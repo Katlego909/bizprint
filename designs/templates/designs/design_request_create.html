@@ -1,0 +1,35 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Request a Design - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 3rem auto;">
+  <h1 class="section-title">Request a Design</h1>
+
+  <form method="post" enctype="multipart/form-data" style="background: #f9f9f9; padding: 2rem; border-radius: 10px;">
+    {% csrf_token %}
+
+    <h3>Select Packages:</h3>
+    {% for package in packages %}
+      <label style="display: block; margin-bottom: 0.5rem;">
+        <input type="checkbox" name="packages" value="{{ package.id }}">
+        {{ package.title }} - R{{ package.price }}
+      </label>
+    {% endfor %}
+
+    <div style="margin-top: 2rem;">
+      <label>Additional Instructions (optional):</label><br>
+      <textarea name="additional_instructions" rows="5" style="width: 100%; margin-top: 0.5rem;"></textarea>
+    </div>
+
+    <div style="margin-top: 2rem;">
+      <label>Upload Files (optional):</label><br>
+      <input type="file" name="uploaded_files" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.ai,.psd">
+    </div>
+
+    <div style="margin-top: 2rem;">
+      <button type="submit" class="btn">Submit Request</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

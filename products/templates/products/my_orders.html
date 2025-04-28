@@ -1,0 +1,64 @@
+{% extends 'products/base.html' %}
+
+{% block title %}My Orders - BizPrint{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1 class="mb-2">📦 My Orders</h1>
+
+  {% if orders %}
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+        <thead>
+          <tr style="background: #1d3557; color: white;">
+            <th style="padding: 12px;">Reference</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Submitted</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px;">{{ order.uuid|slice:":8" }}</td>
+              <td>{{ order.product.name }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>
+                <span style="
+                  display: inline-block;
+                  padding: 4px 8px;
+                  border-radius: 4px;
+                  font-weight: 600;
+                  font-size: 0.85rem;
+                  {% if order.status == 'received' %}background: #f0f0f0; color: #555;
+                  {% elif order.status == 'in_production' %}background: #ffe08a; color: #000;
+                  {% elif order.status == 'completed' %}background: #b8e994; color: #1e5128;
+                  {% elif order.status == 'shipped' %}background: #74b9ff; color: #0c2461;
+                  {% elif order.status == 'cancelled' %}background: #ff6b6b; color: #fff;
+                  {% endif %}
+                ">
+                  {{ order.get_status_display }}
+                </span>
+              </td>
+              <td>R{{ order.total_price }}</td>
+              <td>{{ order.created_at|date:"Y-m-d" }}</td>
+              <td>
+                <a class="btn btn-link" style="margin-right: 8px;" href="{% url 'products:track_order_result' %}?ref={{ order.uuid }}">View</a>
+                <a class="btn btn-link" href="{% url 'products:order_invoice' order.uuid %}" target="_blank">Invoice</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="margin-top: 1rem; color: #666;">No orders found.</p>
+  {% endif %}
+
+  </div>
+
+{% endblock %}

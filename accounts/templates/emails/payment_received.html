@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; background: white; padding: 30px; border-radius: 8px; margin: auto;">
+    <h2 style="color: #1d3557;">✅ Payment Received</h2>
+    <p>Hello {{ order.full_name }},</p>
+
+    <p>Your payment for order <strong>#{{ order.uuid|slice:":8" }}</strong> has been received and confirmed.</p>
+
+    <p>We'll now begin processing your order. You can check the order status at any time:</p>
+    <p>
+      <a href="https://bizprint.co.za/track/result/?ref={{ order.uuid }}" style="background: #1d3557; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Track Order</a>
+    </p>
+
+    <p>Regards,<br>BizPrint Team</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Contact & Support - BizPrint{% endblock %}
+
+{% block content %}
+
+
+<style>
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+  
+    .input-field {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+  
+    .contact-info-box {
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: left;
+    }
+  
+    @media (max-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-info-box {
+        margin-top: 2rem;
+      }
+    }
+  </style>
+
+<div class="container" style="max-width: 1000px; margin: 3rem auto; padding: 1rem;">
+  <h1 class="section-title">Need Help? We're Here to Assist!</h1>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success" style="margin-bottom: 2rem;">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="contact-grid">
+    <!-- Contact Form -->
+    <div>
+      <form method="POST">
+        {% csrf_token %}
+        <label>Name:</label><br>
+        <input type="text" name="name" required class="input-field">
+
+        <label>Email:</label><br>
+        <input type="email" name="email" required class="input-field">
+
+        <label>Subject:</label><br>
+        <select name="subject" required class="input-field">
+          <option value="General Inquiry">General Inquiry</option>
+          <option value="Order Support">Order Support</option>
+          <option value="Design Support">Design Support</option>
+          <option value="Quote Request">Quote Request</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label>Message:</label><br>
+        <textarea name="message" rows="6" required class="input-field"></textarea>
+
+        <button type="submit" class="btn" style="margin-top: 1rem;">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="contact-info-box">
+      <h3 style="color:#1d3557;">Contact Information</h3>
+      <p><strong>Email:</strong> hello@bizprint.co.za</p>
+      <p><strong>Phone:</strong> +27 71 234 5678</p>
+      <p><strong>Hours:</strong> Monday–Friday, 9AM–5PM</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Your BizPrint Discount</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      padding: 2rem;
+      color: #333;
+    }
+    .email-wrapper {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+    .email-wrapper h2 {
+      color: #1d3557;
+      font-size: 1.6rem;
+    }
+    .discount-code {
+      background: #e63946;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 6px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 1rem 0;
+      letter-spacing: 1px;
+    }
+    .footer {
+      font-size: 0.85rem;
+      color: #777;
+      margin-top: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <h2>Thanks for Signing Up, {{ email }} 🎉</h2>
+    <p>We’re excited to have you! Use the discount code below to enjoy 10% off your first order at BizPrint.</p>
+
+    <div class="discount-code">{{ discount_code }}</div>
+
+    <p style="margin-top: 2rem;">Simply enter this code at checkout and start printing with confidence.</p>
+    <p>Happy printing!<br>– The BizPrint Team</p>
+
+    <div class="footer">
+      You received this email because you subscribed to the BizPrint newsletter.
+    </div>
+  </div>
+</body>
+</html>

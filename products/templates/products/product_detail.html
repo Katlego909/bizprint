@@ -1,0 +1,162 @@
+{% extends 'products/base.html' %}
+
+{% block title %}{{ product.name }} - BizPrint{% endblock %}
+
+{% block content %}
+<style>
+  .product-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .product-image {
+    flex: 1 1 300px;
+    max-width: 400px;
+  }
+
+  .product-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .product-info {
+    flex: 2;
+  }
+
+  .product-info h1 {
+    margin-top: 0;
+    color: #1d3557;
+  }
+
+  .product-info p {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .product-header {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="container">
+
+  <!-- 🔥 Product Info Preview -->
+  <div class="product-header">
+    <div class="product-image">
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    </div>
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+      <p>{{ product.description|linebreaks }}</p>
+    </div>
+  </div>
+
+  <!-- 💼 Order Form -->
+  <form method="post" enctype="multipart/form-data" id="order-form">
+    {% csrf_token %}
+
+    <label>Quantity:</label><br>
+    <select name="quantity" id="quantity-select" required>
+      <option value="">-- Select Quantity --</option>
+      {% for q in quantities %}
+        <option value="{{ q.quantity }}" data-baseprice="{{ q.base_price }}">
+          {{ q.quantity }} (R{{ q.base_price }})
+        </option>
+      {% endfor %}
+    </select>
+    <br><br>
+
+    {% for option_type, options in grouped_options.items %}
+      <label>{{ option_type }}</label><br>
+      <select name="{{ option_type }}" class="option-select" required>
+        <option value="">-- Select {{ option_type }} --</option>
+        {% for opt in options %}
+          <option value="{{ opt.value }}" data-price="{{ opt.price_modifier }}">
+            {{ opt.value }}{% if opt.price_modifier > 0 %} (+R{{ opt.price_modifier }}){% endif %}
+          </option>
+        {% endfor %}
+      </select>
+      <br><br>
+    {% endfor %}
+
+    {% if services %}
+      <label>Extras:</label><br>
+      {% for service in services %}
+        <label>
+          <input type="checkbox" name="{{ service.label }}" class="service-check" data-price="{{ service.price }}">
+          {{ service.label }}{% if service.price > 0 %} (+R{{ service.price }}){% endif %}
+        </label><br>
+      {% endfor %}
+      <br>
+    {% endif %}
+
+    <!-- 🚚 Shipping Method -->
+    <label>Shipping Method:</label><br>
+    <select name="shipping_method" id="shipping-method" required>
+      <option value="">-- Select Shipping Option --</option>
+      <option value="standard" data-price="50.00">Standard (R50)</option>
+      <option value="express" data-price="120.00">Express (R120)</option>
+      <option value="pickup" data-price="0.00">Pickup (Free)</option>
+    </select>
+    <br><br>
+
+    <label>Upload your artwork (PDF, PNG, JPG):</label><br>
+    <input type="file" name="file" accept=".pdf,.png,.jpg" required>
+    <br><br>
+
+    <label>Discount Code (if you have one):</label>
+    <input type="text" name="discount_code" placeholder="Enter your 10% code">
+    <br><br>
+
+    <p><strong>Total (incl. 15% VAT):</strong> R<span id="total-price">0.00</span></p>
+    <br>
+    <button type="submit" class="btn btn-primary">Place Order</button>
+  </form>
+
+</div>
+
+<script>
+  const quantitySelect = document.getElementById("quantity-select");
+  const optionSelects = document.querySelectorAll(".option-select");
+  const serviceChecks = document.querySelectorAll(".service-check");
+  const shippingSelect = document.getElementById("shipping-method");
+  const totalPriceEl = document.getElementById("total-price");
+
+  function updateTotal() {
+    const basePrice = parseFloat(quantitySelect.selectedOptions[0]?.dataset.baseprice || 0);
+    let modifiers = 0;
+
+    optionSelects.forEach(select => {
+      const price = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
+      modifiers += !isNaN(price) ? price : 0;
+    });
+
+    serviceChecks.forEach(chk => {
+      if (chk.checked) {
+        const price = parseFloat(chk.dataset.price || 0);
+        modifiers += !isNaN(price) ? price : 0;
+      }
+    });
+
+    const shipping = parseFloat(shippingSelect.selectedOptions[0]?.dataset.price || 0);
+
+    const subtotal = basePrice + modifiers + shipping;
+    const tax = subtotal * 0.15;
+    const total = subtotal + tax;
+
+    totalPriceEl.textContent = total.toFixed(2);
+  }
+
+  quantitySelect.addEventListener("change", updateTotal);
+  optionSelects.forEach(s => s.addEventListener("change", updateTotal));
+  serviceChecks.forEach(c => c.addEventListener("change", updateTotal));
+  shippingSelect.addEventListener("change", updateTotal);
+</script>
+{% endblock %}

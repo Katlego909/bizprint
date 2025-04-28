@@ -1,0 +1,32 @@
+{% extends 'products/base.html' %}
+
+{% block title %}My Profile - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 3rem auto;">
+
+  <h1 style="margin-bottom: 2rem;">👤 My Profile</h1>
+
+  <div style="background: #f9f9f9; padding: 2rem; border-radius: 10px; box-shadow: 0 1px 8px rgba(0,0,0,0.03);">
+
+    <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    {% if user.profile %}
+      <p><strong>Phone:</strong> {{ user.profile.phone }}</p>
+      <p><strong>Address:</strong> {{ user.profile.address }}</p>
+    {% endif %}
+
+    <div style="margin-top: 2rem;">
+      <a href="{% url 'accounts:edit_profile' %}" class="btn btn-secondary" style="margin-right: 1rem;">Edit Profile</a>
+      <a href="{% url 'products:my_orders' %}" class="btn btn-primary">View My Orders</a>
+    </div>
+
+    <form method="post" action="{% url 'accounts:logout' %}" style="margin-top: 1.5rem;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Order Status Update</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; background: white; padding: 30px; border-radius: 8px; margin: auto;">
+    <h2 style="color: #1d3557;">📦 Order Update</h2>
+    <p>Hello {{ order.full_name }},</p>
+
+    <p>Your order <strong>#{{ order.uuid|slice:":8" }}</strong> status has been updated to:</p>
+    <p style="font-size: 1.2rem;"><strong>{{ order.get_status_display }}</strong></p>
+
+    <p>You can review the order status below:</p>
+    <p>
+      <a href="https://bizprint.co.za/track/result/?ref={{ order.uuid }}" style="background: #1d3557; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Track Order</a>
+    </p>
+
+    <p>Thanks for choosing BizPrint!<br>The Team</p>
+  </div>
+</body>
+</html>

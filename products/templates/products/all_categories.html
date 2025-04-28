@@ -1,0 +1,27 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}All Categories - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 4rem auto; text-align: center;">
+  <h1 class="section-title">Explore All Categories</h1>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 2rem;">
+    {% for category in categories %}
+      <a href="{% url 'products:products_by_category' category.slug %}" style="text-decoration: none;">
+        <div style="background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.2s;">
+          {% if category.image %}
+            <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+          {% else %}
+            <div style="width: 100%; height: 150px; background: #f1f1f1; border-radius: 8px; margin-bottom: 1rem;"></div>
+          {% endif %}
+          <h3 style="color: #1d3557;">{{ category.name }}</h3>
+        </div>
+      </a>
+    {% empty %}
+      <p>No categories available.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

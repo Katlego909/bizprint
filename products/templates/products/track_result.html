@@ -1,0 +1,142 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Order Summary - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if order %}
+    <h1>Order Summary</h1>
+
+    <div class="section">
+      <p><strong>Reference:</strong> {{ order.uuid }}</p>
+      <p><strong>Product:</strong> {{ order.product.name }}</p>
+      <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+
+      <p><strong>Options:</strong></p>
+      <ul class="order-summary-list">
+        {% for k, v in order.options.items %}
+          <li><strong>{{ k }}:</strong> {{ v }}</li>
+        {% endfor %}
+      </ul>
+
+      {% if order.services %}
+        <p><strong>Extras:</strong></p>
+        <ul class="order-summary-list">
+          {% for s in order.services %}
+            <li>{{ s }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <hr style="margin: 1.5rem 0;">
+
+      <p><strong>Subtotal:</strong> R{{ subtotal|floatformat:2 }}</p>
+      {% if order.shipping_price %}
+        <p><strong>Shipping:</strong> R{{ order.shipping_price|floatformat:2 }}</p>
+      {% endif %}
+      <p><strong>VAT (15%):</strong> R{{ vat|floatformat:2 }}</p>
+      <p><strong>Total:</strong> R{{ order.total_price|floatformat:2 }}</p>
+
+      <p><strong>Submitted:</strong> {{ order.created_at }}</p>
+      <p><strong>Payment Status:</strong> {{ order.get_payment_status_display }}</p>
+      <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+
+      {% if order.status != "cancelled" and order.status != "refunded" %}
+        <div class="order-tracker mt-2 mb-2">
+          <div class="step {% if order.status in 'received in_production completed shipped' %}active{% endif %}">Received</div>
+          <div class="step {% if order.status in 'in_production completed shipped' %}active{% endif %}">In Production</div>
+          <div class="step {% if order.status in 'completed shipped' %}active{% endif %}">Completed</div>
+          <div class="step {% if order.status == 'shipped' %}active{% endif %}">Shipped</div>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if order.payment_status == "pending" %}
+      <div class="alert alert-warning mt-2">
+        <p><strong>Next Step:</strong> Please make payment via EFT:</p>
+        <p>
+          <strong>Bank:</strong> FNB<br>
+          <strong>Account Name:</strong> BizPrint (Pty) Ltd<br>
+          <strong>Account Number:</strong> 123456789<br>
+          <strong>Reference:</strong> {{ order.uuid }}
+        </p>
+
+        <form method="post" action="{% url 'products:upload_payment_proof' order.uuid %}" enctype="multipart/form-data" class="mt-1">
+          {% csrf_token %}
+          <label>Upload Proof of Payment (PDF, PNG, JPG – Max 5MB):</label><br>
+          <input type="file" name="payment_file" accept=".pdf,.png,.jpg,.jpeg" required>
+          <button type="submit" class="btn mt-1">Submit Proof</button>
+        </form>
+      </div>
+    {% elif order.payment_status == "paid" %}
+      <div class="alert alert-success">✅ Payment received and verified.</div>
+    {% endif %}
+
+    {% if order.file %}
+      <div class="section">
+        <p><strong>Artwork:</strong></p>
+        {% if ".jpg" in order.file.name|lower or ".jpeg" in order.file.name|lower or ".png" in order.file.name|lower %}
+          <img src="{{ order.file.url }}" alt="Uploaded artwork" class="file-preview">
+        {% else %}
+          <p>File uploaded: {{ order.file.name }}</p>
+        {% endif %}
+
+        <form action="{% url 'products:reupload_artwork' order.uuid %}" method="post" enctype="multipart/form-data" class="mt-1">
+          {% csrf_token %}
+          <label>Re-upload your file (PDF, PNG, JPG – Max 5MB):</label><br>
+          <input type="file" name="file" accept=".pdf,.png,.jpg,.jpeg" required>
+          <button type="submit" class="btn mt-1">Upload</button>
+        </form>
+      </div>
+    {% else %}
+      <p><strong>Artwork:</strong> Not uploaded</p>
+    {% endif %}
+
+    {% if order.status == 'received' %}
+      <form method="post" action="{% url 'products:cancel_order' order.uuid %}" class="mt-2">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">Cancel Order</button>
+      </form>
+    {% endif %}
+
+    <div class="mt-2">
+      <a href="{% url 'products:order_invoice' order.uuid %}" target="_blank" class="btn">🧾 View Invoice</a>
+      <a href="{% url 'products:track_order' %}" class="btn btn-secondary ml-1">Track Another Order</a>
+    </div>
+
+  {% else %}
+    <div class="alert alert-error">
+      No order found for the reference you entered.
+    </div>
+  {% endif %}
+
+</div>
+
+<style>
+  .order-summary-list {
+    list-style: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .order-summary-list li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  .section p strong {
+    display: inline-block;
+    margin-top: 1rem;
+  }
+</style>
+{% endblock %}

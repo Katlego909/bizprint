@@ -1,0 +1,124 @@
+{% extends 'products/base.html' %}
+
+{% block title %}My Design Requests - BizPrint{% endblock %}
+
+{% block content %}
+<style>
+  .request-card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .request-card:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+
+  .request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+  }
+
+  .request-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1d3557;
+  }
+
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+
+  .status-pending { background: #ffe5e5; color: #e63946; }
+  .status-paid { background: #e6f4ea; color: #2a9d8f; }
+  .status-in_progress { background: #fff3cd; color: #856404; }
+  .status-completed { background: #dee2f0; color: #264653; }
+
+  .package-list {
+    list-style: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .action-links {
+    margin-top: 1.2rem;
+  }
+
+  .action-links a {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: #1d3557;
+    color: white;
+    transition: background 0.2s ease;
+  }
+
+  .action-links a:hover {
+    background: #163049;
+  }
+
+  .quote-invoice {
+    margin-top: 1rem;
+  }
+
+  .quote-invoice a {
+    margin-right: 1rem;
+    font-size: 0.85rem;
+    color: #1d3557;
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container" style="max-width: 1000px; margin: 3rem auto;">
+  <h1 class="section-title">My Design Requests</h1>
+
+  {% if requests %}
+    {% for request in requests %}
+      <div class="request-card">
+        <div class="request-header">
+          <div class="request-title">Request #{{ request.id }}</div>
+          <div class="status-badge status-{{ request.status }}">{{ request.get_status_display }}</div>
+        </div>
+
+        <p><strong>Packages:</strong></p>
+        <ul class="package-list">
+          {% for package in request.packages.all %}
+            <li>{{ package.title }} (R{{ package.price|floatformat:2 }})</li>
+          {% endfor %}
+        </ul>
+
+        <p><strong>Total Price:</strong> R{{ request.total_price|floatformat:2 }}</p>
+
+        <div class="action-links">
+          {% if not request.proof_of_payment %}
+            <a href="{% url 'designs:upload_proof_of_payment' request.id %}">Upload Proof of Payment</a>
+          {% else %}
+            <span style="color: #2a9d8f;">✅ Proof Uploaded</span>
+          {% endif %}
+        </div>
+
+        <div class="quote-invoice">
+          <a href="{% url 'designs:design_request_quote' request.id %}" target="_blank">📄 Download Quote</a>
+          {% if request.status == 'paid' %}
+            <a href="{% url 'designs:design_request_invoice' request.id %}" target="_blank">🧾 Download Invoice</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No design requests yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

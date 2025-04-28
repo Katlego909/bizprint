@@ -1,0 +1,26 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Upload Proof of Payment - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 3rem auto;">
+
+  <h1 class="section-title">Upload Proof of Payment</h1>
+
+  <form method="post" enctype="multipart/form-data" style="background: #f9f9f9; padding: 2rem; border-radius: 10px;">
+    {% csrf_token %}
+
+    <p>Please upload your proof of payment for Request #{{ design_request.id }}.</p>
+
+    <div style="margin-top: 1.5rem;">
+      <label>Upload File (PDF, PNG, JPG – Max 5MB):</label><br>
+      <input type="file" name="proof_of_payment" accept=".pdf,.png,.jpg,.jpeg" required style="margin-top: 0.5rem;">
+    </div>
+
+    <div style="margin-top: 2rem;">
+      <button type="submit" class="btn">Submit Proof</button>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

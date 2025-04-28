@@ -1,0 +1,34 @@
+{% extends 'products/base.html' %}
+{% block title %}Request a Design - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin: 4rem auto;">
+  <h1 style="text-align: center; margin-bottom: 2rem;">📝 Request a Design</h1>
+
+  <form method="post" enctype="multipart/form-data" class="design-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div style="text-align: center; margin-top: 2rem;">
+      <button type="submit" class="btn">Submit Request</button>
+    </div>
+  </form>
+</div>
+
+<style>
+.design-form label {
+  font-weight: bold;
+  color: #1d3557;
+}
+.design-form input[type="text"], 
+.design-form textarea, 
+.design-form select, 
+.design-form input[type="file"] {
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+</style>
+{% endblock %}

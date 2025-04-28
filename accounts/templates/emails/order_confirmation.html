@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Order Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; background: white; padding: 30px; border-radius: 8px; margin: auto;">
+    <h2 style="color: #1d3557;">🧾 Thank you for your order!</h2>
+    <p>Hello {{ order.full_name }},</p>
+
+    <p>We've received your order <strong>#{{ order.uuid|slice:":8" }}</strong> placed on <strong>{{ order.created_at|date:"Y-m-d" }}</strong>.</p>
+
+    <p><strong>Product:</strong> {{ order.product.name }}<br>
+    <strong>Quantity:</strong> {{ order.quantity }}<br>
+    <strong>Total:</strong> R{{ order.total_price|floatformat:2 }}</p>
+
+    <p>You can upload your artwork or view your order here:</p>
+    <p>
+      <a href="https://bizprint.co.za/track/result/?ref={{ order.uuid }}" style="background: #1d3557; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">View Order</a>
+    </p>
+
+    <p>Regards,<br>BizPrint Team</p>
+  </div>
+</body>
+</html>

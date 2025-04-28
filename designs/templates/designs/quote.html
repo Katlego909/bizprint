@@ -1,0 +1,94 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}Design Quote - BizPrint{% endblock %}
+
+{% block content %}
+
+
+<style>
+
+  @media print {
+    .navbar, .btn, footer {
+      display: none !important;
+    }
+
+    body, html {
+      background: white !important;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .invoice-container {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      padding: 1in !important;
+      margin: 0 !important;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+</style>
+
+<div class="container" style="max-width: 800px; margin: 3rem auto; padding: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+
+  <div class="section-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+    <a href="/" class="logo">
+        <img src="{% static "images/bp-logo-1.png" %}" class="" alt="">
+      </a>
+  <h1 style="margin-bottom: 2rem; color: #1d3557;">Quotation</h1>
+</div>
+
+  <p><strong>Quote #:</strong> {{ design_request.id }}</p>
+  <p><strong>Customer:</strong> {{ design_request.user.get_full_name }}</p>
+  <p><strong>Email:</strong> {{ design_request.user.email }}</p>
+  <p><strong>Date:</strong> {{ design_request.created_at|date:"d M Y" }}</p>
+
+  <hr style="margin: 2rem 0;">
+
+  <h2 style="font-size: 1.3rem; margin-bottom: 1rem;">Selected Packages</h2>
+  <table style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #f1f1f1;">
+        <th style="padding: 0.8rem; text-align: left;">Package</th>
+        <th style="padding: 0.8rem; text-align: right;">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for package in design_request.packages.all %}
+      <tr>
+        <td style="padding: 0.8rem;">{{ package.title }}</td>
+        <td style="padding: 0.8rem; text-align: right;">R{{ package.price|floatformat:2 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="margin-top: 2rem; text-align: right;">
+    <p><strong>Subtotal:</strong> R{{ subtotal|floatformat:2 }}</p>
+    <p><strong>VAT (15%):</strong> R{{ vat|floatformat:2 }}</p>
+    <p><strong>Total:</strong> <strong>R{{ total|floatformat:2 }}</strong></p>
+  </div>
+
+  <hr style="margin: 2rem 0;">
+
+  <div style="text-align: start;">
+    <p><strong>Banking Details:</strong></p>
+    <p>Account Name: BizPrint</p>
+    <p>Bank: ABSA Bank</p>
+    <p>Account Number: 1234567890</p>
+    <p>Branch Code: 632005</p>
+    <p>Reference: Your Full Name + Request ID</p>
+  </div>
+
+  <div style="text-align: right; margin-bottom: 2rem;">
+    <button onclick="window.print()" class="btn" style="padding: 0.8rem 1.5rem; background: #1d3557; color: #fff; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer;">
+      🖨️ Print / Download Quotation
+    </button>
+  </div>
+
+</div>
+{% endblock %}

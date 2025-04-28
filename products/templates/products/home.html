@@ -1,0 +1,523 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}Welcome to BizPrint{% endblock %}
+
+{% block extra_head %}
+<style>
+  .hero-section {
+    position: relative;
+    height: 65vh;
+    background: url('{% static "images/homepage_banner.png" %}') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(29, 53, 87, 0.6);
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    padding: 2rem;
+  }
+
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+  }
+
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-content .cta-btn {
+    background: #e63946;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+
+  .hero-content .cta-btn:hover {
+    background: #d62839;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin: 4rem 0 2rem;
+    color: #1d3557;
+  }
+
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 1rem 3rem;
+  }
+
+  .product-card {
+    flex: 1 1 250px;
+    max-width: 320px;
+    min-height: 380px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .product-card h4 {
+    margin-bottom: 0.5rem;
+    color: #1d3557;
+    font-size: 1.1rem;
+  }
+
+  .product-card p {
+    font-size: 0.9rem;
+    color: #555;
+    min-height: 60px;
+    margin-bottom: auto;
+  }
+  
+  {% comment %} Category  {% endcomment %}
+  
+  .category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 1rem 3rem;
+  }
+
+  .category-card {
+    flex: 1 1 250px;
+    max-width: 320px;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  .category-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .category-card h4 {
+    margin-bottom: 0.5rem;
+    color: #1d3557;
+    font-size: 1.1rem;
+  }
+
+  .category-card p {
+    font-size: 0.9rem;
+    color: #555;
+    min-height: 60px;
+    margin-bottom: auto;
+  }
+
+  .why-section {
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    padding: 3rem 2rem 4rem;
+    max-width: 1000px;
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+
+  .why-section .intro {
+    font-size: 1.1rem;
+    color: #444;
+    margin-bottom: 2rem;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .why-point {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  }
+
+  .why-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .why-point h3 {
+    color: #1d3557;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .why-point p {
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .cta-section {
+    background: #1d3557;
+    color: white;
+    text-align: center;
+    padding: 3rem 2rem;
+    margin-top: 4rem;
+  }
+
+  .cta-section h2 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 30px;
+    font-size: 1rem;
+    background: #e63946;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.2s ease;
+    text-decoration: none;
+  }
+
+  .cta-btn-printing {
+    display: inline-block;
+    padding: 14px 30px;
+    font-size: 1rem;
+    background: #e63946;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.2s ease;
+    text-decoration: none;
+  }
+
+  .cta-btn-designs {
+    display: inline-block;
+    padding: 14px 30px;
+    font-size: 1rem;
+    background: #1d3557;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.2s ease;
+    text-decoration: none;
+  }
+
+  .cta-btn:hover {
+    background: #d62839;
+  }
+
+  .cta-btn-printing:hover {
+    background: #d62839;
+  }
+
+  .cta-btn-designs:hover {
+    background: #1d3557;
+  }
+
+  /* FAQ Accordion Styles */
+
+  .faq-section {
+    max-width: 1000px;
+    margin: 4rem auto;
+    padding: 0 1rem;
+  }
+
+  .faq-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #1d3557;
+  }
+
+  .faq-item {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+  }
+
+  .faq-item input {
+    display: none;
+  }
+
+  .faq-question {
+    display: block;
+    background: #f1f2f6;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: #1d3557;
+    transition: background 0.2s ease;
+  }
+
+  .faq-question:hover {
+    background: #e9ecef;
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: white;
+    padding: 0 1.2rem;
+  }
+
+  .faq-item input:checked ~ .faq-answer {
+    max-height: 300px;
+    padding: 1rem 1.2rem;
+  }
+
+  .faq-answer p {
+    margin: 0;
+    color: #444;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.2rem;
+    }
+
+    .hero-content p {
+      font-size: 1rem;
+    }
+
+    .hero-content .cta-btn {
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .products-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .product-card {
+      width: 100%;
+      max-width: 340px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-wrapper">
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>High-Quality Printing. Delivered Fast.</h1>
+      <p>Professional-grade print materials tailored for your business or personal needs.</p>
+      <div class="hero-cta">
+        <a href="{% url 'products:product_list' %}" class="cta-btn-printing">Start Printing Now</a>
+        <a href="{% url 'designs:design_list' %}" class="cta-btn-designs">Design Services</a>
+      </div>
+    </div>
+  </div>
+
+    <!-- Categories Section -->
+  <div class="categories-wrapper" style="max-width: 1100px; margin: 4rem auto; padding: 0 1rem; text-align: center;">
+    <h2 class="section-title">Explore All Categories</h2>
+
+    <div class="categories-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; margin-top: 2rem;">
+      {% for category in categories|slice:":6" %}
+        <a href="{% url 'products:products_by_category' category.slug %}" style="text-decoration: none; color: inherit;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            {% if category.image %}
+              <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+            {% else %}
+              <div style="width: 120px; height: 120px; background: #f1f1f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">📦</div>
+            {% endif %}
+            <p style="margin-top: 0.8rem; font-weight: 600;">{{ category.name }}</p>
+          </div>
+        </a>
+      {% empty %}
+        <p>No categories available.</p>
+      {% endfor %}
+    </div>
+
+    <div style="margin-top: 2rem;">
+      <a href="{% url 'products:all_categories' %}" class="cta-btn" style="background: #1d3557;">View All Categories</a>
+    </div> 
+  </div>
+
+  <!-- Products -->
+  <h2 class="section-title">Featured Products</h2>
+  <div class="products-grid">
+    {% for product in products|slice:":3" %}
+      <div class="product-card">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <h4>{{ product.name }}</h4>
+        <p>{{ product.description|truncatewords:12 }}</p>
+        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-secondary" style="margin-top: 10px;">View Product</a>
+      </div>
+    {% empty %}
+      <p>No products available.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Why BizPrint -->
+  <div class="why-section">
+    <h2>Why Choose <span style="color: #e63946;">BizPrint</span>?</h2>
+    <p class="intro">More than just a print shop — we’re your creative production partner.</p>
+    <div class="why-grid">
+      <div class="why-point">
+        <div class="why-icon">⚡</div>
+        <h3>Fast Turnarounds</h3>
+        <p>Get your prints quicker than ever with our efficient workflows and optional express services.</p>
+      </div>
+      <div class="why-point">
+        <div class="why-icon">🎯</div>
+        <h3>Tailored to You</h3>
+        <p>From business cards to booklets, customize every detail to match your brand and vision.</p>
+      </div>
+      <div class="why-point">
+        <div class="why-icon">📦</div>
+        <h3>Nationwide Delivery</h3>
+        <p>We ship across South Africa. Enjoy reliable doorstep delivery, wherever you are.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Design Services Section -->
+  <div class="why-section" style="margin-top: 4rem;">
+    <h2>Need Custom Designs?</h2>
+    <p class="intro">Stand out with stunning designs crafted by our professional team. Whether you need a logo, business cards, company profile, or marketing material — we create it with excellence.</p>
+    
+    <div class="why-grid">
+      <div class="why-point">
+        <div class="why-icon">🎨</div>
+        <h3>Logo & Branding</h3>
+        <p>Create a brand identity that leaves a lasting impression with a professionally crafted logo and visual system.</p>
+      </div>
+      <div class="why-point">
+        <div class="why-icon">📝</div>
+        <h3>Business Essentials</h3>
+        <p>Business cards, letterheads, company profiles, and more — all customized to match your brand's voice.</p>
+      </div>
+      <div class="why-point">
+        <div class="why-icon">📈</div>
+        <h3>Marketing Materials</h3>
+        <p>Flyers, brochures, posters, and social media graphics designed to grab attention and grow your brand.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 2rem;">
+      <a href="{% url 'designs:design_list' %}" class="cta-btn-designs">Explore Design Packages</a>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <input type="checkbox" id="faq1">
+      <label class="faq-question" for="faq1">How long does delivery take?</label>
+      <div class="faq-answer">
+        <p>Standard delivery takes 3–5 business days. Express options are available at checkout for faster turnaround.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <input type="checkbox" id="faq2">
+      <label class="faq-question" for="faq2">Can I upload my own design?</label>
+      <div class="faq-answer">
+        <p>Absolutely. You can upload high-resolution artwork (PDF, JPG, PNG) during the order process.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <input type="checkbox" id="faq3">
+      <label class="faq-question" for="faq3">Do you offer design assistance?</label>
+      <div class="faq-answer">
+        <p>Yes! You can select "Design Help" as an optional add-on during checkout, and our designers will assist you.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <input type="checkbox" id="faq4">
+      <label class="faq-question" for="faq4">What payment methods are accepted?</label>
+      <div class="faq-answer">
+        <p>We accept EFT payments and online card payments. EFT details are provided at checkout.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Ready to Print with Confidence?</h2>
+    <p>Join thousands of professionals and small businesses who trust BizPrint for quality, speed, and service.</p>
+    <a href="{% url 'products:product_list' %}" class="cta-btn">Start Your Order</a>
+  </div>
+
+  <div class="newsletter-section" style="background:#f1f1f1;padding:2rem;text-align:center;">
+    <h3>📬 Get 10% Off Your First Order</h3>
+    <p>Join our newsletter and receive a discount code straight to your inbox.</p>
+    <form action="{% url 'accounts:subscribe_newsletter' %}" method="POST" style="margin-top:1rem;">
+      {% csrf_token %}
+      <input type="email" name="email" placeholder="Enter your email" required style="padding:1rem;width:350px;border-radius:6px;border:1px solid #ccc;">
+      <button type="submit" class="cta-btn" style="margin-left: 0.5rem; border:none;">Sign Up</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
