@@ -1,11 +1,13 @@
 {% extends 'products/base.html' %}
 {% block content %}
-<div class="container">
+<div class="account-container">
 <h2>Register</h2>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="btn btn-primary">Register</button>
 </form>
+
+<small>Already have an account? <a href="{% url "accounts:login" %}">Login</a></small>
 </div>
 {% endblock %}

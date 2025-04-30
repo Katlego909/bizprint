@@ -14,7 +14,6 @@ from accounts.utils import send_order_confirmation_email
 
 from accounts.models import CustomerProfile, NewsletterSubscriber
 
-
 def home(request):
     products = Product.objects.all()[:3]
     categories = Category.objects.all()
@@ -43,7 +42,7 @@ def all_categories(request):
         'categories': categories
     })
 
-@login_required
+# @login_required
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
     quantity_tiers = product.quantity_tiers.all().order_by('quantity')
