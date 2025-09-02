@@ -35,6 +35,7 @@
   padding: 0;
 }
 
+
 body {
   font-family: var(--font-main);
   font-size: var(--font-size-base);
@@ -247,6 +248,8 @@ header {
   align-items: center;
 }
 
+
+
 /* =============================
    CARDS & COMPONENTS
 ============================= */
@@ -362,6 +365,7 @@ header {
   color: #fff;
   padding: 3rem 1rem 1rem;
   font-size: 0.95rem;
+  position: static; 
 }
 .footer-top {
   display: grid;
@@ -514,6 +518,8 @@ header {
   .account-container {
     margin: 1.5rem;
   }
+
+  .newsletter-section 
 
   .footer-newsletter {
     flex-direction: column;

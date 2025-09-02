@@ -1,6 +1,7 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
+from django.utils.text import slugify
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -22,6 +23,30 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+     # ---- helpers ----
+    def _generate_unique_slug(self):
+        """
+        Create a URL-safe slug from name and ensure uniqueness by adding -2, -3, ...
+        Only called when slug is empty.
+        """
+        base = slugify(self.name) or "category"
+        maxlen = self._meta.get_field("slug").max_length or 50
+        slug = base[:maxlen]
+
+        # If taken, append -2, -3 ... truncating base to keep within maxlen
+        counter = 2
+        while Category.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+            suffix = f"-{counter}"
+            slug = f"{base[:maxlen - len(suffix)]}{suffix}"
+            counter += 1
+        return slug
+
+    # ---- save override ----
+    def save(self, *args, **kwargs):
+        if not self.slug and self.name:
+            self.slug = self._generate_unique_slug()
+        super().save(*args, **kwargs)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Products

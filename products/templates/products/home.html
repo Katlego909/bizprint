@@ -340,6 +340,10 @@
     font-size: 0.95rem;
   }
 
+  .section {
+    margin-top: 6rem;
+  }
+
   @media (max-width: 768px) {
     .hero-content h1 {
       font-size: 2.2rem;
@@ -403,12 +407,14 @@
     </div>
   </div>
 
+
     <!-- Categories Section -->
+     <section class="section">
   <div class="categories-wrapper" style="max-width: 1100px; margin: 4rem auto; padding: 0 1rem; text-align: center;">
     <h2 class="section-title">Explore All Categories</h2>
 
-    <div class="categories-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; margin-top: 2rem;">
-      {% for category in categories|slice:":6" %}
+    <div class="categories-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2rem; margin-top: 2rem;">
+      {% for category in categories|slice:":10" %}
         <a href="{% url 'products:products_by_category' category.slug %}" style="text-decoration: none; color: inherit;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             {% if category.image %}
@@ -428,23 +434,27 @@
       <a href="{% url 'products:all_categories' %}" class="cta-btn" style="background: #1d3557;">View All Categories</a>
     </div> 
   </div>
+</section>
 
   <!-- Products -->
+   <section class="section">
   <h2 class="section-title">Featured Products</h2>
   <div class="products-grid">
-    {% for product in products|slice:":3" %}
+    {% for product in products|slice:":6" %}
       <div class="product-card">
         <img src="{{ product.image.url }}" alt="{{ product.name }}">
         <h4>{{ product.name }}</h4>
         <p>{{ product.description|truncatewords:12 }}</p>
-        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-secondary" style="margin-top: 10px;">View Product</a>
+        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-secondary" style="margin-top: 10px;">Configure & Get Quote</a>
       </div>
     {% empty %}
       <p>No products available.</p>
     {% endfor %}
   </div>
+</section>
 
   <!-- Why BizPrint -->
+   <section class="section">
   <div class="why-section">
     <h2>Why Choose <span style="color: #e63946;">BizPrint</span>?</h2>
     <p class="intro">More than just a print shop — we’re your creative production partner.</p>
@@ -466,8 +476,10 @@
       </div>
     </div>
   </div>
+</section>
 
   <!-- Design Services Section -->
+   <section class="section">
   <div class="why-section" style="margin-top: 4rem;">
     <h2>Need Custom Designs?</h2>
     <p class="intro">Stand out with stunning designs crafted by our professional team. Whether you need a logo, business cards, company profile, or marketing material — we create it with excellence.</p>
@@ -494,8 +506,10 @@
       <a href="{% url 'designs:design_list' %}" class="cta-btn-designs">Explore Design Packages</a>
     </div>
   </div>
+</section>
 
   <!-- FAQ Section -->
+   <section class="section">
   <div class="faq-section">
     <h2>Frequently Asked Questions</h2>
 
@@ -531,8 +545,10 @@
       </div>
     </div>
   </div>
+</section>
 
   <!-- CTA -->
+   <section class="section">
   <div class="cta-section">
     <h2>Ready to Print with Confidence?</h2>
     <p>Join thousands of professionals and small businesses who trust BizPrint for quality, speed, and service.</p>
@@ -544,10 +560,11 @@
     <p>Join our newsletter and receive a discount code straight to your inbox.</p>
     <form action="{% url 'accounts:subscribe_newsletter' %}" method="POST" style="margin-top:1rem;">
       {% csrf_token %}
-      <input type="email" name="email" placeholder="Enter your email" required style="padding:1rem;width:350px;border-radius:6px;border:1px solid #ccc;">
+      <input type="email" name="email" placeholder="Enter your email" required style="padding: 1rem;width:350px;border-radius:6px;border:1px solid #ccc;">
       <button type="submit" class="cta-btn" style="margin-left: 0.5rem; border:none;">Sign Up</button>
     </form>
   </div>
+</section>
 
 </div>
 {% endblock %}
