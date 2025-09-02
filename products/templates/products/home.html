@@ -40,13 +40,12 @@
 
   .hero-content h1 {
     font-size: 3rem;
-    margin-bottom: 0.5rem;
     color: #fff;
   }
 
   .hero-content p {
     font-size: 1.2rem;
-    margin-bottom: 2rem;
+    margin: 2rem 0;
   }
 
   .hero-content .cta-btn {
@@ -62,6 +61,13 @@
 
   .hero-content .cta-btn:hover {
     background: #d62839;
+  }
+
+  .hero-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
   }
 
   .section-title {
@@ -280,7 +286,7 @@
   .faq-section {
     max-width: 1000px;
     margin: 4rem auto;
-    padding: 0 1rem;
+    padding: 0 2rem;
   }
 
   .faq-section h2 {
@@ -351,14 +357,33 @@
     .products-grid {
       flex-direction: column;
       align-items: center;
+      width: 100%;
     }
 
     .product-card {
       width: 100%;
       max-width: 340px;
     }
+
+    .hero-cta {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .hero-cta a {
+      width: 100%;
+    }
+
+    .why-section {
+      margin: 2rem;
+    }
+
+    {% comment %} .cta-btn-printing {
+      margin-bottom: 1rem;
+    } {% endcomment %}
   }
 </style>
+
 {% endblock %}
 
 {% block content %}

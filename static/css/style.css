@@ -83,7 +83,7 @@ p {
    CONTAINERS & LAYOUT
 ============================= */
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 2rem;
   background: var(--color-white);
@@ -134,6 +134,7 @@ p {
   border: 0.1rem solid var(--color-white);
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
+  text-align: center;
   cursor: pointer;
 }
 
@@ -195,15 +196,26 @@ form textarea {
 /* =============================
    NAVBAR
 ============================= */
-.navbar {
+
+header {
   background: var(--color-primary);
+  position: -webkit-sticky;
+  position: sticky;        /* keep it in the normal flow, stick at top on scroll */
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  max-width: 1200px;
+  margin: 0 auto;
   color: var(--color-white);
-  padding: 1rem 2rem;
+  padding: 1.5rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
 }
+
 
 .navbar-brand {
   display: flex;
@@ -217,7 +229,7 @@ form textarea {
 
 .navbar a {
   color: var(--color-white);
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .navbar-toggle {
@@ -364,7 +376,9 @@ form textarea {
   color: #f1f1f1;
 }
 .footer-col p {
+  font-size: 0.85rem;
   line-height: 1.6;
+  margin-top: 1rem;
 }
 .footer-col ul {
   list-style: none;
@@ -414,8 +428,14 @@ form textarea {
   border-top: 1px solid rgba(255,255,255,0.2);
   padding-top: 1rem;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
+
+.footer-bottom p {
+  font-size: 0.75rem;
+
+}
+
 .footer-bottom a {
   color: #f1f1f1;
   text-decoration: none;
@@ -463,6 +483,7 @@ form textarea {
       flex-direction: column;
       width: 100%;
       margin-top: 1rem;
+      text-align: left;
     }
   
     .navbar-links.show {
@@ -476,7 +497,7 @@ form textarea {
 
   .container {
     padding: 1.5rem;
-    margin: 1rem;
+    margin: 2rem;
   }
 
   .btn,
@@ -484,6 +505,14 @@ form textarea {
   select,
   textarea {
     font-size: 1rem;
+  }
+
+  .btn-outline, .btn-secondary {
+    width: 100%;
+  } 
+
+  .account-container {
+    margin: 1.5rem;
   }
 
   .footer-newsletter {

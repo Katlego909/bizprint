@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container" style="max-width: 800px; margin: 3rem auto;">
-  <h1 class="section-title">Request a Design</h1>
+  <h1 class="section-title">Request a Design / Create a Quotation</h1>
 
   <form method="post" enctype="multipart/form-data" style="background: #f9f9f9; padding: 2rem; border-radius: 10px;">
     {% csrf_token %}
@@ -12,7 +12,7 @@
     {# if user is anonymous, ask for their email #}
     {% if not request.user.is_authenticated %}
       <div style="margin-bottom: 1.5rem;">
-        <label for="id_email">Your Email <span style="color: #e63946;">*</span></label><br>
+        <label for="id_email">Your Email <span style="color: #e63946;">*</span></label>
         <input type="email" name="email" id="id_email" required
                style="width:100%; padding:0.8rem; margin-top:0.5rem; border-radius:4px; border:1px solid #ccc;">
       </div>
@@ -26,21 +26,21 @@
       </label>
     {% endfor %}
 
-    <div style="margin-top: 2rem;">
-      <label for="id_instructions">Additional Instructions (optional):</label><br>
+    <div style="margin-top: 1rem;">
+      <label for="id_instructions">Additional Instructions (optional):</label>
       <textarea name="additional_instructions" id="id_instructions" rows="5"
                 style="width:100%; margin-top:0.5rem; padding:0.8rem; border-radius:4px; border:1px solid #ccc;"></textarea>
     </div>
 
-    <div style="margin-top: 2rem;">
-      <label for="id_upload">Upload Files (optional):</label><br>
+    <div style="margin-top: 1rem;">
+      <label for="id_upload">Upload Files (optional):</label>
       <input type="file" name="uploaded_files" id="id_upload"
              accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.ai,.psd"
              style="margin-top:0.5rem;">
     </div>
 
     <div style="margin-top: 2.5rem; text-align: center;">
-      <button type="submit" class="btn" style="padding:0.8rem 2rem;">Submit Request</button>
+      <button type="submit" class="btn btn-primary" style="padding:0.8rem 2rem;">Submit Request</button>
     </div>
   </form>
 </div>

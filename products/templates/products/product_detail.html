@@ -34,8 +34,13 @@
 
   .product-info p {
     color: #555;
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  #total-price {
+    font-size: 1.2rem;
+    font-weight: bolder;
   }
 
   @media (max-width: 768px) {
@@ -54,7 +59,7 @@
     </div>
     <div class="product-info">
       <h1>{{ product.name }}</h1>
-      <p>{{ product.description|linebreaks }}</p>
+      <p class="description">{{ product.description|linebreaks }}</p>
     </div>
   </div>
 
@@ -62,7 +67,7 @@
   <form method="post" enctype="multipart/form-data" id="order-form">
     {% csrf_token %}
 
-    <label>Quantity:</label><br>
+    <label>Quantity:</label>
     <select name="quantity" id="quantity-select" required>
       <option value="">-- Select Quantity --</option>
       {% for q in quantities %}
@@ -74,7 +79,7 @@
     <br><br>
 
     {% for option_type, options in grouped_options.items %}
-      <label>{{ option_type }}</label><br>
+      <label>{{ option_type }}</label>
       <select name="{{ option_type }}" class="option-select" required>
         <option value="">-- Select {{ option_type }} --</option>
         {% for opt in options %}
@@ -87,7 +92,7 @@
     {% endfor %}
 
     {% if services %}
-      <label>Extras:</label><br>
+      <label>Extras:</label>
       {% for service in services %}
         <label>
           <input type="checkbox" name="{{ service.label }}" class="service-check" data-price="{{ service.price }}">
@@ -98,7 +103,7 @@
     {% endif %}
 
     <!-- 🚚 Shipping Method -->
-    <label>Shipping Method:</label><br>
+    <label>Shipping Method:</label>
     <select name="shipping_method" id="shipping-method" required>
       <option value="">-- Select Shipping Option --</option>
       <option value="standard" data-price="50.00">Standard (R50)</option>
@@ -107,7 +112,7 @@
     </select>
     <br><br>
 
-    <label>Upload your artwork (PDF, PNG, JPG):</label><br>
+    <label>Upload your artwork (PDF, PNG, JPG):</label>
     <input type="file" name="file" accept=".pdf,.png,.jpg" required>
     <br><br>
 

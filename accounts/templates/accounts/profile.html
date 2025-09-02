@@ -3,6 +3,23 @@
 {% block title %}My Profile - BizPrint{% endblock %}
 
 {% block content %}
+
+<style>
+  .profile-buttons {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    gap: 1rem;
+
+  }
+
+  @media screen and (max-width: 768px) {
+    .profile-buttons {
+      flex-direction: column;
+          }
+  }
+</style>
+
 <div class="container" style="max-width: 600px; margin: 3rem auto;">
 
   <h1 style="margin-bottom: 2rem;">👤 My Profile</h1>
@@ -17,14 +34,14 @@
       <p><strong>Address:</strong> {{ user.profile.address }}</p>
     {% endif %}
 
-    <div style="margin-top: 2rem;">
-      <a href="{% url 'accounts:edit_profile' %}" class="btn btn-secondary" style="margin-right: 1rem;">Edit Profile</a>
+    <div class="profile-buttons" style="margin-top: 2rem;">
+      <a href="{% url 'accounts:edit_profile' %}" class="btn btn-secondary" >Edit Profile</a>
       <a href="{% url 'products:my_orders' %}" class="btn btn-primary">View My Orders</a>
     </div>
 
-    <form method="post" action="{% url 'accounts:logout' %}" style="margin-top: 1.5rem;">
+    <form method="post" action="{% url 'accounts:logout' %}" style="margin-top: 2.5rem;">
       {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Logout</button>
+      <button type="submit" class="btn">Logout</button>
     </form>
 
   </div>
