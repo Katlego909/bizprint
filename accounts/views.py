@@ -71,4 +71,7 @@ def subscribe_newsletter(request):
                 messages.info(request, "You're already subscribed.")
         else:
             messages.error(request, "Please enter a valid email.")
-    return redirect('products:home')
+
+    # send them back to where they submitted from; fall back to home
+    referer = request.META.get("HTTP_REFERER") or reverse('products:home')
+    return redirect(referer)
