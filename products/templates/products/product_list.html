@@ -78,9 +78,14 @@
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
     {% for product in products %}
       <div style="border: 1px solid #eee; padding: 1rem; border-radius: 10px; background: #fff;">
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
+        <img
+          src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/placeholders/product.png' %}{% endif %}"
+          alt="{{ product.name }}"
+          style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;"
+          loading="lazy"
+        >
         <h3 style="margin-top: 1rem;">{{ product.name }}</h3>
-        <p style="color: #555;">{{ product.description|truncatechars:100 }}</p>
+        <p style="color: #555;">{{ product.description|default:''|truncatechars:100 }}</p>
         <a href="{% url 'products:product_detail' slug=product.slug %}"
            style="display: inline-block; margin-top: 10px; background: #1d3557; color: white; padding: 8px 16px; border-radius: 5px; text-decoration: none;">
           Order Now

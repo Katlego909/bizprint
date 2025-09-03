@@ -210,7 +210,7 @@ header {
   max-width: 1200px;
   margin: 0 auto;
   color: var(--color-white);
-  padding: 1.5rem 0;
+  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -519,7 +519,6 @@ header {
     margin: 1.5rem;
   }
 
-  .newsletter-section 
 
   .footer-newsletter {
     flex-direction: column;
