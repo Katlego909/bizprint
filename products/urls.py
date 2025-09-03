@@ -25,8 +25,5 @@ urlpatterns = [
 
     path('upload-payment/<uuid:order_id>/', views.upload_payment_proof, name='upload_payment_proof'),
 
-    
-
     path('contact/', views.contact_support, name='contact_support'),
-
 ]

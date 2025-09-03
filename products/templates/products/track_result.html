@@ -70,12 +70,39 @@
           <strong>Reference:</strong> {{ order.uuid }}
         </p>
 
-        <form method="post" action="{% url 'products:upload_payment_proof' order.uuid %}" enctype="multipart/form-data" class="mt-1">
-          {% csrf_token %}
-          <label>Upload Proof of Payment (PDF, PNG, JPG – Max 5MB):</label><br>
-          <input type="file" name="payment_file" accept=".pdf,.png,.jpg,.jpeg" required>
-          <button type="submit" class="btn mt-1">Submit Proof</button>
-        </form>
+        {# ---- Proof of payment UX (pure Django template) ---- #}
+        {% if order.proof_of_payment %}
+          <div class="alert alert-success" style="margin-top: 1rem;">
+            ✅ We’ve received your proof of payment. We’ll verify it shortly.
+            {% if order.proof_of_payment.url %}
+              <div style="margin-top: .5rem;">
+                <a href="{{ order.proof_of_payment.url }}" target="_blank" rel="noopener">View uploaded file</a>
+                {% if order.proof_of_payment.size %} • {{ order.proof_of_payment.size|filesizeformat }}{% endif %}
+              </div>
+            {% endif %}
+          </div>
+
+          {# Re-upload form (always visible, no JS) #}
+          <form method="post"
+                action="{% url 'products:upload_payment_proof' order_id=order.uuid %}"
+                enctype="multipart/form-data"
+                class="mt-1">
+            {% csrf_token %}
+            <label>Re-upload proof (PDF, PNG, JPG – Max 5MB):</label><br>
+            <input type="file" name="payment_file" accept=".pdf,.png,.jpg,.jpeg" required>
+            <button type="submit" class="btn mt-1">Re-upload Proof</button>
+          </form>
+        {% else %}
+          <form method="post"
+                action="{% url 'products:upload_payment_proof' order_id=order.uuid %}"
+                enctype="multipart/form-data"
+                class="mt-1">
+            {% csrf_token %}
+            <label>Upload Proof of Payment (PDF, PNG, JPG – Max 5MB):</label><br>
+            <input type="file" name="payment_file" accept=".pdf,.png,.jpg,.jpeg" required>
+            <button type="submit" class="btn mt-1">Submit Proof</button>
+          </form>
+        {% endif %}
       </div>
     {% elif order.payment_status == "paid" %}
       <div class="alert alert-success">✅ Payment received and verified.</div>

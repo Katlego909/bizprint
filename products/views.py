@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -244,24 +245,31 @@ def cancel_order(request, order_id):
 def upload_payment_proof(request, order_id):
     order = get_object_or_404(Order, uuid=order_id, user=request.user)
 
+    def go_to_track():
+        base = reverse('products:track_order_result')       # -> '/track/result/'
+        query = urlencode({'ref': str(order.uuid)})
+        return redirect(f'{base}?{query}')
+
     if request.method == "POST":
         uploaded_file = request.FILES.get("payment_file")
+        if not uploaded_file:
+            messages.error(request, "No file uploaded.")
+            return go_to_track()
 
-        if uploaded_file:
-            if uploaded_file.size > 5 * 1024 * 1024:
-                messages.error(request, "File too large. Max 5MB.")
-                return redirect("products:track_order_result" + f"?ref={order.uuid}")
+        if uploaded_file.size > 5 * 1024 * 1024:
+            messages.error(request, "File too large. Max 5MB.")
+            return go_to_track()
 
-            valid_types = ['application/pdf', 'image/png', 'image/jpeg']
-            if uploaded_file.content_type not in valid_types:
-                messages.error(request, "Invalid file type.")
-                return redirect("products:track_order_result" + f"?ref={order.uuid}")
+        valid_types = ('application/pdf', 'image/png', 'image/jpeg')
+        if uploaded_file.content_type not in valid_types:
+            messages.error(request, "Invalid file type.")
+            return go_to_track()
 
-            order.proof_of_payment = uploaded_file
-            order.save()
-            messages.success(request, "Proof of payment uploaded. We'll confirm it soon.")
+        order.proof_of_payment = uploaded_file
+        order.save(update_fields=['proof_of_payment'])
+        messages.success(request, "Proof of payment uploaded. We'll confirm it soon.")
 
-    return redirect("products:track_order_result" + f"?ref={order.uuid}")
+    return go_to_track()
 
 # Contact Support View
 def contact_support(request):
