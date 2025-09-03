@@ -6,6 +6,7 @@ __pycache__/
 
 # Django static/media
 /media/
+/static_root/   # add this so collectstatic output is never tracked
 
 # Virtualenv
 venv/
