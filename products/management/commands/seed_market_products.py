@@ -1,225 +1,293 @@
 from django.core.management.base import BaseCommand
-from django.apps import apps
+from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from decimal import Decimal
-
-def find_model_by_name(model_name):
-    """Return the first installed model whose class name matches model_name."""
-    for m in apps.get_models():
-        if m.__name__.lower() == model_name.lower():
-            return m
-    return None
-
-def first_existing_field(model, candidates):
-    """Return the first field name that exists on the model from a list of candidates."""
-    model_fields = {f.name for f in model._meta.get_fields()}
-    for c in candidates:
-        if c in model_fields:
-            return c
-    return None
-
-PRODUCT_DATA = [
-    {
-        "name": "Business Cards — 350gsm, Matt Lamination (Single/Double Sided)",
-        "category": "Business Cards",
-        "description": (
-            "Premium 90×50mm cards on 350gsm board with smooth matt lamination. "
-            "Clean edges, crisp colour. Great for first impressions."
-        ),
-        # Competitive vs Webprinter (50=R290, 100=R300, 200=R320) -> ~10–15% lower.
-        "tiers": [
-            {"qty": 50,  "price": 255},
-            {"qty": 100, "price": 269},
-            {"qty": 200, "price": 289},
-            {"qty": 500, "price": 499},
-        ],
-    },
-    {
-        "name": "A5 Flyers — 130gsm, Full Colour (Single-Sided)",
-        "category": "Flyers",
-        "description": (
-            "Vibrant marketing flyers on 130gsm gloss. Ideal for promos, events, and handouts."
-        ),
-        # Anchor: Flyerz “A5 double sided from R299” -> make single-sided tiers very competitive.
-        "tiers": [
-            {"qty": 100,  "price": 259},
-            {"qty": 500,  "price": 699},
-            {"qty": 1000, "price": 1199},
-        ],
-    },
-    {
-        "name": "A4 Flyers — 130gsm, Full Colour (Single-Sided)",
-        "category": "Flyers",
-        "description": "Bigger canvas for menus, promos and product sheets. Sharp colour on 130gsm.",
-        "tiers": [
-            {"qty": 100,  "price": 399},
-            {"qty": 500,  "price": 999},
-            {"qty": 1000, "price": 1699},
-        ],
-    },
-    {
-        "name": "Vinyl Stickers — Die-Cut (Gloss/Matt) • Indoor/Outdoor",
-        "category": "Stickers",
-        "description": (
-            "Durable vinyl stickers, any shape. Weather-resistant, perfect for packaging and gear."
-        ),
-        # Competitive entry points for common sheet-based ordering.
-        "tiers": [
-            {"qty": 10,   "price": 49},     # ~per A4 sheet (guide)
-            {"qty": 50,   "price": 229},
-            {"qty": 100,  "price": 399},
-            {"qty": 1000, "price": 3490},
-        ],
-    },
-    {
-        "name": "A4 Brochures — Tri-Fold (Z-Fold optional) • 150gsm",
-        "category": "Brochures",
-        "description": "Professional tri-fold brochures on 150gsm. Great for company profiles & menus.",
-        "tiers": [
-            {"qty": 100,  "price": 699},
-            {"qty": 500,  "price": 2299},
-            {"qty": 1000, "price": 3799},
-        ],
-    },
-    {
-        "name": "A2 Posters — 170gsm, Full Colour",
-        "category": "Posters",
-        "description": "High-impact A2 posters on sturdy 170gsm. Retail promos, events, notices.",
-        "tiers": [
-            {"qty": 10,  "price": 399},
-            {"qty": 50,  "price": 1499},
-            {"qty": 100, "price": 2499},
-        ],
-    },
-    # Add more here if you like: Letterheads, Correx Boards, Roll-Up Banners, etc.
-]
-
-CATEGORIES = [
-    "Business Cards",
-    "Flyers",
-    "Stickers",
-    "Brochures",
-    "Posters",
-]
+from products.models import Product, Category, QuantityTier, ProductOption, OptionalService
 
 class Command(BaseCommand):
-    help = "Seed market-backed product data with competitive SA pricing. Safe on varying models."
+    help = "Seed market-backed product data with competitive SA pricing."
 
     def handle(self, *args, **options):
-        # Try to resolve likely model names
-        Category = find_model_by_name("Category") or find_model_by_name("ProductCategory")
-        Product = find_model_by_name("Product") or find_model_by_name("PrintingProduct")
-        PriceTier = find_model_by_name("PriceTier") or find_model_by_name("ProductPrice") or find_model_by_name("VariantPrice")
+        self.stdout.write("Seeding market products...")
 
-        if Product is None:
-            self.stdout.write(self.style.ERROR(
-                "Could not find a Product-like model (tried 'Product', 'PrintingProduct')."
-            ))
-            return
+        # 1. Define Categories
+        categories = [
+            "Business Cards",
+            "Flyers & Leaflets",
+            "Posters",
+            "Banners & Signage",
+            "Booklets & Magazines",
+            "Stickers & Labels",
+            "Calendars",
+            "Corporate Gifts",
+            "Apparel",
+            "Stationery",
+        ]
 
-        # Introspect field names on Product
-        price_field = first_existing_field(Product, ["price", "base_price", "unit_price", "starting_price"])
-        name_field = first_existing_field(Product, ["name", "title"])
-        slug_field = first_existing_field(Product, ["slug"])
-        desc_field = first_existing_field(Product, ["description", "desc", "long_description", "summary"])
-        active_field = first_existing_field(Product, ["is_active", "active", "enabled"])
-        sku_field = first_existing_field(Product, ["sku", "code"])
-        # Find any FK to Category
-        category_field = None
-        if Category:
-            for f in Product._meta.get_fields():
-                try:
-                    if f.is_relation and getattr(f, "remote_field", None) and f.remote_field.model == Category:
-                        category_field = f.name
-                        break
-                except Exception:
-                    pass
-
-        created_counts = {"categories": 0, "products": 0, "tiers": 0}
-
-        # Create categories if model exists
-        category_objs = {}
-        if Category:
-            for cname in CATEGORIES:
-                defaults = {}
-                if slug_field and hasattr(Category, "_meta") and "slug" in {f.name for f in Category._meta.get_fields()}:
-                    defaults["slug"] = slugify(cname)
-                cat_obj, created = Category.objects.get_or_create(
-                    **({"name": cname} if "name" in {f.name for f in Category._meta.get_fields()} else {"title": cname}),
-                    defaults=defaults
-                )
-                category_objs[cname] = cat_obj
-                if created:
-                    created_counts["categories"] += 1
-
-        # Seed products
-        for item in PRODUCT_DATA:
-            product_kwargs = {}
-
-            # name/title
-            if name_field:
-                product_kwargs[name_field] = item["name"]
-
-            # description
-            if desc_field:
-                product_kwargs[desc_field] = item["description"]
-
-            # slug
-            if slug_field:
-                product_kwargs[slug_field] = slugify(item["name"])
-
-            # category
-            if Category and category_field and item.get("category") in category_objs:
-                product_kwargs[category_field] = category_objs[item["category"]]
-
-            # pick a "starting price" (lowest tier) if we have a price field
-            if price_field and item["tiers"]:
-                product_kwargs[price_field] = Decimal(str(item["tiers"][0]["price"]))
-
-            # SKU
-            if sku_field:
-                product_kwargs[sku_field] = f"SKU-{slugify(item['name'])[:30]}"
-
-            # upsert by name/title
-            lookup = {name_field: item["name"]} if name_field else {}
-            obj, created = Product.objects.update_or_create(  # idempotent
-                **lookup, defaults=product_kwargs
+        cat_objs = {}
+        for cat_name in categories:
+            cat, created = Category.objects.get_or_create(
+                name=cat_name,
+                defaults={"description": f"All your {cat_name} needs."}
             )
+            cat_objs[cat_name] = cat
             if created:
-                created_counts["products"] += 1
+                self.stdout.write(f"Created Category: {cat_name}")
 
-            # activate if field exists
-            if active_field:
-                setattr(obj, active_field, True)
-                obj.save(update_fields=[active_field])
+        # 2. Define Products Data
+        products_data = [
+            # --- Business Cards ---
+            {
+                "name": "Standard Business Cards",
+                "category": "Business Cards",
+                "description": "Premium 350gsm board with a choice of finishes. The standard for professional networking.",
+                "tiers": [
+                    {"qty": 100, "price": 250},
+                    {"qty": 250, "price": 350},
+                    {"qty": 500, "price": 495},
+                    {"qty": 1000, "price": 795},
+                ],
+                "options": [
+                    {"type": "Finish", "value": "Matt Lamination", "price": 0},
+                    {"type": "Finish", "value": "Gloss Lamination", "price": 0},
+                    {"type": "Finish", "value": "Soft Touch", "price": 100},
+                    {"type": "Sides", "value": "Single Sided", "price": 0},
+                    {"type": "Sides", "value": "Double Sided", "price": 50},
+                    {"type": "Corners", "value": "Square", "price": 0},
+                    {"type": "Corners", "value": "Rounded", "price": 80},
+                ],
+                "services": [
+                    {"label": "Design Service", "price": 250, "required": False},
+                ]
+            },
+            {
+                "name": "Spot UV Business Cards",
+                "category": "Business Cards",
+                "description": "Stand out with glossy raised areas on a matt background. Ultimate luxury.",
+                "tiers": [
+                    {"qty": 250, "price": 850},
+                    {"qty": 500, "price": 1200},
+                    {"qty": 1000, "price": 1800},
+                ],
+                "options": [
+                    {"type": "Sides", "value": "Single Sided", "price": 0},
+                    {"type": "Sides", "value": "Double Sided", "price": 150},
+                ],
+                "services": [
+                    {"label": "Design Service", "price": 350, "required": False},
+                ]
+            },
 
-            # Optional: create price tiers if a model exists with sensible fields
-            if PriceTier:
-                # Detect likely field names on PriceTier
-                pt_product_fk = None
-                pt_qty_field = first_existing_field(PriceTier, ["qty", "quantity", "min_qty"])
-                pt_price_field = first_existing_field(PriceTier, ["price", "unit_price", "amount"])
-                for f in PriceTier._meta.get_fields():
-                    try:
-                        if f.is_relation and getattr(f, "remote_field", None) and f.remote_field.model == Product:
-                            pt_product_fk = f.name
-                            break
-                    except Exception:
-                        pass
+            # --- Flyers ---
+            {
+                "name": "A5 Flyers (Gloss)",
+                "category": "Flyers & Leaflets",
+                "description": "128gsm Gloss paper. Perfect for handing out at events or street marketing.",
+                "tiers": [
+                    {"qty": 1000, "price": 999},
+                    {"qty": 2500, "price": 1850},
+                    {"qty": 5000, "price": 2999},
+                ],
+                "options": [
+                    {"type": "Sides", "value": "Single Sided", "price": 0},
+                    {"type": "Sides", "value": "Double Sided", "price": 200},
+                ],
+                "services": [
+                    {"label": "Basic Layout", "price": 150, "required": False},
+                ]
+            },
+            {
+                "name": "A4 Folded Leaflets",
+                "category": "Flyers & Leaflets",
+                "description": "A4 folded to DL or A5. Great for menus and price lists. 170gsm Gloss.",
+                "tiers": [
+                    {"qty": 500, "price": 1450},
+                    {"qty": 1000, "price": 2200},
+                ],
+                "options": [
+                    {"type": "Fold", "value": "Z-Fold (Concertina)", "price": 0},
+                    {"type": "Fold", "value": "Roll Fold", "price": 0},
+                    {"type": "Fold", "value": "Half Fold", "price": 0},
+                ],
+                "services": []
+            },
 
-                if pt_product_fk and pt_qty_field and pt_price_field:
-                    for tier in item["tiers"]:
-                        tier_lookup = {
-                            pt_product_fk: obj,
-                            pt_qty_field: tier["qty"],
-                        }
-                        defaults = {pt_price_field: Decimal(str(tier["price"]))}
-                        _, t_created = PriceTier.objects.update_or_create(**tier_lookup, defaults=defaults)
-                        if t_created:
-                            created_counts["tiers"] += 1
+            # --- Posters ---
+            {
+                "name": "A1 Posters",
+                "category": "Posters",
+                "description": "Large format A1 posters printed on high quality satin paper.",
+                "tiers": [
+                    {"qty": 1, "price": 180},
+                    {"qty": 5, "price": 800},
+                    {"qty": 10, "price": 1500},
+                ],
+                "options": [
+                    {"type": "Paper", "value": "Standard Satin", "price": 0},
+                    {"type": "Paper", "value": "Premium Photo Gloss", "price": 50},
+                ],
+                "services": []
+            },
+            {
+                "name": "A2 Posters",
+                "category": "Posters",
+                "description": "Medium format A2 posters. Great for indoor signage.",
+                "tiers": [
+                    {"qty": 5, "price": 450},
+                    {"qty": 10, "price": 800},
+                    {"qty": 50, "price": 3500},
+                ],
+                "options": [],
+                "services": []
+            },
 
-        self.stdout.write(self.style.SUCCESS(
-            f"Done. Categories created: {created_counts['categories']}, "
-            f"Products created: {created_counts['products']}, "
-            f"Price tiers created: {created_counts['tiers']}."
-        ))
+            # --- Banners ---
+            {
+                "name": "Pull Up Banner (Standard)",
+                "category": "Banners & Signage",
+                "description": "850mm x 2000mm retractable banner stand. Includes carry bag.",
+                "tiers": [
+                    {"qty": 1, "price": 850},
+                    {"qty": 2, "price": 1600},
+                    {"qty": 5, "price": 3750},
+                ],
+                "options": [
+                    {"type": "Base", "value": "Standard Silver", "price": 0},
+                    {"type": "Base", "value": "Luxury Wide Base", "price": 300},
+                ],
+                "services": [
+                    {"label": "Banner Design", "price": 450, "required": False},
+                ]
+            },
+            {
+                "name": "PVC Banners with Eyelets",
+                "category": "Banners & Signage",
+                "description": "Durable outdoor PVC banners. Price per square meter equivalent.",
+                "tiers": [
+                    {"qty": 1, "price": 350}, # representing a standard size like 2x1m roughly
+                    {"qty": 5, "price": 1600},
+                ],
+                "options": [
+                    {"type": "Size", "value": "2m x 1m", "price": 0},
+                    {"type": "Size", "value": "3m x 1m", "price": 150},
+                    {"type": "Size", "value": "3m x 2m", "price": 500},
+                ],
+                "services": []
+            },
+
+            # --- Stickers ---
+            {
+                "name": "Vinyl Stickers (Round)",
+                "category": "Stickers & Labels",
+                "description": "Waterproof vinyl stickers, kiss cut on sheets.",
+                "tiers": [
+                    {"qty": 100, "price": 350},
+                    {"qty": 500, "price": 1200},
+                    {"qty": 1000, "price": 1900},
+                ],
+                "options": [
+                    {"type": "Size", "value": "30mm", "price": 0},
+                    {"type": "Size", "value": "50mm", "price": 50},
+                    {"type": "Size", "value": "80mm", "price": 150},
+                ],
+                "services": []
+            },
+
+            # --- Booklets ---
+            {
+                "name": "A4 Booklets (Saddle Stitched)",
+                "category": "Booklets & Magazines",
+                "description": "8 to 24 page booklets, stapled on the spine. Great for company profiles.",
+                "tiers": [
+                    {"qty": 50, "price": 2500},
+                    {"qty": 100, "price": 4500},
+                ],
+                "options": [
+                    {"type": "Pages", "value": "8 Pages", "price": 0},
+                    {"type": "Pages", "value": "12 Pages", "price": 500},
+                    {"type": "Pages", "value": "16 Pages", "price": 1000},
+                ],
+                "services": []
+            },
+
+            # --- Corporate Gifts ---
+            {
+                "name": "Branded Coffee Mugs",
+                "category": "Corporate Gifts",
+                "description": "Standard 330ml white ceramic mug with full colour sublimation print.",
+                "tiers": [
+                    {"qty": 10, "price": 850},
+                    {"qty": 50, "price": 3750},
+                    {"qty": 100, "price": 6500},
+                ],
+                "options": [],
+                "services": []
+            },
+            {
+                "name": "Branded Pens",
+                "category": "Corporate Gifts",
+                "description": "Plastic barrel pens with single colour pad print.",
+                "tiers": [
+                    {"qty": 100, "price": 800},
+                    {"qty": 500, "price": 3500},
+                ],
+                "options": [
+                    {"type": "Ink Colour", "value": "Black", "price": 0},
+                    {"type": "Ink Colour", "value": "Blue", "price": 0},
+                ],
+                "services": []
+            },
+        ]
+
+        # 3. Create Products and related data
+        for p_data in products_data:
+            cat = cat_objs.get(p_data["category"])
+            
+            # Create dummy image content
+            dummy_image_content = b"fake_image_data"
+            
+            product, created = Product.objects.get_or_create(
+                name=p_data["name"],
+                defaults={
+                    "category": cat,
+                    "description": p_data["description"],
+                }
+            )
+            
+            # If created, we need to save the image file to satisfy the ImageField
+            if created:
+                # We save a dummy file. In production, you'd want real images.
+                product.image.save(f"{slugify(p_data['name'])}.jpg", ContentFile(dummy_image_content), save=True)
+                self.stdout.write(self.style.SUCCESS(f"Created Product: {product.name}"))
+            else:
+                self.stdout.write(f"Product already exists: {product.name}")
+
+            # Create Quantity Tiers
+            for tier in p_data["tiers"]:
+                QuantityTier.objects.get_or_create(
+                    product=product,
+                    quantity=tier["qty"],
+                    defaults={"base_price": Decimal(tier["price"])}
+                )
+
+            # Create Options
+            for opt in p_data["options"]:
+                ProductOption.objects.get_or_create(
+                    product=product,
+                    option_type=opt["type"],
+                    value=opt["value"],
+                    defaults={"price_modifier": Decimal(opt["price"])}
+                )
+
+            # Create Services
+            for srv in p_data["services"]:
+                OptionalService.objects.get_or_create(
+                    product=product,
+                    label=srv["label"],
+                    defaults={
+                        "price": Decimal(srv["price"]),
+                        "is_required": srv.get("required", False)
+                    }
+                )
+
+        self.stdout.write(self.style.SUCCESS("Market products seeded successfully!"))

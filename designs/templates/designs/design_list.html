@@ -3,94 +3,38 @@
 {% block title %}Design Packages - BizPrint{% endblock %}
 
 {% block extra_head %}
-<style>
-  .design-packages-container {
-    max-width: 1100px;
-    margin: 4rem auto;
-    padding: 0 1rem;
-    text-align: center;
-  }
-
-  .design-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-
-  .design-card {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .design-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  }
-
-  .design-card h4 {
-    font-size: 1.4rem;
-    color: #1d3557;
-    margin-bottom: 1rem;
-  }
-
-  .design-card p {
-    font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 1.5rem;
-  }
-
-  .design-card .price {
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-    color: #e63946;
-    font-size: 1.1rem;
-  }
-
-  .design-card .btn {
-    background: #e63946;
-    color: #fff;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: background 0.2s ease;
-  }
-
-  .design-card .btn:hover {
-    background: #d62839;
-  }
-</style>
 {% endblock %}
 
 {% block content %}
 <div class="design-packages-container">
-  <h1 class="section-title">Choose a Design Package</h1>
+  <h1 class="section-title">Choose Your Design Packages</h1>
 
-  <div class="design-grid">
-    {% for package in packages %}
+  <form action="{% url 'designs:design_request_create' %}" method="GET">
+    <div class="design-grid">
+      {% for package in packages %}
+        <div class="design-card">
+          {% if package.image %}
+            <img src="{{ package.image.url }}" alt="{{ package.title }}" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
+          {% else %}
+            <img src="{% static 'images/default-package.jpg' %}" alt="Default Package" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
+          {% endif %}
 
-      <div class="design-card">
-        {% if package.image %}
-          <img src="{{ package.image.url }}" alt="{{ package.title }}" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
-        {% else %}
-          <img src="{% static 'images/default-package.jpg' %}" alt="Default Package" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
-        {% endif %}
-
-        <h4>{{ package.title }}</h4>
-        <p>{{ package.description }}</p>
-        <div class="price">R{{ package.price }}</div>
-        <a href="{% url 'designs:design_request_create' %}" class="btn">Request</a>
-      </div>
-    {% empty %}
-      <p>No design packages available.</p>
-    {% endfor %}
-  </div>
+          <h4>{{ package.title }}</h4>
+          <p>{{ package.description }}</p>
+          <div class="price">R{{ package.price }}</div>
+          <div class="select-package-checkbox">
+            <input type="checkbox" name="packages" id="package_{{ package.id }}" value="{{ package.id }}">
+            <label for="package_{{ package.id }}">Add to Request</label>
+          </div>
+        </div>
+      {% empty %}
+        <p>No design packages available.</p>
+      {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary" id="proceed-to-request-btn">Proceed to Request</button>
+    </div>
+  </form>
 </div>
 {% endblock %}

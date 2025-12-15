@@ -149,18 +149,28 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# Email Configuration
+# For development, print emails to the console instead of sending them.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_HOST_USER = 'katlego.hlangwane@gmail.com'
-EMAIL_HOST_PASSWORD = 'bscd dvxo hgon puov' 
+# To send real emails, uncomment the lines below and ensure your App Password is correct.
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'katlego.hlangwane@gmail.com'
+# EMAIL_HOST_PASSWORD = 'bscd dvxo hgon puov' 
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'katlego.hlangwane@gmail.com'
 EMAIL_SUBJECT_PREFIX = '[BizPrint] '
 
 
 # Only enable hashed/compressed storage in prod
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    
+
+
+TWILIO_ACCOUNT_SID = 'your_sid_here'
+TWILIO_AUTH_TOKEN = 'your_token_here'
+TWILIO_WHATSAPP_NUMBER = 'whatsapp:+14155238886'    

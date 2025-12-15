@@ -44,7 +44,11 @@
 
   <div style="margin-bottom: 2rem;">
     <p><strong>Invoice Number:</strong> #{{ design_request.id }}</p>
-    <p><strong>Issued To:</strong> {{ design_request.user.first_name }} {{ design_request.user.last_name }} {{ design_request.user.email }}</p>
+    <p><strong>Issued To:</strong> {{ design_request.full_name|default:design_request.user.get_full_name|default:"Guest" }}</p>
+    <p><strong>Email:</strong> {{ design_request.email|default:design_request.user.email }}</p>
+    {% if design_request.phone or design_request.user.profile.phone %}
+      <p><strong>Phone:</strong> {{ design_request.phone|default:design_request.user.profile.phone }}</p>
+    {% endif %}
     <p><strong>Invoice Date:</strong> {{ design_request.created_at|date:"d M Y" }}</p>
   </div>
 

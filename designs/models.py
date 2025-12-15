@@ -32,6 +32,10 @@ class DesignRequest(models.Model):
         blank=True,
         help_text="Required if you are not logged in"
     )
+    phone = models.CharField(max_length=20, blank=True, help_text="Contact number for WhatsApp updates")
+    full_name = models.CharField(max_length=150, blank=True, help_text="Client name")
+    
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True, null=True, db_index=True)
     quote_token = models.CharField(
         max_length=32,
         unique=True,

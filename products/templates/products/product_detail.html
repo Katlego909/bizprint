@@ -2,8 +2,25 @@
 
 {% block title %}{{ product.name }} - BizPrint{% endblock %}
 
-{% block content %}
+{% block extra_head %}
 <style>
+  /* Reusing the clean form styles */
+  .form-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+  }
+  .form-section h3 {
+    margin-top: 0;
+    color: #1d3557;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
   .product-header {
     display: flex;
     flex-wrap: wrap;
@@ -18,7 +35,7 @@
   }
 
   .product-image img {
-    max-width: 100%;
+    width: 100%;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
@@ -30,17 +47,92 @@
   .product-info h1 {
     margin-top: 0;
     color: #1d3557;
+    font-size: 2.5rem;
   }
 
-  .product-info p {
+  .product-info .description {
     color: #555;
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 1.1rem;
+    line-height: 1.6;
   }
 
-  #total-price {
-    font-size: 1.2rem;
-    font-weight: bolder;
+  /* Form Controls */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+  .form-control {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    background: #fff;
+  }
+  .form-control:focus {
+    border-color: #1d3557;
+    outline: none;
+  }
+
+  /* Checkbox Group */
+  .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .checkbox-group label:hover {
+    background: #f9f9f9;
+  }
+  .checkbox-group input[type="checkbox"] {
+    transform: scale(1.2);
+  }
+
+  /* Sticky Footer */
+  .sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid #ddd;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  .sticky-footer.visible {
+    transform: translateY(0);
+  }
+  
+  .total-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.2rem;
+  }
+  .total-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1d3557;
+  }
+
+  .main-container {
+    padding-bottom: 100px;
   }
 
   @media (max-width: 768px) {
@@ -49,8 +141,10 @@
     }
   }
 </style>
+{% endblock %}
 
-<div class="container">
+{% block content %}
+<div class="container main-container">
 
   <!-- 🔥 Product Info Preview -->
   <div class="product-header">
@@ -67,62 +161,118 @@
   <form method="post" enctype="multipart/form-data" id="order-form">
     {% csrf_token %}
 
-    <label>Quantity:</label>
-    <select name="quantity" id="quantity-select" required>
-      <option value="">-- Select Quantity --</option>
-      {% for q in quantities %}
-        <option value="{{ q.quantity }}" data-baseprice="{{ q.base_price }}">
-          {{ q.quantity }} (R{{ q.base_price }})
-        </option>
-      {% endfor %}
-    </select>
-    <br><br>
+    <!-- Section 1: Configuration -->
+    <div class="form-section">
+      <h3>1. Configure Your Product</h3>
+      
+      <div class="form-group">
+        <label for="quantity-select">Quantity</label>
+        <select name="quantity" id="quantity-select" class="form-control" required>
+          <option value="">-- Select Quantity --</option>
+          {% for q in quantities %}
+            <option value="{{ q.quantity }}" data-baseprice="{{ q.base_price }}">
+              {{ q.quantity }} units (R{{ q.base_price }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
 
-    {% for option_type, options in grouped_options.items %}
-      <label>{{ option_type }}</label>
-      <select name="{{ option_type }}" class="option-select" required>
-        <option value="">-- Select {{ option_type }} --</option>
-        {% for opt in options %}
-          <option value="{{ opt.value }}" data-price="{{ opt.price_modifier }}">
-            {{ opt.value }}{% if opt.price_modifier > 0 %} (+R{{ opt.price_modifier }}){% endif %}
-          </option>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        {% for option_type, options in grouped_options.items %}
+          <div class="form-group">
+            <label>{{ option_type }}</label>
+            <select name="{{ option_type }}" class="option-select form-control" required>
+              <option value="">-- Select {{ option_type }} --</option>
+              {% for opt in options %}
+                <option value="{{ opt.value }}" data-price="{{ opt.price_modifier }}">
+                  {{ opt.value }}{% if opt.price_modifier > 0 %} (+R{{ opt.price_modifier }}){% endif %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
         {% endfor %}
-      </select>
-      <br><br>
-    {% endfor %}
+      </div>
 
-    {% if services %}
-      <label>Extras:</label>
-      {% for service in services %}
-        <label>
-          <input type="checkbox" name="{{ service.label }}" class="service-check" data-price="{{ service.price }}">
-          {{ service.label }}{% if service.price > 0 %} (+R{{ service.price }}){% endif %}
-        </label><br>
-      {% endfor %}
-      <br>
-    {% endif %}
+      {% if services %}
+        <div class="form-group checkbox-group">
+          <label style="margin-bottom: 0.5rem; border: none; padding: 0;">Optional Extras</label>
+          {% for service in services %}
+            <label>
+              <input type="checkbox" name="{{ service.label }}" class="service-check" data-price="{{ service.price }}">
+              <span>{{ service.label }} {% if service.price > 0 %}<strong style="color: #e63946;">(+R{{ service.price }})</strong>{% endif %}</span>
+            </label>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
 
-    <!-- 🚚 Shipping Method -->
-    <label>Shipping Method:</label>
-    <select name="shipping_method" id="shipping-method" required>
-      <option value="">-- Select Shipping Option --</option>
-      <option value="standard" data-price="50.00">Standard (R50)</option>
-      <option value="express" data-price="120.00">Express (R120)</option>
-      <option value="pickup" data-price="0.00">Pickup (Free)</option>
-    </select>
-    <br><br>
+    <!-- Section 2: Shipping & Upload -->
+    <div class="form-section">
+      <h3>2. Shipping & Artwork</h3>
+      
+      <div class="form-group">
+        <label for="shipping-method">Shipping Method</label>
+        <select name="shipping_method" id="shipping-method" class="form-control" required>
+          <option value="">-- Select Shipping Option --</option>
+          {% for method in shipping_methods %}
+            <option value="{{ method.slug }}" data-price="{{ method.price }}">
+              {{ method.name }} (R{{ method.price }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
 
-    <label>Upload your artwork (PDF, PNG, JPG):</label>
-    <input type="file" name="file" accept=".pdf,.png,.jpg" required>
-    <br><br>
+      <div class="form-group">
+        <label>Upload Artwork (PDF, PNG, JPG)</label>
+        <div style="border: 2px dashed #ccc; padding: 2rem; text-align: center; border-radius: 6px; background: #fafafa;">
+            <input type="file" name="file" id="id_file" accept=".pdf,.png,.jpg" required style="display: none;" onchange="showFileName(this)">
+            <label for="id_file" class="btn btn-secondary" style="cursor: pointer; margin: 0;">Choose File</label>
+            <p id="file-name" style="margin-top: 1rem; color: #666; font-size: 0.9rem;">No file selected</p>
+        </div>
+      </div>
+    </div>
 
-    <label>Discount Code (if you have one):</label>
-    <input type="text" name="discount_code" placeholder="Enter your 10% code">
-    <br><br>
+    <!-- Section 3: Delivery Details -->
+    <div class="form-section">
+      <h3>3. Delivery Details</h3>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="full_name" class="form-control" value="{{ user.first_name }} {{ user.last_name }}" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+        </div>
+      </div>
 
-    <p><strong>Total (incl. 15% VAT):</strong> R<span id="total-price">0.00</span></p>
-    <br>
-    <button type="submit" class="btn btn-primary">Place Order</button>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="form-group">
+          <label>Contact Phone</label>
+          <input type="text" name="phone" class="form-control" value="{{ user.profile.phone|default:'' }}" required placeholder="e.g. 082 123 4567">
+        </div>
+        <div class="form-group">
+          <label>Discount Code</label>
+          <input type="text" name="discount_code" class="form-control" placeholder="Enter code (optional)">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Shipping Address</label>
+        <textarea name="address" rows="3" class="form-control" required placeholder="Street address, Suburb, City, Postal Code">{{ user.profile.address|default:'' }}</textarea>
+      </div>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="sticky-footer" id="sticky-footer">
+      <div>
+        <div class="total-label">Total (incl. VAT)</div>
+        <div class="total-amount">R<span id="total-price">0.00</span></div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2.5rem; font-size: 1.1rem;">Place Order</button>
+    </div>
+
   </form>
 
 </div>
@@ -133,6 +283,20 @@
   const serviceChecks = document.querySelectorAll(".service-check");
   const shippingSelect = document.getElementById("shipping-method");
   const totalPriceEl = document.getElementById("total-price");
+  const stickyFooter = document.getElementById("sticky-footer");
+
+  function showFileName(input) {
+    const nameDisplay = document.getElementById('file-name');
+    if (input.files && input.files.length > 0) {
+      nameDisplay.textContent = "Selected: " + input.files[0].name;
+      nameDisplay.style.color = "#1d3557";
+      nameDisplay.style.fontWeight = "bold";
+    } else {
+      nameDisplay.textContent = "No file selected";
+      nameDisplay.style.color = "#666";
+      nameDisplay.style.fontWeight = "normal";
+    }
+  }
 
   function updateTotal() {
     const basePrice = parseFloat(quantitySelect.selectedOptions[0]?.dataset.baseprice || 0);
@@ -157,11 +321,48 @@
     const total = subtotal + tax;
 
     totalPriceEl.textContent = total.toFixed(2);
+
+    // Show footer if a quantity is selected (meaning a price exists)
+    if (basePrice > 0) {
+      stickyFooter.classList.add('visible');
+    } else {
+      stickyFooter.classList.remove('visible');
+    }
   }
 
   quantitySelect.addEventListener("change", updateTotal);
   optionSelects.forEach(s => s.addEventListener("change", updateTotal));
   serviceChecks.forEach(c => c.addEventListener("change", updateTotal));
   shippingSelect.addEventListener("change", updateTotal);
+</script>
+
+{{ pending_data|json_script:"pending-data-json" }}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const pendingDataElement = document.getElementById('pending-data-json');
+    if (pendingDataElement) {
+      const pendingData = JSON.parse(pendingDataElement.textContent);
+      if (pendingData && Object.keys(pendingData).length > 0) {
+        // console.log("Restoring pending order data...", pendingData);
+        for (const [key, value] of Object.entries(pendingData)) {
+          if (key === 'csrfmiddlewaretoken') continue;
+          
+          // Try to find input by name
+          const input = document.querySelector(`[name="${key}"]`);
+          if (input) {
+            if (input.type === 'checkbox') {
+              input.checked = true;
+            } else if (input.tagName === 'SELECT') {
+                input.value = value;
+            } else if (input.type !== 'file') {
+                input.value = value;
+            }
+            // Trigger change event manually to update totals
+            input.dispatchEvent(new Event('change'));
+          }
+        }
+      }
+    }
+  });
 </script>
 {% endblock %}

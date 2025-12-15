@@ -8,7 +8,7 @@
     <button type="submit" class="btn btn-primary" >Login</button>
   </form>
   
-  <small>Don't have an account? <a href="{% url "accounts:register" %}">Register</a></small>
+  <small>Don't have an account? <a href="{% url "accounts:register" %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">Register</a></small>
  
 </div>
 {% endblock %}

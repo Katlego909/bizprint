@@ -4,390 +4,6 @@
 {% block title %}Welcome to BizPrint{% endblock %}
 
 {% block extra_head %}
-<style>
-
-  a {
-    text-decoration: none;
-  }
-
-  .hero-section {
-    position: relative;
-    height: 65vh;
-    background: url('{% static "images/homepage_banner.png" %}') center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-  }
-
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(29, 53, 87, 0.6);
-    z-index: 1;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 700px;
-    padding: 2rem;
-  }
-
-  .hero-content h1 {
-    font-size: 3rem;
-    color: #fff;
-  }
-
-  .hero-content p {
-    font-size: 1.2rem;
-    margin: 2rem 0;
-  }
-
-  .hero-content .cta-btn {
-    background: #e63946;
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    text-decoration: none;
-    transition: background 0.3s ease;
-  }
-
-  .hero-content .cta-btn:hover {
-    background: #d62839;
-  }
-
-  .hero-cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .section-title {
-    text-align: center;
-    font-size: 1.8rem;
-    margin: 4rem 0 2rem;
-    color: #1d3557;
-  }
-
-  .products-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    padding: 0 1rem 3rem;
-  }
-
-  .product-card {
-    flex: 1 1 250px;
-    max-width: 320px;
-    min-height: 380px;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    text-align: center;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-sizing: border-box;
-  }
-
-  .product-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-  }
-
-  .product-card h4 {
-    margin-bottom: 0.5rem;
-    color: #1d3557;
-    font-size: 1.1rem;
-  }
-
-  .product-card p {
-    font-size: 0.9rem;
-    color: #555;
-    min-height: 60px;
-    margin-bottom: auto;
-  }
-  
-  {% comment %} Category  {% endcomment %}
-  
-  .category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    padding: 0 1rem 3rem;
-  }
-
-  .category-card {
-    flex: 1 1 250px;
-    max-width: 320px;
-    border-radius: 10px;
-    overflow: hidden;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-sizing: border-box;
-  }
-
-  .category-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-  }
-
-  .category-card h4 {
-    margin-bottom: 0.5rem;
-    color: #1d3557;
-    font-size: 1.1rem;
-  }
-
-  .category-card p {
-    font-size: 0.9rem;
-    color: #555;
-    min-height: 60px;
-    margin-bottom: auto;
-  }
-
-  .why-section {
-    background: #ffffff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    border-radius: 10px;
-    padding: 3rem 2rem 4rem;
-    max-width: 1000px;
-    margin: 0 auto 3rem;
-    text-align: center;
-  }
-
-  .why-section .intro {
-    font-size: 1.1rem;
-    color: #444;
-    margin-bottom: 2rem;
-  }
-
-  .why-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-
-  .why-point {
-    background: #f9f9f9;
-    border-radius: 10px;
-    padding: 2rem;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
-  }
-
-  .why-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .why-point h3 {
-    color: #1d3557;
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .why-point p {
-    font-size: 0.95rem;
-    color: #555;
-  }
-
-  .cta-section {
-    background: #1d3557;
-    color: white;
-    text-align: center;
-    padding: 3rem 2rem;
-    margin-top: 4rem;
-  }
-
-  .cta-section h2 {
-    color: #fff;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .cta-section p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cta-btn {
-    display: inline-block;
-    padding: 14px 30px;
-    font-size: 1rem;
-    background: #e63946;
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.2s ease;
-    text-decoration: none;
-  }
-
-  .cta-btn-printing {
-    display: inline-block;
-    padding: 14px 30px;
-    font-size: 1rem;
-    background: #e63946;
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.2s ease;
-    text-decoration: none;
-  }
-
-  .cta-btn-designs {
-    display: inline-block;
-    padding: 14px 30px;
-    font-size: 1rem;
-    background: #1d3557;
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.2s ease;
-    text-decoration: none;
-  }
-
-  .cta-btn:hover {
-    background: #d62839;
-  }
-
-  .cta-btn-printing:hover {
-    background: #d62839;
-  }
-
-  .cta-btn-designs:hover {
-    background: #1d3557;
-  }
-
-  /* FAQ Accordion Styles */
-
-  .faq-section {
-    max-width: 1000px;
-    margin: 4rem auto;
-    padding: 0 2rem;
-  }
-
-  .faq-section h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    color: #1d3557;
-  }
-
-  .faq-item {
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #ddd;
-  }
-
-  .faq-item input {
-    display: none;
-  }
-
-  .faq-question {
-    display: block;
-    background: #f1f2f6;
-    padding: 1rem 1.2rem;
-    cursor: pointer;
-    font-weight: 600;
-    color: #1d3557;
-    transition: background 0.2s ease;
-  }
-
-  .faq-question:hover {
-    background: #e9ecef;
-  }
-
-  .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    background: white;
-    padding: 0 1.2rem;
-  }
-
-  .faq-item input:checked ~ .faq-answer {
-    max-height: 300px;
-    padding: 1rem 1.2rem;
-  }
-
-  .faq-answer p {
-    margin: 0;
-    color: #444;
-    font-size: 0.95rem;
-  }
-
-  .section {
-    margin: 6rem 0;
-  }
-
-  @media (max-width: 768px) {
-    .hero-content h1 {
-      font-size: 2.2rem;
-    }
-
-    .hero-content p {
-      font-size: 1rem;
-    }
-
-    .hero-content .cta-btn {
-      padding: 0.8rem 1.5rem;
-      font-size: 0.95rem;
-    }
-
-    .products-grid {
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-
-    .product-card {
-      width: 100%;
-      max-width: 340px;
-    }
-
-    .hero-cta {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .hero-cta a {
-      width: 100%;
-    }
-
-    .why-section {
-      margin: 2rem;
-    }
-
-    {% comment %} .cta-btn-printing {
-      margin-bottom: 1rem;
-    } {% endcomment %}
-  }
-</style>
-
 {% endblock %}
 
 {% block content %}
@@ -401,8 +17,8 @@
       <h1>High-Quality Printing. Delivered Fast.</h1>
       <p>Professional-grade print materials tailored for your business or personal needs.</p>
       <div class="hero-cta">
-        <a href="{% url 'products:product_list' %}" class="cta-btn-printing">Start Printing Now</a>
-        <a href="{% url 'designs:design_list' %}" class="cta-btn-designs">Design Services</a>
+        <a href="{% url 'products:product_list' %}" class="cta-btn btn-primary">Start Printing Now</a>
+        <a href="{% url 'designs:design_list' %}" class="cta-btn btn-outline">Design Services</a>
       </div>
     </div>
   </div>
@@ -410,19 +26,19 @@
 
     <!-- Categories Section -->
      <section class="section">
-  <div class="categories-wrapper" style="max-width: 1100px; margin: 4rem auto; padding: 0 1rem; text-align: center;">
+  <div class="categories-wrapper">
     <h2 class="section-title">Explore All Categories</h2>
 
-    <div class="categories-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2rem; margin-top: 2rem;">
+    <div class="categories-grid">
       {% for category in categories|slice:":10" %}
-        <a href="{% url 'products:products_by_category' category.slug %}" style="text-decoration: none; color: inherit;">
-          <div style="display: flex; flex-direction: column; align-items: center;">
+        <a href="{% url 'products:products_by_category' category.slug %}">
+          <div class="category-card-small">
             {% if category.image %}
-              <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <img src="{{ category.image.url }}" alt="{{ category.name }}">
             {% else %}
-              <div style="width: 120px; height: 120px; background: #f1f1f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">📦</div>
+              <div class="category-placeholder">📦</div>
             {% endif %}
-            <p style="margin-top: 0.8rem; font-weight: 600;">{{ category.name }}</p>
+            <p>{{ category.name }}</p>
           </div>
         </a>
       {% empty %}
@@ -430,8 +46,8 @@
       {% endfor %}
     </div>
 
-    <div style="margin-top: 2rem;">
-      <a href="{% url 'products:all_categories' %}" class="cta-btn" style="background: #1d3557;">View All Categories</a>
+    <div class="text-center" style="margin-top: 2rem;">
+      <a href="{% url 'products:all_categories' %}" class="btn btn-primary">View All Categories</a>
     </div> 
   </div>
 </section>
@@ -455,8 +71,8 @@
 
   <!-- Why BizPrint -->
    <section class="section">
-  <div class="why-section">
-    <h2>Why Choose <span style="color: #e63946;">BizPrint</span>?</h2>
+  <div class="why-section text-center">
+    <h2>Why Choose <span class="text-primary-red">BizPrint</span>?</h2>
     <p class="intro">More than just a print shop — we’re your creative production partner.</p>
     <div class="why-grid">
       <div class="why-point">
@@ -480,7 +96,7 @@
 
   <!-- Design Services Section -->
    <section class="section">
-  <div class="why-section" style="margin-top: 4rem;">
+  <div class="why-section text-center">
     <h2>Need Custom Designs?</h2>
     <p class="intro">Stand out with stunning designs crafted by our professional team. Whether you need a logo, business cards, company profile, or marketing material — we create it with excellence.</p>
     
@@ -503,7 +119,7 @@
     </div>
 
     <div style="margin-top: 2rem;">
-      <a href="{% url 'designs:design_list' %}" class="cta-btn-designs">Explore Design Packages</a>
+      <a href="{% url 'designs:design_list' %}" class="cta-btn">Explore Design Packages</a>
     </div>
   </div>
 </section>
@@ -555,13 +171,34 @@
     <a href="{% url 'products:product_list' %}" class="cta-btn">Start Your Order</a>
   </div>
 
-  <div class="newsletter-section" style="background:#f1f1f1;padding:2rem;text-align:center;">
+  <!-- Testimonials Section -->
+  <section class="section">
+    <div class="testimonials-section">
+      <h2 class="section-title">What Our Clients Say</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"BizPrint transformed our marketing materials! The quality is exceptional, and the turnaround time was incredibly fast. Highly recommend!"</p>
+          <p class="testimonial-author">- Sarah P., Marketing Director</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"The design team at BizPrint helped us create a stunning new logo. They understood our vision perfectly and delivered beyond expectations."</p>
+        <p class="testimonial-author">- John D., Small Business Owner</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Reliable, professional, and always delivers. BizPrint is our go-to for all our printing needs. Fantastic service every time!"</p>
+          <p class="testimonial-author">- Emily R., Event Coordinator</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="newsletter-section-home">
     <h3>📬 Get 10% Off Your First Order</h3>
     <p>Join our newsletter and receive a discount code straight to your inbox.</p>
-    <form action="{% url 'accounts:subscribe_newsletter' %}" method="POST" style="margin-top:1rem;">
+    <form action="{% url 'accounts:subscribe_newsletter' %}" method="POST">
       {% csrf_token %}
-      <input type="email" name="email" placeholder="Enter your email" required style="padding: 1rem;width:350px;border-radius:6px;border:1px solid #ccc;">
-      <button type="submit" class="cta-btn" style="margin-left: 0.5rem; border:none;">Sign Up</button>
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <button type="submit" class="cta-btn">Sign Up</button>
     </form>
   </div>
 

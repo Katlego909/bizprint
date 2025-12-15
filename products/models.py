@@ -5,12 +5,13 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.urls import reverse
 from django.db.models import Min, Q
+from .mixins import UniqueSlugMixin
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Category
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Category(models.Model):
+class Category(UniqueSlugMixin, models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, null=True, blank=True)
     description = models.TextField(blank=True)
@@ -31,36 +32,12 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('products:products_by_category', kwargs={'slug': self.slug})
 
-    # ---- helpers ----
-    def _generate_unique_slug(self):
-        """
-        Create a URL-safe slug from name and ensure uniqueness by adding -2, -3, ...
-        Only called when slug is empty.
-        """
-        base = slugify(self.name) or "category"
-        maxlen = self._meta.get_field("slug").max_length or 50
-        slug = base[:maxlen]
-
-        # If taken, append -2, -3 ... truncating base to keep within maxlen
-        counter = 2
-        while Category.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-            suffix = f"-{counter}"
-            slug = f"{base[:maxlen - len(suffix)]}{suffix}"
-            counter += 1
-        return slug
-
-    # ---- save override ----
-    def save(self, *args, **kwargs):
-        if not self.slug and self.name:
-            self.slug = self._generate_unique_slug()
-        super().save(*args, **kwargs)
-
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Products
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class Product(models.Model):
+class Product(UniqueSlugMixin, models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, null=True, blank=True)
     description = models.TextField(blank=True)
@@ -79,23 +56,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
-    # NEW: keep slug populated if left blank
-    def _generate_unique_slug(self):
-        base = slugify(self.name) or "product"
-        maxlen = self._meta.get_field("slug").max_length or 50
-        slug = base[:maxlen]
-        counter = 2
-        while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-            suffix = f"-{counter}"
-            slug = f"{base[:maxlen - len(suffix)]}{suffix}"
-            counter += 1
-        return slug
-
-    def save(self, *args, **kwargs):
-        if not self.slug and self.name:
-            self.slug = self._generate_unique_slug()
-        super().save(*args, **kwargs)
 
     # NEW: convenience for templates/admin; does not change stored totals
     @property
@@ -173,6 +133,20 @@ class OptionalService(models.Model):
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Shipping
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class ShippingMethod(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.name} (R{self.price})"
+
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Orders
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -212,6 +186,8 @@ class Order(models.Model):
     file = models.FileField(upload_to='orders/')
 
     shipping_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)  # ✅ Shipping field added
+    discount_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00) # ✅ Discount amount
+    discount_code = models.CharField(max_length=50, blank=True, null=True)              # ✅ Discount code used
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.RECEIVED)

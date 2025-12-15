@@ -188,9 +188,12 @@
 
   <!-- Totals -->
   <div class="invoice-totals">
-    <p><strong>Subtotal:</strong> R{{ subtotal|floatformat:2 }}</p>
+    <p><strong>Subtotal:</strong> R{{ product_subtotal|floatformat:2 }}</p>
     {% if order.shipping_price %}
       <p><strong>Shipping:</strong> R{{ order.shipping_price|floatformat:2 }}</p>
+    {% endif %}
+    {% if order.discount_amount > 0 %}
+      <p style="color: #e63946;"><strong>Discount{% if order.discount_code %} ({{ order.discount_code }}){% endif %}:</strong> -R{{ order.discount_amount|floatformat:2 }}</p>
     {% endif %}
     <p><strong>VAT (15%):</strong> R{{ vat|floatformat:2 }}</p>
     <p class="invoice-total-bold"><strong>Total:</strong> R{{ order.total_price|floatformat:2 }}</p>

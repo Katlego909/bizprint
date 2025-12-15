@@ -2,46 +2,146 @@
 
 {% block title %}Request a Design – BizPrint{% endblock %}
 
-{% block content %}
-<div class="container" style="max-width: 800px; margin: 3rem auto;">
-  <h1 class="section-title">Request a Design / Create a Quotation</h1>
+{% block extra_head %}
+{% endblock %}
 
-  <form method="post" enctype="multipart/form-data" style="background: #f9f9f9; padding: 2rem; border-radius: 10px;">
+{% block content %}
+<div class="container main-container" style="max-width: 900px; margin: 3rem auto;">
+  
+  <div style="text-align: center; margin-bottom: 3rem;">
+    <h1 class="section-title" style="margin-bottom: 0.5rem;">Start Your Design Project</h1>
+    <p style="color: #666; font-size: 1.1rem;">Select the packages you need, tell us about your vision, and we'll get to work.</p>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" id="design-form">
     {% csrf_token %}
 
-    {# if user is anonymous, ask for their email #}
-    {% if not request.user.is_authenticated %}
-      <div style="margin-bottom: 1.5rem;">
-        <label for="id_email">Your Email <span style="color: #e63946;">*</span></label>
-        <input type="email" name="email" id="id_email" required
-               style="width:100%; padding:0.8rem; margin-top:0.5rem; border-radius:4px; border:1px solid #ccc;">
+    <!-- Step 1: Contact Info -->
+    <div class="form-section">
+      <h3>1. Contact Details</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="form-group">
+          <label for="id_fullname">Full Name</label>
+          <input type="text" name="full_name" id="id_fullname" class="form-control"
+                 value="{% if form_data %}{{ form_data.full_name }}{% elif request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}"
+                 placeholder="Your Name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="id_phone">Phone Number (WhatsApp)</label>
+          <input type="text" name="phone" id="id_phone" class="form-control"
+                 value="{% if form_data %}{{ form_data.phone }}{% elif request.user.is_authenticated and request.user.profile %}{{ request.user.profile.phone }}{% endif %}"
+                 placeholder="e.g. 082 123 4567">
+        </div>
       </div>
-    {% endif %}
 
-    <h3>Select Packages:</h3>
-    {% for package in packages %}
-      <label style="display: block; margin-bottom: 0.5rem;">
-        <input type="checkbox" name="packages" value="{{ package.id }}">
-        {{ package.title }} – R{{ package.price }}
-      </label>
-    {% endfor %}
-
-    <div style="margin-top: 1rem;">
-      <label for="id_instructions">Additional Instructions (optional):</label>
-      <textarea name="additional_instructions" id="id_instructions" rows="5"
-                style="width:100%; margin-top:0.5rem; padding:0.8rem; border-radius:4px; border:1px solid #ccc;"></textarea>
+      {% if not request.user.is_authenticated %}
+        <div class="form-group">
+          <label for="id_email">Email Address <span style="color: #e63946;">*</span></label>
+          <input type="email" name="email" id="id_email" class="form-control"
+                 value="{% if form_data %}{{ form_data.email }}{% endif %}"
+                 required placeholder="name@example.com">
+        </div>
+      {% endif %}
     </div>
 
-    <div style="margin-top: 1rem;">
-      <label for="id_upload">Upload Files (optional):</label>
-      <input type="file" name="uploaded_files" id="id_upload"
-             accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.ai,.psd"
-             style="margin-top:0.5rem;">
+    <!-- Step 2: Packages -->
+    <div class="form-section">
+      <h3>2. Select Packages</h3>
+      <div class="package-grid">
+        {% for package in all_packages %}
+          <div class="package-card {% if package in pre_selected_packages %}selected{% endif %}" onclick="toggleCard(this)">
+            <div class="package-title">{{ package.title }}</div>
+            <input type="checkbox" name="packages" value="{{ package.id }}" data-price="{{ package.price }}"
+                   {% if package in pre_selected_packages %}checked{% endif %} onclick="event.stopPropagation(); updateTotal();">
+            <div class="package-desc">{{ package.description }}</div>
+            <div class="package-price">R{{ package.price|floatformat:0 }}</div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
 
-    <div style="margin-top: 2.5rem; text-align: center;">
-      <button type="submit" class="btn btn-primary" style="padding:0.8rem 2rem;">Submit Request</button>
+    <!-- Step 3: Brief -->
+    <div class="form-section">
+      <h3>3. Project Brief</h3>
+      
+      <div class="form-group">
+        <label for="id_instructions">Tell us about your design needs</label>
+        <textarea name="additional_instructions" id="id_instructions" rows="5" class="form-control"
+                  placeholder="Describe your vision, preferred colors, style (modern, classic, etc.), and any specific text to include.">{{ form_data.additional_instructions }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="id_upload">Upload References / Logos (Optional)</label>
+        <div style="border: 2px dashed #ccc; padding: 2rem; text-align: center; border-radius: 6px; background: #fafafa;">
+            <input type="file" name="uploaded_files" id="id_upload"
+                   accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.ai,.psd"
+                   style="display: none;" onchange="showFileName(this)">
+            <label for="id_upload" class="btn btn-secondary" style="cursor: pointer;">Choose File</label>
+            <p id="file-name" style="margin-top: 1rem; color: #666; font-size: 0.9rem;">No file selected</p>
+            <p style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">Max 5MB. Accepted: PDF, JPG, PNG, AI, PSD</p>
+        </div>
+      </div>
     </div>
+
+    <!-- Sticky Footer -->
+    <div class="sticky-footer" id="sticky-footer">
+      <div>
+        <div class="total-label">Estimated Total</div>
+        <div class="total-amount" id="total-display">R0.00</div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2.5rem; font-size: 1.1rem;">Request Quote</button>
+    </div>
+
   </form>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', updateTotal);
+
+  function toggleCard(card) {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    updateTotal();
+  }
+
+  function updateTotal() {
+    const checkboxes = document.querySelectorAll('input[name="packages"]');
+    let total = 0;
+    let anyChecked = false;
+
+    checkboxes.forEach(cb => {
+      const card = cb.closest('.package-card');
+      if (cb.checked) {
+        total += parseFloat(cb.dataset.price);
+        card.classList.add('selected');
+        anyChecked = true;
+      } else {
+        card.classList.remove('selected');
+      }
+    });
+
+    document.getElementById('total-display').textContent = 'R' + total.toFixed(2);
+    
+    const footer = document.getElementById('sticky-footer');
+    if (anyChecked) {
+      footer.classList.add('visible');
+    } else {
+      footer.classList.remove('visible');
+    }
+  }
+
+  function showFileName(input) {
+    const nameDisplay = document.getElementById('file-name');
+    if (input.files && input.files.length > 0) {
+      nameDisplay.textContent = "Selected: " + input.files[0].name;
+      nameDisplay.style.color = "#1d3557";
+      nameDisplay.style.fontWeight = "bold";
+    } else {
+      nameDisplay.textContent = "No file selected";
+      nameDisplay.style.color = "#666";
+      nameDisplay.style.fontWeight = "normal";
+    }
+  }
+</script>
 {% endblock %}

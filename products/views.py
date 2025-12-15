@@ -10,7 +10,7 @@ from collections import defaultdict
 from django.core.mail import send_mail
 from django.conf import settings
 
-from .models import Product, ProductOption, QuantityTier, OptionalService, Order, Category
+from .models import Product, ProductOption, QuantityTier, OptionalService, Order, Category, ShippingMethod
 from accounts.utils import send_order_confirmation_email
 
 from accounts.models import CustomerProfile, NewsletterSubscriber
@@ -55,19 +55,36 @@ def product_detail(request, slug):
         grouped_options[opt.option_type].append(opt)
     grouped_options = dict(grouped_options)
 
-    # Define available shipping options
-    shipping_options = {
-        "standard": Decimal("60.00"),
-        "express": Decimal("120.00"),
-        "pickup": Decimal("0.00")
-    }
+    # Fetch available shipping options from DB
+    shipping_methods = ShippingMethod.objects.all()
+    # Create a dict for easy lookup in template/view: slug -> price
+    shipping_options = {method.slug: method.price for method in shipping_methods}
+
+    # Check for pending order data (restoring session)
+    pending_data = {}
+    if request.method == "GET" and 'pending_order' in request.session:
+        session_order = request.session['pending_order']
+        if session_order.get('slug') == slug:
+            pending_data = session_order.get('data', {})
+            messages.info(request, "Welcome back! We've restored your order details. Please re-upload your artwork.")
+            del request.session['pending_order']
 
     if request.method == "POST":
         if not request.user.is_authenticated:
-            messages.warning(request, "You must be logged in to place an order.")
-            return redirect('accounts:login')
+            # Save form data to session
+            request.session['pending_order'] = {
+                'slug': slug,
+                'data': request.POST.dict()
+            }
+            messages.info(request, "Please log in to complete your order. Your details have been saved.")
+            return redirect(f"{reverse('accounts:login')}?next={request.path}")
 
-        quantity = int(request.POST.get("quantity"))
+        try:
+            quantity = int(request.POST.get("quantity"))
+        except (ValueError, TypeError):
+            messages.error(request, "Invalid quantity selected.")
+            return redirect('products:product_detail', slug=slug)
+
         base_price = QuantityTier.objects.get(product=product, quantity=quantity).base_price
 
         selected_options = {}
@@ -93,8 +110,8 @@ def product_detail(request, slug):
                 total_modifiers += opt_obj.price_modifier
 
         # Get selected shipping method and price
-        selected_shipping = request.POST.get("shipping_method", "standard")
-        shipping_price = shipping_options.get(selected_shipping, Decimal("0.00"))
+        selected_shipping_slug = request.POST.get("shipping_method", "standard")
+        shipping_price = shipping_options.get(selected_shipping_slug, Decimal("0.00"))
 
         # Optional: check discount code
         discount_code = request.POST.get("discount_code", "").strip().upper()
@@ -114,11 +131,24 @@ def product_detail(request, slug):
         vat = subtotal * Decimal("0.15")
         grand_total = subtotal + vat
 
-        profile = request.user.profile
-        full_name = f"{request.user.first_name} {request.user.last_name}".strip()
-        email = request.user.email
-        phone = profile.phone
-        address = profile.address
+        # Get contact details from form, fallback to profile if needed
+        full_name = request.POST.get("full_name")
+        if not full_name:
+            full_name = f"{request.user.first_name} {request.user.last_name}".strip()
+            
+        email = request.POST.get("email")
+        if not email:
+            email = request.user.email
+        
+        # Prefer form data for this specific order
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+
+        # Fallback to profile if form data is missing (though required in HTML)
+        if not phone and hasattr(request.user, 'profile'):
+            phone = request.user.profile.phone
+        if not address and hasattr(request.user, 'profile'):
+            address = request.user.profile.address
 
         order = Order.objects.create(
             user=request.user,
@@ -132,7 +162,9 @@ def product_detail(request, slug):
             full_name=full_name,
             email=email,
             phone=phone,
-            address=address
+            address=address,
+            discount_amount=discount_amount,
+            discount_code=discount_code if discount_amount > 0 else ""
         )
 
         send_order_confirmation_email(order)
@@ -145,7 +177,8 @@ def product_detail(request, slug):
         'quantities': quantity_tiers,
         'grouped_options': grouped_options,
         'services': services,
-        'shipping_options': shipping_options
+        'shipping_methods': shipping_methods,
+        'pending_data': pending_data,
     })
 
 @login_required
@@ -211,16 +244,17 @@ def reupload_artwork(request, order_id):
 def order_invoice(request, order_id):
     order = get_object_or_404(Order, uuid=order_id, user=request.user)
 
-    vat_amount = order.total_price * Decimal("0.15")
-    subtotal = order.total_price - vat_amount
-
-    vat = order.total_price * Decimal("0.15") / Decimal("1.15")
-    subtotal = order.total_price - vat
+    vat_amount = order.total_price * Decimal("0.15") / Decimal("1.15")
+    taxable_total = order.total_price - vat_amount
+    
+    # Reconstruct product total (pre-tax, pre-shipping, pre-discount)
+    # taxable_total = product_price + shipping - discount
+    product_subtotal = taxable_total - order.shipping_price + order.discount_amount
 
     return render(request, "products/invoice.html", {
         "order": order,
         "vat": vat_amount,
-        "subtotal": subtotal
+        "product_subtotal": product_subtotal,
     })
 
 @login_required

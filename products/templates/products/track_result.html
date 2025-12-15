@@ -51,11 +51,32 @@
       <p><strong>Status:</strong> {{ order.get_status_display }}</p>
 
       {% if order.status != "cancelled" and order.status != "refunded" %}
-        <div class="order-tracker mt-2 mb-2">
-          <div class="step {% if order.status in 'received in_production completed shipped' %}active{% endif %}">Received</div>
-          <div class="step {% if order.status in 'in_production completed shipped' %}active{% endif %}">In Production</div>
-          <div class="step {% if order.status in 'completed shipped' %}active{% endif %}">Completed</div>
-          <div class="step {% if order.status == 'shipped' %}active{% endif %}">Shipped</div>
+        <!-- 🚚 Visual Order Timeline -->
+        <div class="timeline-container">
+            <div class="timeline-step active">
+                <div class="circle">✓</div>
+                <div class="label">Order Placed</div>
+            </div>
+            
+            <div class="timeline-step {% if order.payment_status == 'paid' or order.status in 'in_production shipped completed' %}active{% endif %}">
+                <div class="circle">{% if order.payment_status == 'paid' or order.status in 'in_production shipped completed' %}✓{% else %}2{% endif %}</div>
+                <div class="label">Payment Verified</div>
+            </div>
+
+            <div class="timeline-step {% if order.status in 'in_production shipped completed' %}active{% endif %}">
+                <div class="circle">{% if order.status in 'in_production shipped completed' %}✓{% else %}3{% endif %}</div>
+                <div class="label">In Production</div>
+            </div>
+
+            <div class="timeline-step {% if order.status in 'shipped completed' %}active{% endif %}">
+                <div class="circle">{% if order.status in 'shipped completed' %}✓{% else %}4{% endif %}</div>
+                <div class="label">Ready / Shipped</div>
+            </div>
+
+            <div class="timeline-step {% if order.status == 'completed' %}active{% endif %}">
+                <div class="circle">{% if order.status == 'completed' %}✓{% else %}5{% endif %}</div>
+                <div class="label">Completed</div>
+            </div>
         </div>
       {% endif %}
     </div>
@@ -164,6 +185,82 @@
   .section p strong {
     display: inline-block;
     margin-top: 1rem;
+  }
+
+  /* Timeline CSS */
+  .timeline-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+    position: relative;
+  }
+
+  .timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #e0e0e0;
+    z-index: 0;
+  }
+
+  .timeline-step {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    flex: 1;
+  }
+
+  .timeline-step .circle {
+    width: 35px;
+    height: 35px;
+    background: #fff;
+    border: 3px solid #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-weight: bold;
+    color: #999;
+    transition: all 0.3s ease;
+  }
+
+  .timeline-step .label {
+    font-size: 0.85rem;
+    color: #999;
+    font-weight: 500;
+  }
+
+  /* Active State */
+  .timeline-step.active .circle {
+    background: #25D366; /* WhatsApp Green for consistency */
+    border-color: #25D366;
+    color: #fff;
+  }
+
+  .timeline-step.active .label {
+    color: #1d3557;
+    font-weight: bold;
+  }
+
+  /* Connecting Line Progress */
+  /* This is a simple trick: we color the line based on how many items are active. 
+     For a perfect CSS-only progress bar, we'd need a separate bar element, 
+     but this visual is usually sufficient for simple trackers. */
+  
+  @media (max-width: 600px) {
+    .timeline-step .label {
+        font-size: 0.7rem;
+    }
+    .timeline-step .circle {
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
   }
 </style>
 {% endblock %}

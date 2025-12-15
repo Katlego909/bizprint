@@ -40,10 +40,9 @@
       <a href="/contact/">Contact</a>
 
       {% if user.is_authenticated %}
-        <a href="/my-orders/">My Orders</a>
+        <a href="{% url 'accounts:dashboard' %}">My Dashboard</a>
         <a href="/track/">Track Order</a>
-        <a href="/designs/my-requests/">Design Requests</a>
-        <a href="/accounts/profile/">Profile</a>
+        <a href="{% url 'accounts:logout' %}">Logout</a>
       {% else %}
         <a href="{% url 'accounts:login' %}" class="btn-outline">Login</a>
         <a href="{% url 'accounts:register' %}" class="btn btn-secondary">Register</a>

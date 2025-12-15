@@ -19,24 +19,55 @@ def design_request_create(request):
     Logged‑in users will have their account associated;
     guests must supply an email.
     """
+    # Get all packages to display in the form
+    all_packages = DesignPackage.objects.all()
+    pre_selected_packages = []
+    
+    # Handle pre-selected packages from GET request (from design_list)
+    if request.method == 'GET':
+        selected_package_ids = request.GET.getlist('packages')
+        if selected_package_ids:
+            pre_selected_packages = DesignPackage.objects.filter(id__in=selected_package_ids)
+            # You might want to add a message here that packages are pre-selected
+            if not pre_selected_packages:
+                messages.warning(request, "Some pre-selected design packages were not found.")
+
     if request.method == 'POST':
         package_ids = request.POST.getlist('packages')
         additional_instructions = request.POST.get('additional_instructions', '')
         uploaded_file = request.FILES.get('uploaded_files')
         email = request.POST.get('email', '').strip()
+        full_name = request.POST.get('full_name', '').strip()
+        phone = request.POST.get('phone', '').strip()
 
         if not package_ids:
             messages.error(request, "Please select at least one design package.")
-            return redirect('designs:design_request_create')
+            # Repopulate packages for rendering the form again
+            pre_selected_packages = DesignPackage.objects.filter(id__in=request.POST.getlist('packages'))
+            return render(request, 'designs/design_request_create.html', {
+                'all_packages': all_packages,
+                'pre_selected_packages': pre_selected_packages,
+                'form_data': request.POST # Pass post data back to repopulate form fields
+            })
 
         # if user not authenticated, require email
         if not request.user.is_authenticated:
             if not email:
                 messages.error(request, "Guests must provide an email address.")
-                return redirect('designs:design_request_create')
+                pre_selected_packages = DesignPackage.objects.filter(id__in=package_ids)
+                return render(request, 'designs/design_request_create.html', {
+                    'all_packages': all_packages,
+                    'pre_selected_packages': pre_selected_packages,
+                    'form_data': request.POST
+                })
             user = None
         else:
             user = request.user
+            # Fallback if form fields were left empty but user has profile info
+            if not full_name:
+                full_name = f"{user.first_name} {user.last_name}".strip()
+            if not phone and hasattr(user, 'profile'):
+                phone = user.profile.phone
 
         # generate a unique quote token
         quote_token = get_random_string(32)
@@ -45,7 +76,9 @@ def design_request_create(request):
             user=user,
             additional_instructions=additional_instructions,
             uploaded_files=uploaded_file,
-            email=email if not user else '',
+            email=email if not user else '', # Store email if guest, otherwise user's email is implicit via user FK
+            phone=phone,
+            full_name=full_name,
             quote_token=quote_token
         )
         design_request.packages.add(*package_ids)
@@ -58,8 +91,11 @@ def design_request_create(request):
         )
         return redirect('designs:design_request_quote', quote_token=quote_token)
 
-    packages = DesignPackage.objects.all()
-    return render(request, 'designs/design_request_create.html', {'packages': packages})
+    # For initial GET request without pre-selected packages or after form errors
+    return render(request, 'designs/design_request_create.html', {
+        'all_packages': all_packages,
+        'pre_selected_packages': pre_selected_packages
+    })
 
 
 def design_request_quote(request, quote_token):

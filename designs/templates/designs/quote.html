@@ -4,107 +4,6 @@
 {% block title %}Design Quote – BizPrint{% endblock %}
 
 {% block extra_head %}
-<style>
-  /* Container & card */
-  .quote-container {
-    max-width: 800px;
-    margin: 3rem auto;
-    padding: 2rem;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-
-  /* Header */
-  .quote-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-  }
-  .quote-header .logo img {
-    height: 50px;
-  }
-  .quote-header h1 {
-    color: #1d3557;
-    margin: 0;
-  }
-
-  /* Table */
-  .quote-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-  }
-  .quote-table th,
-  .quote-table td {
-    padding: 0.8rem;
-  }
-  .quote-table th {
-    background: #f1f2f6;
-    text-align: left;
-    color: #1d3557;
-  }
-  .quote-table td {
-    border-bottom: 1px solid #e0e0e0;
-  }
-  .quote-table td.price {
-    text-align: right;
-  }
-
-  /* Totals */
-  .quote-totals {
-    text-align: right;
-    margin-bottom: 2rem;
-    font-size: 0.95rem;
-  }
-  .quote-totals p {
-    margin: 0.3rem 0;
-  }
-  .quote-totals .total {
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-
-  /* Banking details */
-  .bank-details p {
-    margin: 0.3rem 0;
-    font-size: 0.95rem;
-  }
-
-  /* Print button */
-  .print-btn {
-    text-align: right;
-    margin-top: 2rem;
-  }
-  .print-btn button {
-    padding: 0.8rem 1.5rem;
-    background: #1d3557;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  /* Hide nav/footer on print */
-  @media print {
-    .navbar, .btn, footer {
-      display: none !important;
-    }
-    body, html {
-      background: white !important;
-      -webkit-print-color-adjust: exact;
-    }
-    .quote-container {
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      width: 100% !important;
-      margin: 0 !important;
-      padding: 1in !important;
-    }
-  }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -118,21 +17,52 @@
   </div>
 
   <p><strong>Quote #:</strong> {{ design_request.id }}</p>
-  <p><strong>Customer:</strong>
-    {% if design_request.user %}
-      {{ design_request.user.get_full_name }}
-    {% else %}
-      {{ design_request.email }}
-    {% endif %}
-  </p>
-  <p><strong>Email:</strong>
-    {% if design_request.user %}
-      {{ design_request.user.email }}
-    {% else %}
-      {{ design_request.email }}
-    {% endif %}
-  </p>
   <p><strong>Date:</strong> {{ design_request.created_at|date:"d M Y" }}</p>
+  
+  <div style="margin-top: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 6px;">
+    <p><strong>Prepared For:</strong> 
+      {% if design_request.user %}
+        {{ design_request.user.get_full_name }}
+      {% else %}
+        {{ design_request.full_name|default:"Guest" }}
+      {% endif %}
+    </p>
+    <p><strong>Email:</strong> 
+      {% if design_request.user %}
+        {{ design_request.user.email }}
+      {% else %}
+        {{ design_request.email }}
+      {% endif %}
+    </p>
+    {% if design_request.phone %}
+      <p><strong>Phone:</strong> {{ design_request.phone }}</p>
+    {% elif design_request.user and design_request.user.profile.phone %}
+      <p><strong>Phone:</strong> {{ design_request.user.profile.phone }}</p>
+    {% endif %}
+  </div>
+
+  <!-- 🚚 Visual Order Timeline -->
+  <div class="timeline-container">
+      <div class="timeline-step active">
+          <div class="circle">✓</div>
+          <div class="label">Quote Ready</div>
+      </div>
+      
+      <div class="timeline-step {% if design_request.status == 'paid' or design_request.status == 'in_progress' or design_request.status == 'completed' %}active{% endif %}">
+          <div class="circle">{% if design_request.status == 'paid' or design_request.status == 'in_progress' or design_request.status == 'completed' %}✓{% else %}2{% endif %}</div>
+          <div class="label">Payment Verified</div>
+      </div>
+
+      <div class="timeline-step {% if design_request.status == 'in_progress' or design_request.status == 'completed' %}active{% endif %}">
+          <div class="circle">{% if design_request.status == 'in_progress' or design_request.status == 'completed' %}✓{% else %}3{% endif %}</div>
+          <div class="label">In Progress</div>
+      </div>
+
+      <div class="timeline-step {% if design_request.status == 'completed' %}active{% endif %}">
+          <div class="circle">{% if design_request.status == 'completed' %}✓{% else %}4{% endif %}</div>
+          <div class="label">Completed</div>
+      </div>
+  </div>
 
   <hr>
 
