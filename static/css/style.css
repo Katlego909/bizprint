@@ -1097,6 +1097,13 @@ a {
   margin-top: 2rem;
 }
 
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
 .category-card-small {
   display: flex;
   flex-direction: column;
