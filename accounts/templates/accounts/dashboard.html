@@ -4,7 +4,7 @@
 {% block title %}My Dashboard - BizPrint{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 1200px; margin: 2rem auto;">
+<div class="container dashboard-wrapper" style="max-width: 1200px; margin: 2rem auto;">
     
     <!-- Welcome Section -->
     <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
@@ -159,6 +159,10 @@
     .badge-cancelled { background: #fed7d7; color: #c53030; }
 
     @media (max-width: 768px) {
+        .dashboard-wrapper.container {
+            margin: 1rem !important;
+            padding: 1rem !important;
+        }
         .dashboard-header {
             flex-direction: column;
             align-items: flex-start;
