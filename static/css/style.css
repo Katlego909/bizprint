@@ -190,6 +190,8 @@ form label {
 form input[type="text"],
 form input[type="email"],
 form input[type="password"],
+form input[type="number"],
+form input[type="tel"],
 form input[type="file"],
 form select,
 form textarea {
@@ -200,6 +202,7 @@ form textarea {
   border-radius: var(--border-radius);
   margin-bottom: 1rem;
   background: var(--color-white);
+  box-sizing: border-box;
 }
 
 form textarea {
@@ -519,7 +522,7 @@ header {
   input,
   select,
   textarea {
-    font-size: 1rem;
+    font-size: 16px;
   }
 
   .btn-outline, .btn-secondary {
@@ -527,7 +530,20 @@ header {
   } 
 
   .account-container {
-    margin: 1.5rem;
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="password"],
+  form input[type="number"],
+  form input[type="tel"],
+  form input[type="file"],
+  form select,
+  form textarea {
+    font-size: 16px;
+    padding: 0.9rem;
   }
 
 
@@ -617,27 +633,29 @@ a {
   max-width: 320px;
   background: white;
   border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Stronger shadow */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   text-align: center;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   box-sizing: border-box;
-  transition: transform 0.2s ease-in-out; /* Add hover effect */
+  transition: transform 0.2s ease-in-out;
+  min-height: 400px;
 }
 
 .product-card:hover {
-  transform: translateY(-5px); /* Lift effect on hover */
+  transform: translateY(-5px);
 }
 
 .product-card img {
   width: 100%;
   height: 180px;
+  min-height: 180px;
+  max-height: 180px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .product-card h4 {
@@ -926,6 +944,13 @@ a {
   .product-card {
     width: 100%;
     max-width: 340px;
+    min-height: 380px;
+  }
+
+  .product-card img {
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
   }
 
   .hero-cta {
@@ -1272,6 +1297,19 @@ a {
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: #333;
+}
+
+.form-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .form-row-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
 }
 .form-control {
   width: 100%;

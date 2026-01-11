@@ -236,7 +236,7 @@
     <div class="form-section">
       <h3>3. Delivery Details</h3>
       
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      <div class="form-row-grid">
         <div class="form-group">
           <label>Full Name</label>
           <input type="text" name="full_name" class="form-control" value="{{ user.first_name }} {{ user.last_name }}" required>
@@ -247,7 +247,7 @@
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      <div class="form-row-grid">
         <div class="form-group">
           <label>Contact Phone</label>
           <input type="text" name="phone" class="form-control" value="{{ user.profile.phone|default:'' }}" required placeholder="e.g. 082 123 4567">
