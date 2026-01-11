@@ -36,7 +36,13 @@
             {% if category.image %}
               <img src="{{ category.image.url }}" alt="{{ category.name }}">
             {% else %}
-              <div class="category-placeholder">📦</div>
+              <div class="category-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+              </div>
             {% endif %}
             <p>{{ category.name }}</p>
           </div>
@@ -76,17 +82,33 @@
     <p class="intro">More than just a print shop — we’re your creative production partner.</p>
     <div class="why-grid">
       <div class="why-point">
-        <div class="why-icon">⚡</div>
+        <div class="why-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
         <h3>Fast Turnarounds</h3>
         <p>Get your prints quicker than ever with our efficient workflows and optional express services.</p>
       </div>
       <div class="why-point">
-        <div class="why-icon">🎯</div>
+        <div class="why-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+        </div>
         <h3>Tailored to You</h3>
         <p>From business cards to booklets, customize every detail to match your brand and vision.</p>
       </div>
       <div class="why-point">
-        <div class="why-icon">📦</div>
+        <div class="why-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
         <h3>Nationwide Delivery</h3>
         <p>We ship across South Africa. Enjoy reliable doorstep delivery, wherever you are.</p>
       </div>
@@ -102,17 +124,38 @@
     
     <div class="why-grid">
       <div class="why-point">
-        <div class="why-icon">🎨</div>
+        <div class="why-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+            <path d="M2 2l7.586 7.586"></path>
+            <circle cx="11" cy="11" r="2"></circle>
+          </svg>
+        </div>
         <h3>Logo & Branding</h3>
         <p>Create a brand identity that leaves a lasting impression with a professionally crafted logo and visual system.</p>
       </div>
       <div class="why-point">
-        <div class="why-icon">📝</div>
+        <div class="why-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
         <h3>Business Essentials</h3>
         <p>Business cards, letterheads, company profiles, and more — all customized to match your brand's voice.</p>
       </div>
       <div class="why-point">
-        <div class="why-icon">📈</div>
+        <div class="why-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+        </div>
         <h3>Marketing Materials</h3>
         <p>Flyers, brochures, posters, and social media graphics designed to grab attention and grow your brand.</p>
       </div>
@@ -193,12 +236,18 @@
   </section>
 
   <div class="newsletter-section-home">
-    <h3>📬 Get 10% Off Your First Order</h3>
-    <p>Join our newsletter and receive a discount code straight to your inbox.</p>
+    <div class="newsletter-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+        <polyline points="22,6 12,13 2,6"></polyline>
+      </svg>
+    </div>
+    <h3>Get 10% Off Your First Order</h3>
+    <p>Join our newsletter and receive exclusive discounts and printing tips.</p>
     <form action="{% url 'accounts:subscribe_newsletter' %}" method="POST">
       {% csrf_token %}
-      <input type="email" name="email" placeholder="Enter your email" required>
-      <button type="submit" class="cta-btn">Sign Up</button>
+      <input type="email" name="email" placeholder="Enter your email address" required>
+      <button type="submit" class="cta-btn">Subscribe Now</button>
     </form>
   </div>
 

@@ -3,9 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.http import HttpResponse
 from decimal import Decimal
 
 from .models import DesignPackage, DesignRequest
+from .pdf_utils import generate_design_quote_pdf
 
 
 def design_list(request):
@@ -147,6 +149,27 @@ def upload_proof_of_payment(request, request_id):
         return redirect('designs:my_design_requests')
 
     return render(request, 'designs/upload_proof_of_payment.html', {'design_request': design_request})
+
+
+def download_design_quote_pdf(request, quote_token):
+    """
+    Download quote as PDF - accessible via quote token (no login required)
+    """
+    dr = DesignRequest.objects.filter(quote_token=quote_token).first()
+    if not dr:
+        if quote_token.isdigit():
+            dr = get_object_or_404(DesignRequest, pk=int(quote_token))
+        else:
+            dr = get_object_or_404(DesignRequest, quote_token=quote_token)
+    
+    # Generate PDF
+    pdf = generate_design_quote_pdf(dr)
+    
+    # Create HTTP response
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="BizPrint_Quote_{dr.id}.pdf"'
+    
+    return response
 
 
 @login_required
