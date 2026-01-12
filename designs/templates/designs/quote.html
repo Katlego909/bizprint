@@ -64,6 +64,16 @@
       </div>
   </div>
 
+  <div style="margin: 1.5rem 0; padding: 1rem; background: #f0f7ff; border-left: 4px solid #1d3557; border-radius: 4px;">
+    <p style="margin: 0; color: #1d3557;">
+      <strong>⏱️ Estimated Turnaround Time:</strong> 
+      <span style="font-size: 1.1rem; font-weight: bold;">{{ design_request.get_estimated_turnaround_days }} business days</span>
+      {% if design_request.timeline_preference %}
+        <span style="font-size: 0.9rem; color: #666;">({{ design_request.get_timeline_preference_display }} timeline)</span>
+      {% endif %}
+    </p>
+  </div>
+
   <hr>
 
   <h2 style="font-size:1.2rem; margin-bottom:1rem;">Selected Packages</h2>
@@ -86,6 +96,10 @@
 
   <div class="quote-totals">
     <p><strong>Subtotal:</strong> R{{ subtotal|floatformat:2 }}</p>
+    {% if design_request.timeline_preference == 'rush' %}
+      <p style="color: #e63946;"><strong>Rush Fee (50%):</strong> R{{ design_request.get_rush_fee|floatformat:2 }}</p>
+      <p><strong>Subtotal with Rush:</strong> R{{ design_request.get_subtotal_with_rush|floatformat:2 }}</p>
+    {% endif %}
     <p><strong>VAT (15%):</strong> R{{ vat|floatformat:2 }}</p>
     <p class="total"><strong>Total:</strong> R{{ total|floatformat:2 }}</p>
   </div>

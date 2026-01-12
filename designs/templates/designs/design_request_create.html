@@ -19,7 +19,7 @@
     <!-- Step 1: Contact Info -->
     <div class="form-section">
       <h3>1. Contact Details</h3>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      <div class="form-row-grid">
         <div class="form-group">
           <label for="id_fullname">Full Name</label>
           <input type="text" name="full_name" id="id_fullname" class="form-control"
@@ -61,14 +61,56 @@
       </div>
     </div>
 
-    <!-- Step 3: Brief -->
+    <!-- Step 3: Design Brief -->
     <div class="form-section">
-      <h3>3. Project Brief</h3>
+      <h3>3. Design Brief</h3>
+      <p style="color: #666; margin-bottom: 1.5rem;">Help us understand your vision better</p>
       
+      <div class="form-row-grid">
+        <div class="form-group">
+          <label for="id_brand_colors">Brand Colors</label>
+          <input type="text" name="brand_colors" id="id_brand_colors" class="form-control"
+                 value="{{ form_data.brand_colors }}"
+                 placeholder="e.g., #FF5733, Blue, Red">
+          <small style="color: #666;">Hex codes or color names</small>
+        </div>
+
+        <div class="form-group">
+          <label for="id_timeline">Timeline Preference</label>
+          <select name="timeline_preference" id="id_timeline" class="form-control" onchange="updateTotal()">
+            <option value="">Select timeline...</option>
+            <option value="rush" {% if form_data.timeline_preference == 'rush' %}selected{% endif %}>Rush (1-2 days) - 50% Surcharge ⚡</option>
+            <option value="standard" {% if form_data.timeline_preference == 'standard' %}selected{% endif %}>Standard (3-5 days)</option>
+            <option value="flexible" {% if form_data.timeline_preference == 'flexible' %}selected{% endif %}>Flexible (1-2 weeks)</option>
+          </select>
+          <small id="rush-warning" style="color: #e63946; font-weight: bold; display: none; margin-top: 0.5rem;">
+            ⚠️ Rush jobs include a 50% surcharge on the total package price
+          </small>
+        </div>
+      </div>
+
       <div class="form-group">
-        <label for="id_instructions">Tell us about your design needs</label>
-        <textarea name="additional_instructions" id="id_instructions" rows="5" class="form-control"
-                  placeholder="Describe your vision, preferred colors, style (modern, classic, etc.), and any specific text to include.">{{ form_data.additional_instructions }}</textarea>
+        <label for="id_target_audience">Target Audience</label>
+        <textarea name="target_audience" id="id_target_audience" rows="3" class="form-control"
+                  placeholder="Who is your target audience? e.g., Young professionals, Corporate clients, Students...">{{ form_data.target_audience }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="id_design_preferences">Design Style Preferences</label>
+        <textarea name="design_preferences" id="id_design_preferences" rows="3" class="form-control"
+                  placeholder="Describe your preferred style: Modern, Classic, Minimalist, Bold, Elegant, etc.">{{ form_data.design_preferences }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="id_inspiration_links">Inspiration Links (Optional)</label>
+        <textarea name="inspiration_links" id="id_inspiration_links" rows="2" class="form-control"
+                  placeholder="Paste links to designs you like (one per line)">{{ form_data.inspiration_links }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="id_instructions">Additional Instructions</label>
+        <textarea name="additional_instructions" id="id_instructions" rows="4" class="form-control"
+                  placeholder="Any other details we should know?">{{ form_data.additional_instructions }}</textarea>
       </div>
 
       <div class="form-group">
@@ -76,9 +118,11 @@
         <div style="border: 2px dashed #ccc; padding: 2rem; text-align: center; border-radius: 6px; background: #fafafa;">
             <input type="file" name="uploaded_files" id="id_upload"
                    accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.ai,.psd"
-                   style="display: none;" onchange="showFileName(this)">
+                   style="display: none;" onchange="showFilePreview(this)">
             <label for="id_upload" class="btn btn-secondary" style="cursor: pointer;">Choose File</label>
-            <p id="file-name" style="margin-top: 1rem; color: #666; font-size: 0.9rem;">No file selected</p>
+            <div id="file-preview" style="margin-top: 1rem;">
+              <p id="file-name" style="color: #666; font-size: 0.9rem;">No file selected</p>
+            </div>
             <p style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">Max 5MB. Accepted: PDF, JPG, PNG, AI, PSD</p>
         </div>
       </div>
@@ -89,6 +133,7 @@
       <div>
         <div class="total-label">Estimated Total</div>
         <div class="total-amount" id="total-display">R0.00</div>
+        <div id="rush-fee-display" style="display: none; font-size: 0.85rem; color: #e63946; margin-top: 0.25rem;"></div>
       </div>
       <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2.5rem; font-size: 1.1rem;">Request Quote</button>
     </div>
@@ -107,19 +152,39 @@
 
   function updateTotal() {
     const checkboxes = document.querySelectorAll('input[name="packages"]');
-    let total = 0;
+    const timelineSelect = document.getElementById('id_timeline');
+    const rushWarning = document.getElementById('rush-warning');
+    const rushFeeDisplay = document.getElementById('rush-fee-display');
+    
+    let subtotal = 0;
     let anyChecked = false;
 
     checkboxes.forEach(cb => {
       const card = cb.closest('.package-card');
       if (cb.checked) {
-        total += parseFloat(cb.dataset.price);
+        subtotal += parseFloat(cb.dataset.price);
         card.classList.add('selected');
         anyChecked = true;
       } else {
         card.classList.remove('selected');
       }
     });
+
+    // Check if rush timeline is selected
+    const isRush = timelineSelect && timelineSelect.value === 'rush';
+    let rushFee = 0;
+    let total = subtotal;
+    
+    if (isRush && subtotal > 0) {
+      rushFee = subtotal * 0.50; // 50% rush fee
+      total = subtotal + rushFee;
+      rushWarning.style.display = 'block';
+      rushFeeDisplay.style.display = 'block';
+      rushFeeDisplay.textContent = `Includes R${rushFee.toFixed(2)} rush fee`;
+    } else {
+      rushWarning.style.display = 'none';
+      rushFeeDisplay.style.display = 'none';
+    }
 
     document.getElementById('total-display').textContent = 'R' + total.toFixed(2);
     
@@ -131,17 +196,57 @@
     }
   }
 
-  function showFileName(input) {
-    const nameDisplay = document.getElementById('file-name');
+  function showFilePreview(input) {
+    const previewContainer = document.getElementById('file-preview');
+    
     if (input.files && input.files.length > 0) {
-      nameDisplay.textContent = "Selected: " + input.files[0].name;
-      nameDisplay.style.color = "#1d3557";
-      nameDisplay.style.fontWeight = "bold";
+      const file = input.files[0];
+      const fileSize = (file.size / 1024 / 1024).toFixed(2);
+      
+      let previewHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem; background: white; border-radius: 6px; border: 1px solid #ddd;">
+          <div style="width: 50px; height: 50px; background: #1d3557; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem;">
+            ${file.name.split('.').pop().toUpperCase()}
+          </div>
+          <div style="flex: 1; text-align: left;">
+            <p style="margin: 0; font-weight: bold; color: #1d3557;">${file.name}</p>
+            <p style="margin: 0; font-size: 0.85rem; color: #666;">${fileSize} MB</p>
+          </div>
+          <button type="button" onclick="clearFile()" style="background: #e63946; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Remove</button>
+        </div>
+      `;
+      
+      // Show image preview for image files
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewHTML = `
+            <div style="padding: 1rem; background: white; border-radius: 6px; border: 1px solid #ddd;">
+              <img src="${e.target.result}" style="max-width: 100%; max-height: 200px; border-radius: 4px; margin-bottom: 0.5rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <p style="margin: 0; font-weight: bold; color: #1d3557;">${file.name}</p>
+                  <p style="margin: 0; font-size: 0.85rem; color: #666;">${fileSize} MB</p>
+                </div>
+                <button type="button" onclick="clearFile()" style="background: #e63946; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Remove</button>
+              </div>
+            </div>
+          `;
+          previewContainer.innerHTML = previewHTML;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        previewContainer.innerHTML = previewHTML;
+      }
     } else {
-      nameDisplay.textContent = "No file selected";
-      nameDisplay.style.color = "#666";
-      nameDisplay.style.fontWeight = "normal";
+      previewContainer.innerHTML = '<p id="file-name" style="color: #666; font-size: 0.9rem;">No file selected</p>';
     }
+  }
+  
+  function clearFile() {
+    const input = document.getElementById('id_upload');
+    input.value = '';
+    showFilePreview(input);
   }
 </script>
 {% endblock %}

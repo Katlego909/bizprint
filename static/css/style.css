@@ -283,8 +283,148 @@ header {
 }
 
 /* =============================
-   ALERTS
+   TOAST NOTIFICATIONS
 ============================= */
+#toast-container {
+  position: fixed;
+  top: 100px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 22px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(29, 53, 87, 0.12), 0 2px 8px rgba(29, 53, 87, 0.08);
+  border: 1px solid rgba(29, 53, 87, 0.08);
+  opacity: 0;
+  transform: translateX(450px) scale(0.9);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-width: 320px;
+  position: relative;
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.toast-message {
+  flex: 1;
+  font-size: 0.94rem;
+  line-height: 1.5;
+  color: #2c3e50;
+  font-weight: 500;
+  padding-top: 2px;
+  word-break: break-word;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: #95a5a6;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
+.toast-close:hover {
+  color: #2c3e50;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Toast variants */
+.toast-success {
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+  border-left: 4px solid #28a745;
+}
+
+.toast-success .toast-icon {
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+}
+
+.toast-error,
+.toast-danger {
+  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+  border-left: 4px solid #e63946;
+}
+
+.toast-error .toast-icon,
+.toast-danger .toast-icon {
+  color: #e63946;
+  background: rgba(230, 57, 70, 0.1);
+}
+
+.toast-warning {
+  background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+  border-left: 4px solid #f59e0b;
+}
+
+.toast-warning .toast-icon {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.toast-info {
+  background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+  border-left: 4px solid #1d3557;
+}
+
+.toast-info .toast-icon {
+  color: #1d3557;
+  background: rgba(29, 53, 87, 0.1);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  #toast-container {
+    top: 80px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+  
+  .toast {
+    min-width: auto;
+    width: 100%;
+    padding: 16px 18px;
+  }
+}
+
+/* Legacy alert support (deprecated) */
 .alert {
   padding: 1rem;
   border-radius: var(--border-radius);

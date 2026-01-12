@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -12,6 +12,7 @@ from django.conf import settings
 
 from .models import Product, ProductOption, QuantityTier, OptionalService, Order, Category, ShippingMethod
 from accounts.utils import send_order_confirmation_email
+from .pdf_utils import generate_order_invoice_pdf
 
 from accounts.models import CustomerProfile, NewsletterSubscriber
 
@@ -256,6 +257,20 @@ def order_invoice(request, order_id):
         "vat": vat_amount,
         "product_subtotal": product_subtotal,
     })
+
+@login_required
+def download_invoice_pdf(request, order_id):
+    """Download invoice as PDF"""
+    order = get_object_or_404(Order, uuid=order_id, user=request.user)
+    
+    # Generate PDF
+    pdf = generate_order_invoice_pdf(order)
+    
+    # Create HTTP response
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="BizPrint_Invoice_{str(order.uuid)[:8].upper()}.pdf"'
+    
+    return response
 
 @login_required
 def my_orders(request):

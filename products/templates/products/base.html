@@ -14,15 +14,19 @@
 </head>
 <body>
 
+  <!-- Toast notification container -->
+  <div id="toast-container"></div>
+
   {% if messages %}
-  <div class="messages" style="max-width:700px;margin:1rem auto;">
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}" style="padding:12px;border-radius:6px;margin-bottom:8px;">
-        {{ message }}
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
+    <script>
+      // Queue messages to show as toasts
+      document.addEventListener('DOMContentLoaded', function() {
+        {% for message in messages %}
+          showToast("{{ message|escapejs }}", "{{ message.tags }}");
+        {% endfor %}
+      });
+    </script>
+  {% endif %}
 
   <header >
   <!-- Navbar -->
@@ -98,6 +102,50 @@
       <p><a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
     </div>
   </footer>
+
+  <!-- Toast notification script -->
+  <script>
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      // Create toast content
+      const icon = getToastIcon(type);
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-message">${message}</div>
+        <button class="toast-close" onclick="closeToast(this)">&times;</button>
+      `;
+      
+      container.appendChild(toast);
+      
+      // Trigger animation
+      setTimeout(() => toast.classList.add('show'), 10);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        closeToast(toast.querySelector('.toast-close'));
+      }, 5000);
+    }
+    
+    function closeToast(button) {
+      const toast = button.parentElement || button;
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }
+    
+    function getToastIcon(type) {
+      const icons = {
+        success: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+        error: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        danger: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        warning: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+        info: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+      };
+      return icons[type] || icons.info;
+    }
+  </script>
 
   <!-- Navbar toggle script -->
   <script>

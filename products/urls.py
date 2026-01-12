@@ -14,6 +14,7 @@ urlpatterns = [
     # Order flow
     path('order/success/<uuid:order_id>/', views.order_success, name='order_success'),
     path('order/<uuid:order_id>/invoice/', views.order_invoice, name='order_invoice'),
+    path('order/<uuid:order_id>/invoice/download/', views.download_invoice_pdf, name='download_invoice_pdf'),
     path('order/<uuid:order_id>/reupload/', views.reupload_artwork, name='reupload_artwork'),
     
     # Tracking & dashboard

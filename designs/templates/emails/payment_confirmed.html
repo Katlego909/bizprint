@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Confirmed</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; background: white; padding: 30px; border-radius: 8px; margin: auto;">
+    <h2 style="color: #1d3557;">✅ Payment Confirmed!</h2>
+    <p>Hello {{ design_request.full_name|default:"there" }},</p>
+
+    <p>We've received and confirmed your payment for design request <strong>#{{ design_request.id }}</strong>.</p>
+
+    <div style="background: #d4edda; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 4px;">
+      <p style="margin: 0; color: #155724;"><strong>✓ Payment Verified</strong></p>
+      <p style="margin: 5px 0 0 0; color: #155724;">Your design is queued to start production.</p>
+    </div>
+
+    <p><strong>What's Next?</strong></p>
+    <ul>
+      <li>Our design team will review your brief and requirements</li>
+      <li>We'll start working on your design within 1 business day</li>
+      <li>You'll receive updates via email and can track progress online</li>
+    </ul>
+
+    <p>Track your design request:</p>
+    <p>
+      <a href="https://bizprint.co.za{% url 'designs:view_quote' design_request.quote_token %}" style="background: #1d3557; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">Track Status</a>
+    </p>
+
+    <p>Expected completion: <strong>{{ turnaround_days }} business days</strong></p>
+
+    <p>Regards,<br>
+    <strong>BizPrint Design Team</strong></p>
+  </div>
+</body>
+</html>

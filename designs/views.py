@@ -41,6 +41,13 @@ def design_request_create(request):
         email = request.POST.get('email', '').strip()
         full_name = request.POST.get('full_name', '').strip()
         phone = request.POST.get('phone', '').strip()
+        
+        # Design brief fields
+        brand_colors = request.POST.get('brand_colors', '').strip()
+        target_audience = request.POST.get('target_audience', '').strip()
+        design_preferences = request.POST.get('design_preferences', '').strip()
+        inspiration_links = request.POST.get('inspiration_links', '').strip()
+        timeline_preference = request.POST.get('timeline_preference', '')
 
         if not package_ids:
             messages.error(request, "Please select at least one design package.")
@@ -81,7 +88,12 @@ def design_request_create(request):
             email=email if not user else '', # Store email if guest, otherwise user's email is implicit via user FK
             phone=phone,
             full_name=full_name,
-            quote_token=quote_token
+            quote_token=quote_token,
+            brand_colors=brand_colors,
+            target_audience=target_audience,
+            design_preferences=design_preferences,
+            inspiration_links=inspiration_links,
+            timeline_preference=timeline_preference,
         )
         design_request.packages.add(*package_ids)
         design_request.save()
@@ -117,14 +129,17 @@ def design_request_quote(request, quote_token):
 
     # now calculate
     subtotal = dr.total_price
-    vat      = subtotal * Decimal('0.15')
-    total    = subtotal + vat
+    rush_fee = dr.get_rush_fee()
+    subtotal_with_rush = dr.get_subtotal_with_rush()
+    vat = subtotal_with_rush * Decimal('0.15')
+    total = subtotal_with_rush + vat
 
     return render(request, 'designs/quote.html', {
         'design_request': dr,
-        'subtotal':       subtotal,
-        'vat':            vat,
-        'total':          total,
+        'subtotal': subtotal,
+        'rush_fee': rush_fee,
+        'vat': vat,
+        'total': total,
     })
 
 
@@ -180,12 +195,15 @@ def design_request_invoice(request, request_id):
     design_request = get_object_or_404(DesignRequest, id=request_id, user=request.user)
 
     subtotal = design_request.total_price
-    vat = subtotal * Decimal('0.15')
-    total = subtotal + vat
+    rush_fee = design_request.get_rush_fee()
+    subtotal_with_rush = design_request.get_subtotal_with_rush()
+    vat = subtotal_with_rush * Decimal('0.15')
+    total = subtotal_with_rush + vat
 
     return render(request, 'designs/invoice.html', {
         'design_request': design_request,
         'subtotal': subtotal,
+        'rush_fee': rush_fee,
         'vat': vat,
         'total': total
     })

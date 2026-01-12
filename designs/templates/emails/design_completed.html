@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Design Completed</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; background: white; padding: 30px; border-radius: 8px; margin: auto;">
+    <h2 style="color: #1d3557;">🎉 Your Design is Complete!</h2>
+    <p>Hello {{ design_request.full_name|default:"there" }},</p>
+
+    <p>Exciting news! Your design request <strong>#{{ design_request.id }}</strong> has been completed and is ready for review!</p>
+
+    <div style="background: #d4edda; padding: 20px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 4px; text-align: center;">
+      <p style="margin: 0; color: #155724; font-size: 1.2rem;"><strong>✨ Design Ready!</strong></p>
+      <p style="margin: 10px 0 0 0; color: #155724;">Your custom design is waiting for you.</p>
+    </div>
+
+    <p><strong>What's Next?</strong></p>
+    <ul>
+      <li>Review your completed design files</li>
+      <li>Request any revisions if needed</li>
+      <li>Download your final files once approved</li>
+    </ul>
+
+    <p>View and download your design:</p>
+    <p>
+      <a href="https://bizprint.co.za{% url 'designs:view_quote' design_request.quote_token %}" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">View My Design</a>
+    </p>
+
+    <p style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0;">
+      <strong>Need Changes?</strong><br>
+      We offer complimentary revisions to ensure you're 100% satisfied with your design. Just let us know what adjustments you'd like!
+    </p>
+
+    <p>Thank you for choosing BizPrint for your design needs. We hope you love what we've created for you!</p>
+
+    <p>Regards,<br>
+    <strong>BizPrint Design Team</strong></p>
+  </div>
+</body>
+</html>

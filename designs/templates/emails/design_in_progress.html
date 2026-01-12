@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Design In Progress</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; background: white; padding: 30px; border-radius: 8px; margin: auto;">
+    <h2 style="color: #1d3557;">🎨 Your Design is In Progress!</h2>
+    <p>Hello {{ design_request.full_name|default:"there" }},</p>
+
+    <p>Great news! Our design team has started working on your request <strong>#{{ design_request.id }}</strong>.</p>
+
+    <div style="background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0; border-radius: 4px;">
+      <p style="margin: 0; color: #856404;"><strong>🖌️ Design in Progress</strong></p>
+      <p style="margin: 5px 0 0 0; color: #856404;">Our designers are bringing your vision to life.</p>
+    </div>
+
+    <p><strong>Selected Packages:</strong></p>
+    <ul>
+      {% for package in design_request.packages.all %}
+      <li>{{ package.title }}</li>
+      {% endfor %}
+    </ul>
+
+    <p><strong>Timeline:</strong></p>
+    <ul>
+      <li>Estimated completion: {{ turnaround_days }} business days from payment</li>
+      <li>You'll be notified once the design is ready for review</li>
+    </ul>
+
+    <p>Track your progress:</p>
+    <p>
+      <a href="https://bizprint.co.za{% url 'designs:view_quote' design_request.quote_token %}" style="background: #1d3557; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">View Status</a>
+    </p>
+
+    <p style="font-size: 0.9rem; color: #666; margin-top: 20px;">Have questions? Reply to this email or contact us on WhatsApp.</p>
+
+    <p>Regards,<br>
+    <strong>BizPrint Design Team</strong></p>
+  </div>
+</body>
+</html>

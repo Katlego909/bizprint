@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Design Request Quote Ready</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; background: white; padding: 30px; border-radius: 8px; margin: auto;">
+    <h2 style="color: #1d3557;">📋 Your Design Quote is Ready!</h2>
+    <p>Hello {{ design_request.full_name|default:"there" }},</p>
+
+    <p>Great news! Your design quote <strong>#{{ design_request.id }}</strong> is ready for review.</p>
+
+    <div style="background: #f0f7ff; padding: 15px; border-left: 4px solid #1d3557; margin: 20px 0;">
+      <p style="margin: 0;"><strong>Total Amount:</strong> R{{ total|floatformat:2 }}</p>
+      <p style="margin: 5px 0 0 0;"><strong>Estimated Turnaround:</strong> {{ turnaround_days }} business days</p>
+    </div>
+
+    <p><strong>Selected Packages:</strong></p>
+    <ul>
+      {% for package in design_request.packages.all %}
+      <li>{{ package.title }} - R{{ package.price|floatformat:2 }}</li>
+      {% endfor %}
+    </ul>
+
+    <p>Click below to view your full quote and make payment:</p>
+    <p>
+      <a href="https://bizprint.co.za{% url 'designs:view_quote' design_request.quote_token %}" style="background: #1d3557; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">View Quote</a>
+    </p>
+
+    <p style="font-size: 0.9rem; color: #666; margin-top: 20px;">Once payment is received, we'll start working on your design immediately.</p>
+
+    <p>Regards,<br>
+    <strong>BizPrint Design Team</strong></p>
+  </div>
+</body>
+</html>

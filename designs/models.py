@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from decimal import Decimal
 import uuid
 
 class DesignPackage(models.Model):
@@ -51,6 +52,36 @@ class DesignRequest(models.Model):
     )
     packages = models.ManyToManyField(DesignPackage)
     additional_instructions = models.TextField(blank=True)
+    
+    # Design Brief Fields
+    brand_colors = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Main brand colors (e.g., #FF5733, Blue, Red)"
+    )
+    target_audience = models.TextField(
+        blank=True,
+        help_text="Who is your target audience?"
+    )
+    design_preferences = models.TextField(
+        blank=True,
+        help_text="Any specific design style preferences?"
+    )
+    inspiration_links = models.TextField(
+        blank=True,
+        help_text="Links to designs you like (one per line)"
+    )
+    timeline_preference = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=[
+            ('rush', 'Rush (1-2 days)'),
+            ('standard', 'Standard (3-5 days)'),
+            ('flexible', 'Flexible (1-2 weeks)'),
+        ],
+        help_text="When do you need this completed?"
+    )
+    
     uploaded_files = models.FileField(
         upload_to='design_uploads/',
         blank=True,
@@ -90,3 +121,42 @@ class DesignRequest(models.Model):
     @property
     def total_price(self):
         return sum(p.price for p in self.packages.all())
+    
+    def get_rush_fee(self):
+        """
+        Calculate rush fee - 50% surcharge for rush timeline
+        """
+        if self.timeline_preference == 'rush':
+            base_price = self.total_price
+            return base_price * Decimal('0.50')  # 50% rush fee
+        return Decimal('0.00')
+    
+    def get_subtotal_with_rush(self):
+        """
+        Get subtotal including rush fee if applicable
+        """
+        return self.total_price + self.get_rush_fee()
+    
+    def get_estimated_turnaround_days(self):
+        """
+        Calculate estimated turnaround time based on timeline preference and package count
+        """
+        # Base turnaround on timeline preference
+        if self.timeline_preference == 'rush':
+            base_days = 2
+        elif self.timeline_preference == 'standard':
+            base_days = 4
+        elif self.timeline_preference == 'flexible':
+            base_days = 10
+        else:
+            # Default to standard if not specified
+            base_days = 5
+        
+        # Adjust based on number of packages (complexity)
+        package_count = self.packages.count()
+        if package_count > 3:
+            base_days += 2
+        elif package_count > 1:
+            base_days += 1
+        
+        return base_days

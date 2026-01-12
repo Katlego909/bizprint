@@ -113,6 +113,27 @@ def generate_design_quote_pdf(design_request):
         ('LEFTPADDING', (0, 0), (-1, -1), 10),
     ]))
     elements.append(client_table)
+    elements.append(Spacer(1, 20))
+    
+    # Estimated turnaround time
+    turnaround_days = design_request.get_estimated_turnaround_days()
+    timeline_text = f"Estimated Turnaround Time: {turnaround_days} business days"
+    if design_request.timeline_preference:
+        timeline_text += f" ({design_request.get_timeline_preference_display()} timeline)"
+    
+    turnaround_style = ParagraphStyle(
+        'Turnaround',
+        parent=normal_style,
+        fontSize=10,
+        textColor=colors.HexColor('#1d3557'),
+        backColor=colors.HexColor('#f0f7ff'),
+        borderPadding=10,
+        borderColor=colors.HexColor('#1d3557'),
+        borderWidth=1,
+        borderRadius=4,
+        leftIndent=10,
+    )
+    elements.append(Paragraph(f"<b>⏱ {timeline_text}</b>", turnaround_style))
     elements.append(Spacer(1, 30))
     
     # Selected packages
@@ -151,15 +172,25 @@ def generate_design_quote_pdf(design_request):
     
     # Totals
     subtotal = design_request.total_price
-    vat = subtotal * Decimal('0.15')
-    total = subtotal + vat
+    rush_fee = design_request.get_rush_fee()
+    subtotal_with_rush = design_request.get_subtotal_with_rush()
+    vat = subtotal_with_rush * Decimal('0.15')
+    total = subtotal_with_rush + vat
     
+    # Build totals data with rush fee if applicable
     totals_data = [
         ['Subtotal:', f"R {subtotal:.2f}"],
+    ]
+    
+    if rush_fee > 0:
+        totals_data.append(['Rush Fee (50%):', f"R {rush_fee:.2f}"])
+        totals_data.append(['Subtotal with Rush:', f"R {subtotal_with_rush:.2f}"])
+    
+    totals_data.extend([
         ['VAT (15%):', f"R {vat:.2f}"],
         ['', ''],  # Spacer row
         ['Total:', f"R {total:.2f}"],
-    ]
+    ])
     
     totals_table = Table(totals_data, colWidths=[4*inch, 1.5*inch])
     totals_table.setStyle(TableStyle([
