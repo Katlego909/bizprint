@@ -289,7 +289,7 @@ header {
   position: fixed;
   top: 100px;
   right: 24px;
-  z-index: 999;
+  z-index: 1001;
   display: flex;
   flex-direction: column;
   gap: 16px;
