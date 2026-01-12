@@ -27,4 +27,14 @@ urlpatterns = [
     path('upload-payment/<uuid:order_id>/', views.upload_payment_proof, name='upload_payment_proof'),
 
     path('contact/', views.contact_support, name='contact_support'),
+    
+    # Legal pages
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
+    
+    # Resource pages
+    path('how-to-order/', views.how_to_order, name='how_to_order'),
+    path('shipping-delivery/', views.shipping_delivery, name='shipping_delivery'),
+    path('returns-refunds/', views.returns_refunds, name='returns_refunds'),
+    path('faq/', views.faq, name='faq'),
 ]

@@ -13,4 +13,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
+    path('validate-discount/', views.validate_discount_code, name='validate_discount'),
 ]

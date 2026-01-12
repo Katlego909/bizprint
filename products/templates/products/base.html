@@ -46,10 +46,10 @@
       {% if user.is_authenticated %}
         <a href="{% url 'accounts:dashboard' %}">My Dashboard</a>
         <a href="/track/">Track Order</a>
-        <a href="{% url 'accounts:logout' %}">Logout</a>
+        <a href="{% url 'accounts:logout' %"  class="btn btn-secondary" >Logout</a>
       {% else %}
         <a href="{% url 'accounts:login' %}" class="btn-outline">Login</a>
-        <a href="{% url 'accounts:register' %}" class="btn btn-secondary">Register</a>
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary">Register</a>
       {% endif %}
     </div>
   </div>
@@ -82,10 +82,10 @@
       <div class="footer-col">
         <h4>Resources</h4>
         <ul>
-          <li><a href="#">How to Order</a></li>
-          <li><a href="#">Shipping & Delivery</a></li>
-          <li><a href="#">Returns & Refunds</a></li>
-          <li><a href="#">FAQ</a></li>
+          <li><a href="{% url 'products:how_to_order' %}">How to Order</a></li>
+          <li><a href="{% url 'products:shipping_delivery' %}">Shipping & Delivery</a></li>
+          <li><a href="{% url 'products:returns_refunds' %}">Returns & Refunds</a></li>
+          <li><a href="{% url 'products:faq' %}">FAQ</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -99,7 +99,7 @@
 
     <div class="footer-bottom">
       <p>&copy; {{ year|default:"2025" }} BizPrint. A Subsidiary of Ardent SA (Pty) Ltd.</p>
-      <p><a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
+      <p><a href="{% url 'products:terms_of_service' %}">Terms of Service</a> | <a href="{% url 'products:privacy_policy' %}">Privacy Policy</a></p>
     </div>
   </footer>
 

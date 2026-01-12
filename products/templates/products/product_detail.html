@@ -99,6 +99,242 @@
     transform: scale(1.2);
   }
 
+  /* Progress Indicator */
+  .progress-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding: 1.25rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .progress-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .progress-step:not(:last-child)::after {
+    content: '→';
+    margin-left: 1rem;
+    color: #ccc;
+    font-size: 1.2rem;
+  }
+  
+  .progress-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #999;
+    transition: all 0.3s;
+  }
+  
+  .progress-step.active .progress-circle {
+    background: #1d3557;
+    border-color: #1d3557;
+    color: white;
+  }
+  
+  .progress-step.completed .progress-circle {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
+  }
+  
+  .progress-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  .progress-step.active .progress-label {
+    color: #1d3557;
+    font-weight: 600;
+  }
+
+  /* Price Breakdown Sidebar */
+  .price-breakdown {
+    position: sticky;
+    top: 100px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .price-breakdown h4 {
+    margin: 0 0 1rem 0;
+    color: #1d3557;
+    font-size: 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.75rem;
+  }
+  
+  .price-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .price-line.total {
+    border-top: 2px solid #e0e0e0;
+    margin-top: 0.75rem;
+    padding-top: 1rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1d3557;
+  }
+  
+  .price-line.savings {
+    color: #28a745;
+    font-weight: 600;
+  }
+
+  .discount-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  
+  .discount-valid {
+    background: #d4edda;
+    color: #155724;
+  }
+  
+  .discount-invalid {
+    background: #f8d7da;
+    color: #721c24;
+  }
+  
+  .discount-checking {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  /* Drag and Drop File Upload */
+  .file-drop-zone {
+    border: 2px dashed #d0d0d0;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    background: #fafafa;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  
+  .file-drop-zone:hover {
+    border-color: #1d3557;
+    background: #f5f8fa;
+  }
+  
+  .file-drop-zone.drag-over {
+    border-color: #28a745;
+    background: #f0f7f4;
+  }
+  
+  .file-preview {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: none;
+    transition: all 0.3s ease;
+  }
+  
+  .file-preview.show {
+    display: block;
+  }
+  
+  .file-preview-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .file-icon {
+    width: 56px;
+    height: 56px;
+    background: #1d3557;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+  
+  .file-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .file-info strong {
+    display: block;
+    color: #1d3557;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .file-info small {
+    color: #6c757d;
+    font-size: 0.85rem;
+  }
+  
+  .file-remove {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  
+  .file-remove:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+  }
+  
+  .file-remove:active {
+    transform: translateY(0);
+  }
+
+  /* Two Column Layout */
+  .order-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
   /* Sticky Footer */
   .sticky-footer {
     position: fixed;
@@ -139,6 +375,24 @@
     .product-header {
       flex-direction: column;
     }
+    
+    .order-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .price-breakdown {
+      position: static;
+      margin-bottom: 2rem;
+    }
+    
+    .progress-steps {
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .progress-step {
+      flex: 1 1 45%;
+    }
   }
 </style>
 {% endblock %}
@@ -157,6 +411,29 @@
     </div>
   </div>
 
+  <!-- Progress Indicator -->
+  <div class="progress-steps">
+    <div class="progress-step completed" data-step="1">
+      <div class="progress-circle">✓</div>
+      <div class="progress-label">Product</div>
+    </div>
+    <div class="progress-step active" data-step="2">
+      <div class="progress-circle">2</div>
+      <div class="progress-label">Configure</div>
+    </div>
+    <div class="progress-step" data-step="3">
+      <div class="progress-circle">3</div>
+      <div class="progress-label">Upload</div>
+    </div>
+    <div class="progress-step" data-step="4">
+      <div class="progress-circle">4</div>
+      <div class="progress-label">Review</div>
+    </div>
+  </div>
+
+  <div class="order-layout">
+  <!-- Order Form Column -->
+  <div>
   <!-- 💼 Order Form -->
   <form method="post" enctype="multipart/form-data" id="order-form">
     {% csrf_token %}
@@ -224,10 +501,26 @@
 
       <div class="form-group">
         <label>Upload Artwork (PDF, PNG, JPG)</label>
-        <div class="file-upload-wrapper">
-            <input type="file" name="file" id="id_file" accept=".pdf,.png,.jpg" required style="display: none;" onchange="showFileName(this)">
-            <label for="id_file" class="btn btn-secondary file-upload-button">Choose File</label>
-            <p id="file-name">No file selected</p>
+        <div class="file-drop-zone" id="drop-zone">
+          <input type="file" name="file" id="id_file" accept=".pdf,.png,.jpg,.jpeg" required style="display: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1d3557" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <p style="margin: 1rem 0 0.5rem 0; color: #1d3557; font-weight: 600;">Drag & drop your file here</p>
+          <p style="margin: 0; color: #666; font-size: 0.9rem;">or click to browse</p>
+          <p style="margin: 0.5rem 0 0 0; color: #999; font-size: 0.85rem;">Max 5MB • PDF, PNG, JPG</p>
+        </div>
+        <div class="file-preview" id="file-preview">
+          <div class="file-preview-content">
+            <div class="file-icon" id="file-icon">PDF</div>
+            <div class="file-info">
+              <strong id="file-name-display">filename.pdf</strong>
+              <small id="file-size">0 KB</small>
+            </div>
+            <button type="button" class="file-remove" onclick="removeFile()">Remove</button>
+          </div>
         </div>
       </div>
     </div>
@@ -254,7 +547,8 @@
         </div>
         <div class="form-group">
           <label>Discount Code</label>
-          <input type="text" name="discount_code" class="form-control" placeholder="Enter code (optional)">
+          <input type="text" id="discount-code" name="discount_code" class="form-control" placeholder="Enter code (optional)">
+          <div id="discount-status" class="discount-status" style="display: none;"></div>
         </div>
       </div>
 
@@ -274,6 +568,43 @@
     </div>
 
   </form>
+  </div>
+
+  <!-- Price Breakdown Sidebar -->
+  <div>
+    <div class="price-breakdown">
+      <h4>Order Summary</h4>
+      <div class="price-line">
+        <span>Base Price:</span>
+        <span id="breakdown-base">R0.00</span>
+      </div>
+      <div class="price-line" id="breakdown-options-line" style="display: none;">
+        <span>Options:</span>
+        <span id="breakdown-options">R0.00</span>
+      </div>
+      <div class="price-line" id="breakdown-services-line" style="display: none;">
+        <span>Extras:</span>
+        <span id="breakdown-services">R0.00</span>
+      </div>
+      <div class="price-line" id="breakdown-shipping-line" style="display: none;">
+        <span>Shipping:</span>
+        <span id="breakdown-shipping">R0.00</span>
+      </div>
+      <div class="price-line" id="breakdown-discount-line" style="display: none;">
+        <span>Discount:</span>
+        <span id="breakdown-discount" style="color: #28a745;">-R0.00</span>
+      </div>
+      <div class="price-line">
+        <span>VAT (15%):</span>
+        <span id="breakdown-vat">R0.00</span>
+      </div>
+      <div class="price-line total">
+        <span>Total:</span>
+        <span id="breakdown-total">R0.00</span>
+      </div>
+    </div>
+  </div>
+  </div>
 
 </div>
 
@@ -284,56 +615,234 @@
   const shippingSelect = document.getElementById("shipping-method");
   const totalPriceEl = document.getElementById("total-price");
   const stickyFooter = document.getElementById("sticky-footer");
+  const discountInput = document.getElementById("discount-code");
+  let discountAmount = 0;
+  let discountTimeout = null;
 
-  function showFileName(input) {
-    const nameDisplay = document.getElementById('file-name');
-    if (input.files && input.files.length > 0) {
-      nameDisplay.textContent = "Selected: " + input.files[0].name;
-      nameDisplay.style.color = "#1d3557";
-      nameDisplay.style.fontWeight = "bold";
+  // Drag and Drop File Upload
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('id_file');
+  const filePreview = document.getElementById('file-preview');
+
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('drag-over');
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInput.files = files;
+      showFilePreview(files[0]);
+    }
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      showFilePreview(e.target.files[0]);
+    }
+  });
+
+  function showFilePreview(file) {
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert('File too large. Maximum size is 5MB.');
+      fileInput.value = '';
+      return;
+    }
+
+    const ext = file.name.split('.').pop().toUpperCase();
+    document.getElementById('file-icon').textContent = ext;
+    document.getElementById('file-name-display').textContent = file.name;
+    document.getElementById('file-size').textContent = (file.size / 1024).toFixed(1) + ' KB';
+    filePreview.classList.add('show');
+    dropZone.style.display = 'none';
+    updateProgress();
+  }
+
+  function removeFile() {
+    fileInput.value = '';
+    filePreview.classList.remove('show');
+    dropZone.style.display = 'block';
+    updateProgress();
+  }
+
+  // Real-time Discount Code Validation
+  discountInput.addEventListener('input', (e) => {
+    clearTimeout(discountTimeout);
+    const code = e.target.value.trim().toUpperCase();
+    
+    if (!code) {
+      document.getElementById('discount-status').style.display = 'none';
+      discountAmount = 0;
+      updateTotal();
+      return;
+    }
+
+    // Show checking status
+    const statusEl = document.getElementById('discount-status');
+    statusEl.style.display = 'inline-block';
+    statusEl.className = 'discount-status discount-checking';
+    statusEl.textContent = 'Checking...';
+
+    // Debounce the validation
+    discountTimeout = setTimeout(() => {
+      validateDiscountCode(code);
+    }, 500);
+  });
+
+  function validateDiscountCode(code) {
+    fetch(`/accounts/validate-discount/?code=${code}`)
+      .then(res => res.json())
+      .then(data => {
+        const statusEl = document.getElementById('discount-status');
+        if (data.valid) {
+          statusEl.className = 'discount-status discount-valid';
+          statusEl.textContent = '\u2713 Valid! 10% discount';
+          discountAmount = 0.10;
+        } else {
+          statusEl.className = 'discount-status discount-invalid';
+          statusEl.textContent = '\u2717 Invalid code';
+          discountAmount = 0;
+        }
+        updateTotal();
+      })
+      .catch(() => {
+        document.getElementById('discount-status').style.display = 'none';
+        discountAmount = 0;
+        updateTotal();
+      });
+  }
+
+  // Progress Indicator Update
+  function updateProgress() {
+    const steps = document.querySelectorAll('.progress-step');
+    const hasQuantity = quantitySelect.value !== '';
+    const hasOptions = Array.from(optionSelects).every(s => s.value !== '');
+    const hasFile = fileInput.files.length > 0;
+    const hasShipping = shippingSelect.value !== '';
+
+    // Step 2: Configure
+    if (hasQuantity && hasOptions) {
+      steps[1].classList.add('completed');
+      steps[1].classList.remove('active');
+      steps[2].classList.add('active');
     } else {
-      nameDisplay.textContent = "No file selected";
-      nameDisplay.style.color = "#666";
-      nameDisplay.style.fontWeight = "normal";
+      steps[1].classList.remove('completed');
+      steps[1].classList.add('active');
+      steps[2].classList.remove('active', 'completed');
+      steps[3].classList.remove('active', 'completed');
+    }
+
+    // Step 3: Upload
+    if (hasQuantity && hasOptions && hasFile && hasShipping) {
+      steps[2].classList.add('completed');
+      steps[2].classList.remove('active');
+      steps[3].classList.add('active');
     }
   }
 
+  // Enhanced Price Calculation with Breakdown
   function updateTotal() {
     const basePrice = parseFloat(quantitySelect.selectedOptions[0]?.dataset.baseprice || 0);
-    let modifiers = 0;
+    let optionsTotal = 0;
+    let servicesTotal = 0;
 
     optionSelects.forEach(select => {
       const price = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
-      modifiers += !isNaN(price) ? price : 0;
+      optionsTotal += !isNaN(price) ? price : 0;
     });
 
     serviceChecks.forEach(chk => {
       if (chk.checked) {
         const price = parseFloat(chk.dataset.price || 0);
-        modifiers += !isNaN(price) ? price : 0;
+        servicesTotal += !isNaN(price) ? price : 0;
       }
     });
 
     const shipping = parseFloat(shippingSelect.selectedOptions[0]?.dataset.price || 0);
+    
+    // Calculate discount
+    const preDiscountTotal = basePrice + optionsTotal + servicesTotal + shipping;
+    const discount = preDiscountTotal * discountAmount;
 
-    const subtotal = basePrice + modifiers + shipping;
-    const tax = subtotal * 0.15;
-    const total = subtotal + tax;
+    const subtotal = preDiscountTotal - discount;
+    const vat = subtotal * 0.15;
+    const total = subtotal + vat;
 
+    // Update sticky footer
     totalPriceEl.textContent = total.toFixed(2);
 
-    // Show footer if a quantity is selected (meaning a price exists)
+    // Update breakdown sidebar
+    document.getElementById('breakdown-base').textContent = 'R' + basePrice.toFixed(2);
+    document.getElementById('breakdown-vat').textContent = 'R' + vat.toFixed(2);
+    document.getElementById('breakdown-total').textContent = 'R' + total.toFixed(2);
+
+    // Show/hide optional lines
+    const optionsLine = document.getElementById('breakdown-options-line');
+    const servicesLine = document.getElementById('breakdown-services-line');
+    const shippingLine = document.getElementById('breakdown-shipping-line');
+    const discountLine = document.getElementById('breakdown-discount-line');
+
+    if (optionsTotal > 0) {
+      optionsLine.style.display = 'flex';
+      document.getElementById('breakdown-options').textContent = 'R' + optionsTotal.toFixed(2);
+    } else {
+      optionsLine.style.display = 'none';
+    }
+
+    if (servicesTotal > 0) {
+      servicesLine.style.display = 'flex';
+      document.getElementById('breakdown-services').textContent = 'R' + servicesTotal.toFixed(2);
+    } else {
+      servicesLine.style.display = 'none';
+    }
+
+    if (shipping > 0) {
+      shippingLine.style.display = 'flex';
+      document.getElementById('breakdown-shipping').textContent = 'R' + shipping.toFixed(2);
+    } else {
+      shippingLine.style.display = 'none';
+    }
+
+    if (discount > 0) {
+      discountLine.style.display = 'flex';
+      document.getElementById('breakdown-discount').textContent = '-R' + discount.toFixed(2);
+    } else {
+      discountLine.style.display = 'none';
+    }
+
+    // Show footer if a quantity is selected
     if (basePrice > 0) {
       stickyFooter.classList.add('visible');
     } else {
       stickyFooter.classList.remove('visible');
     }
+
+    updateProgress();
   }
 
   quantitySelect.addEventListener("change", updateTotal);
   optionSelects.forEach(s => s.addEventListener("change", updateTotal));
   serviceChecks.forEach(c => c.addEventListener("change", updateTotal));
   shippingSelect.addEventListener("change", updateTotal);
+
+  // Set smart defaults on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    // Select first/most popular quantity if not set
+    if (quantitySelect.options.length > 1 && !quantitySelect.value) {
+      quantitySelect.selectedIndex = 1; // Select first real option
+      quantitySelect.dispatchEvent(new Event('change'));
+    }
+  });
 </script>
 
 {{ pending_data|json_script:"pending-data-json" }}

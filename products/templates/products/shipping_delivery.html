@@ -1,0 +1,468 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Shipping & Delivery - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="resource-page">
+    <h1>Shipping & Delivery</h1>
+    <p class="subtitle">Everything you need to know about getting your order delivered</p>
+
+    <section class="info-section">
+      <h2>Delivery Options</h2>
+      <div class="delivery-options">
+        <div class="option-card">
+          <div class="option-icon">📦</div>
+          <h3>Standard Delivery</h3>
+          <p class="price">R120.00</p>
+          <p>Delivery within 3-5 business days to major cities and towns across South Africa.</p>
+          <ul>
+            <li>Door-to-door courier service</li>
+            <li>Tracking number provided</li>
+            <li>Signature on delivery</li>
+          </ul>
+        </div>
+
+        <div class="option-card featured">
+          <div class="badge">Most Popular</div>
+          <div class="option-icon">⚡</div>
+          <h3>Express Shipping</h3>
+          <p class="price">R250.00</p>
+          <p>Fast delivery within 1-2 business days to major metros (Johannesburg, Pretoria, Cape Town, Durban).</p>
+          <ul>
+            <li>Priority courier service</li>
+            <li>Real-time tracking</li>
+            <li>Same-day dispatch available</li>
+          </ul>
+        </div>
+
+        <div class="option-card">
+          <div class="option-icon">🏪</div>
+          <h3>Collection</h3>
+          <p class="price">FREE</p>
+          <p>Collect your order from our Johannesburg office during business hours.</p>
+          <ul>
+            <li>No shipping fees</li>
+            <li>Flexible pickup times</li>
+            <li>Same-day pickup available for rush orders</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h2>Delivery Areas</h2>
+      <div class="areas-grid">
+        <div class="area-card">
+          <h3>🌆 Major Cities (1-2 Days)</h3>
+          <p>Johannesburg, Pretoria, Cape Town, Durban, Port Elizabeth, Bloemfontein</p>
+        </div>
+        <div class="area-card">
+          <h3>🏘️ Towns & Suburbs (3-5 Days)</h3>
+          <p>Most towns and suburbs across South Africa</p>
+        </div>
+        <div class="area-card">
+          <h3>🌄 Remote Areas (5-7 Days)</h3>
+          <p>Rural and remote locations (additional fees may apply)</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h2>Processing & Dispatch</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-icon">✅</div>
+          <div class="timeline-content">
+            <h3>Payment Verification</h3>
+            <p>Your order enters production queue once payment is confirmed (typically within 2-4 hours during business hours).</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-icon">🏭</div>
+          <div class="timeline-content">
+            <h3>Production Time</h3>
+            <ul>
+              <li><strong>Standard:</strong> 3-5 business days</li>
+              <li><strong>Rush:</strong> 1-2 business days (+50% fee)</li>
+              <li><strong>Flexible:</strong> 7-10 business days</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-icon">📦</div>
+          <div class="timeline-content">
+            <h3>Dispatch</h3>
+            <p>Orders are dispatched the same day they're completed if ready before 2 PM. Otherwise, they ship the next business day.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h2>Tracking Your Order</h2>
+      <p>Once your order is dispatched, you'll receive:</p>
+      <div class="tracking-info">
+        <div class="tracking-step">
+          <strong>📧 Email Notification</strong>
+          <p>Confirmation email with tracking number and courier details</p>
+        </div>
+        <div class="tracking-step">
+          <strong>🔍 Order Portal</strong>
+          <p>Track your order status in real-time at <a href="{% url 'products:track_order' %}">Track Order</a></p>
+        </div>
+        <div class="tracking-step">
+          <strong>📱 SMS Updates</strong>
+          <p>Delivery notifications sent to your mobile number</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h2>Important Information</h2>
+      <div class="important-notes">
+        <div class="note-box">
+          <h3>📅 Business Days</h3>
+          <p>All delivery times are calculated in business days (Monday to Friday, excluding public holidays).</p>
+        </div>
+        <div class="note-box">
+          <h3>🏠 Delivery Requirements</h3>
+          <p>Someone must be available to sign for the delivery. If no one is available, the courier will leave a collection notice.</p>
+        </div>
+        <div class="note-box">
+          <h3>📍 Accurate Address</h3>
+          <p>Please ensure your delivery address is complete and accurate. We cannot be held responsible for delays due to incorrect addresses.</p>
+        </div>
+        <div class="note-box">
+          <h3>🛡️ Insurance</h3>
+          <p>All shipments are insured up to R5,000. Additional insurance available on request for high-value orders.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h2>Collection Details</h2>
+      <div class="collection-info">
+        <h3>BizPrint Johannesburg Office</h3>
+        <p><strong>Address:</strong> 123 Print Street, Johannesburg, 2000</p>
+        <p><strong>Hours:</strong> Monday - Friday: 8:00 AM - 5:00 PM</p>
+        <p><strong>Saturday:</strong> 9:00 AM - 1:00 PM (by appointment)</p>
+        <p><strong>Closed:</strong> Sundays and Public Holidays</p>
+        <p class="mt-1"><strong>Note:</strong> Please bring your order confirmation email and ID for collection.</p>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <h3>Can I change my delivery address after placing an order?</h3>
+        <p>Yes, but only before the order is dispatched. Contact us immediately if you need to change the address.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What happens if I'm not home for delivery?</h3>
+        <p>The courier will leave a notice and attempt redelivery the next business day. You can also arrange collection from the courier depot.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do you deliver on weekends?</h3>
+        <p>Standard courier services operate Monday-Friday. Weekend delivery may be available for express orders at an additional cost - contact us to arrange.</p>
+      </div>
+      <div class="faq-item">
+        <h3>My order hasn't arrived. What should I do?</h3>
+        <p>First, check your tracking information. If the delivery is delayed beyond the estimated date, contact us at support@bizprint.co.za with your order number.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .resource-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .resource-page h1 {
+    font-size: 2.5rem;
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 3rem;
+  }
+
+  .info-section {
+    margin-bottom: 3rem;
+  }
+
+  .info-section h2 {
+    font-size: 1.8rem;
+    color: #1d3557;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .delivery-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .option-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .option-card:hover {
+    border-color: #1d3557;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .option-card.featured {
+    border-color: #1d3557;
+    background: #f8f9fa;
+  }
+
+  .badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: #1d3557;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .option-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .option-card h3 {
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+  }
+
+  .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1d3557;
+    margin: 1rem 0;
+  }
+
+  .option-card p {
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .option-card ul {
+    text-align: left;
+    margin-left: 1.5rem;
+  }
+
+  .option-card li {
+    color: #333;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+
+  .areas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .area-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #1d3557;
+  }
+
+  .area-card h3 {
+    color: #1d3557;
+    margin-bottom: 0.75rem;
+  }
+
+  .area-card p {
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .timeline {
+    margin-top: 2rem;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-icon {
+    width: 50px;
+    height: 50px;
+    background: #1d3557;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .timeline-content h3 {
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-content p,
+  .timeline-content li {
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .timeline-content ul {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .tracking-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .tracking-step {
+    background: white;
+    border: 1px solid #e0e0e0;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  .tracking-step strong {
+    color: #1d3557;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .tracking-step p {
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .tracking-step a {
+    color: #1d3557;
+    font-weight: 600;
+  }
+
+  .important-notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .note-box {
+    background: #fff3cd;
+    border-left: 4px solid #856404;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  .note-box h3 {
+    color: #856404;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+  }
+
+  .note-box p {
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .collection-info {
+    background: #e8f4f8;
+    border-left: 4px solid #1d3557;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+  }
+
+  .collection-info h3 {
+    color: #1d3557;
+    margin-bottom: 1rem;
+  }
+
+  .collection-info p {
+    color: #333;
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+  }
+
+  .mt-1 {
+    margin-top: 1rem;
+  }
+
+  .faq-section {
+    margin-top: 3rem;
+  }
+
+  .faq-section h2 {
+    font-size: 1.8rem;
+    color: #1d3557;
+    margin-bottom: 1.5rem;
+  }
+
+  .faq-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .faq-item h3 {
+    color: #1d3557;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+  }
+
+  .faq-item p {
+    color: #333;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .resource-page h1 {
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+
+    .delivery-options {
+      grid-template-columns: 1fr;
+    }
+
+    .timeline-item {
+      flex-direction: column;
+    }
+  }
+</style>
+{% endblock %}

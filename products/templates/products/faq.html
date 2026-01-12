@@ -1,0 +1,457 @@
+{% extends 'products/base.html' %}
+
+{% block title %}FAQ - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="faq-page">
+    <h1>Frequently Asked Questions</h1>
+    <p class="subtitle">Find answers to common questions about our printing services</p>
+
+    <div class="faq-categories">
+      <div class="category-section">
+        <h2>🛒 Ordering & Pricing</h2>
+        
+        <div class="faq-item">
+          <h3>How do I place an order?</h3>
+          <p>Simply select your product, configure your specifications, upload your artwork, and checkout. See our <a href="{% url 'products:how_to_order' %}">How to Order</a> guide for detailed steps.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do your prices include VAT?</h3>
+          <p>Yes, all prices displayed on our website include 15% VAT. You'll see a full breakdown including VAT on your invoice.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do you offer bulk discounts?</h3>
+          <p>Yes! Our pricing automatically adjusts based on quantity. The more you order, the lower the unit price. Check the product page for quantity tiers.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I get a quote before ordering?</h3>
+          <p>Absolutely! Configure your product with the specifications you need, and our instant pricing calculator will show you the exact cost. No account required to view pricing.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do you have a minimum order quantity?</h3>
+          <p>Minimum quantities vary by product. Most products start from as low as 5 units, but some items like banners can be ordered individually.</p>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>💳 Payment</h2>
+        
+        <div class="faq-item">
+          <h3>What payment methods do you accept?</h3>
+          <p>We currently accept Electronic Funds Transfer (EFT). Credit card payments are coming soon. Payment must be made before production begins.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I make payment?</h3>
+          <p>After placing your order, you'll receive banking details via email. Transfer the amount using your order reference number. Then upload your proof of payment on the order tracking page.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How long does payment verification take?</h3>
+          <p>We verify payments within 2-4 hours during business hours (Monday-Friday, 8 AM - 5 PM). Payments made after hours are processed the next business day.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is it safe to upload my proof of payment?</h3>
+          <p>Yes, all uploads are secure and encrypted. We only use your payment proof for verification purposes.</p>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>🎨 Artwork & Files</h2>
+        
+        <div class="faq-item">
+          <h3>What file formats do you accept?</h3>
+          <p>We accept PDF, PNG, and JPG files. PDF is preferred for the best print quality. Maximum file size is 5MB.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What resolution should my files be?</h3>
+          <p>For best results, use 300 DPI (dots per inch) at the actual print size. Lower resolution may result in pixelated or blurry prints.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Should I use RGB or CMYK?</h3>
+          <p>CMYK is preferred for accurate color reproduction in print. RGB colors may shift slightly when printed as they need to be converted to CMYK.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What is bleed and do I need it?</h3>
+          <p>Bleed is extra image area beyond the trim edge (typically 3mm on all sides). It prevents white edges if there's slight movement during cutting. We recommend including bleed for professional results.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can you design for me if I don't have artwork?</h3>
+          <p>Yes! We offer professional <a href="{% url 'designs:design_request_create' %}">design services</a> with various packages to suit your budget and timeline. Our designers will create custom artwork based on your brief.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do you check my files before printing?</h3>
+          <p>Yes, we perform a basic quality check. If we notice issues (low resolution, incorrect size, etc.), we'll contact you. However, you're ultimately responsible for your file's content and quality.</p>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>⏱️ Production & Turnaround</h2>
+        
+        <div class="faq-item">
+          <h3>How long does production take?</h3>
+          <p>Standard turnaround is 3-5 business days after payment verification. We also offer:</p>
+          <ul>
+            <li><strong>Rush:</strong> 1-2 business days (+50% fee)</li>
+            <li><strong>Flexible:</strong> 7-10 business days</li>
+          </ul>
+        </div>
+
+        <div class="faq-item">
+          <h3>When does my turnaround time start?</h3>
+          <p>The turnaround clock starts once payment is verified and your files pass our quality check. Not when you place the order.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I get my order faster?</h3>
+          <p>Yes, select the "Rush" option when configuring your order. Rush orders are prioritized and typically completed in 1-2 business days, with a 50% surcharge.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do weekends count as business days?</h3>
+          <p>No, turnaround times are calculated in business days (Monday-Friday, excluding public holidays).</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Will I get updates on my order?</h3>
+          <p>Yes! You'll receive email notifications when:</p>
+          <ul>
+            <li>Payment is verified</li>
+            <li>Order is in production</li>
+            <li>Order is ready/shipped</li>
+            <li>Order is completed</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>🚚 Delivery & Shipping</h2>
+        
+        <div class="faq-item">
+          <h3>How much is shipping?</h3>
+          <p>Standard shipping is R120.00. Express shipping (1-2 days to major metros) is R250.00. Collection from our Johannesburg office is free. See <a href="{% url 'products:shipping_delivery' %}">Shipping & Delivery</a> for details.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Where do you deliver?</h3>
+          <p>We deliver nationwide across South Africa. Major cities receive delivery in 1-2 days, towns in 3-5 days, and remote areas in 5-7 days.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I track my delivery?</h3>
+          <p>Yes, you'll receive a tracking number once your order is dispatched. You can also track your order status on our website using your order reference.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do you deliver on weekends?</h3>
+          <p>Standard courier services operate Monday-Friday. Weekend delivery may be available for express orders at an additional cost.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I collect my order instead?</h3>
+          <p>Yes! Collection is free from our Johannesburg office (Monday-Friday 8 AM - 5 PM, Saturday 9 AM - 1 PM by appointment). You'll receive notification when your order is ready.</p>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>🔄 Changes & Cancellations</h2>
+        
+        <div class="faq-item">
+          <h3>Can I cancel my order?</h3>
+          <p>Yes, but only before production starts. Once your order is in production, it cannot be cancelled as items are custom-made for you.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I change my order after placing it?</h3>
+          <p>Changes are only possible before production begins. Contact us immediately if you need to modify your order. Once in production, changes cannot be made.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What if I uploaded the wrong file?</h3>
+          <p>Contact us immediately! If caught before production, you can upload a new file at no charge. After production starts, you'd need to place a new order.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I change my delivery address?</h3>
+          <p>Yes, but only before the order is dispatched. Contact us as soon as possible if you need to change the delivery address.</p>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>🎨 Design Services</h2>
+        
+        <div class="faq-item">
+          <h3>How do design services work?</h3>
+          <p>Choose a design package, complete the design brief, and our designers create concepts for you. You'll receive proofs to review and can request revisions according to your package.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How many revisions are included?</h3>
+          <p>This depends on your package:</p>
+          <ul>
+            <li><strong>Basic:</strong> 2 revision rounds</li>
+            <li><strong>Standard:</strong> 3 revision rounds</li>
+            <li><strong>Premium:</strong> Unlimited revisions</li>
+          </ul>
+        </div>
+
+        <div class="faq-item">
+          <h3>What's the difference between rush, standard, and flexible timelines?</h3>
+          <ul>
+            <li><strong>Rush (1-2 days):</strong> +50% surcharge, fast turnaround</li>
+            <li><strong>Standard (3-5 days):</strong> Normal pricing, balanced timeline</li>
+            <li><strong>Flexible (7-10 days):</strong> Best pricing, relaxed schedule</li>
+          </ul>
+        </div>
+
+        <div class="faq-item">
+          <h3>Who owns the design after completion?</h3>
+          <p>You own full rights to the final approved design. We'll provide the files in print-ready formats for you to use as needed.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What if I don't like the initial designs?</h3>
+          <p>Use your included revisions to guide the designer. Be specific about what you'd like changed. Our goal is your satisfaction within the scope of your package.</p>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>❓ Quality & Issues</h2>
+        
+        <div class="faq-item">
+          <h3>What if my order arrives damaged?</h3>
+          <p>Take photos of the packaging and damaged items, don't discard packaging, and report within 24 hours. We'll arrange a replacement at no cost. See <a href="{% url 'products:returns_refunds' %}">Returns & Refunds</a> for details.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What if there's a printing error?</h3>
+          <p>We'll reprint your order at no charge if the error is on our end. Contact us within 7 days with photos and your order number.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Why do the colors look different from my screen?</h3>
+          <p>Screens use RGB color while printing uses CMYK. Some variation is normal. For color-critical projects, we recommend ordering a proof first.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do you offer sample prints or proofs?</h3>
+          <p>For large orders, we recommend ordering a small quantity first to verify quality. Digital proofs are provided for design service orders.</p>
+        </div>
+      </div>
+
+      <div class="category-section">
+        <h2>💼 Account & Support</h2>
+        
+        <div class="faq-item">
+          <h3>Do I need an account to order?</h3>
+          <p>No, you can place orders as a guest. However, creating an account lets you track orders easily, save your details, and access your order history.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I track my order?</h3>
+          <p>Go to <a href="{% url 'products:track_order' %}">Track Order</a> and enter your order reference number. You'll see the current status and can upload files or payment proof.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How can I contact customer support?</h3>
+          <p>Email us at support@bizprint.co.za, call +27 11 123 4567 (Monday-Friday 8 AM - 5 PM), or use our <a href="{% url 'products:contact_support' %}">contact form</a>.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do you offer discounts or promotions?</h3>
+          <p>Yes! Subscribe to our newsletter for exclusive discount codes and special offers. We also run seasonal promotions.</p>
+        </div>
+      </div>
+    </div>
+
+    <section class="still-have-questions">
+      <h2>Still Have Questions?</h2>
+      <p>Can't find what you're looking for? Our support team is happy to help!</p>
+      <div class="contact-buttons">
+        <a href="{% url 'products:contact_support' %}" class="btn-contact">Contact Support</a>
+        <a href="mailto:support@bizprint.co.za" class="btn-email">Email Us</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .faq-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .faq-page h1 {
+    font-size: 2.5rem;
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 3rem;
+  }
+
+  .category-section {
+    margin-bottom: 3rem;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 2rem;
+  }
+
+  .category-section h2 {
+    font-size: 1.6rem;
+    color: #1d3557;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .faq-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .faq-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .faq-item h3 {
+    color: #1d3557;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  .faq-item p {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .faq-item ul {
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+  }
+
+  .faq-item li {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .faq-item a {
+    color: #1d3557;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .faq-item a:hover {
+    color: #457b9d;
+  }
+
+  .still-have-questions {
+    background: #e8f4f8;
+    padding: 3rem 2rem;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .still-have-questions h2 {
+    color: #1d3557;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+
+  .still-have-questions p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 2rem;
+  }
+
+  .contact-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-contact,
+  .btn-email {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .btn-contact {
+    background: #1d3557;
+    color: white;
+    border: 2px solid #1d3557;
+  }
+
+  .btn-contact:hover {
+    background: #457b9d;
+    border-color: #457b9d;
+  }
+
+  .btn-email {
+    background: white;
+    color: #1d3557;
+    border: 2px solid #1d3557;
+  }
+
+  .btn-email:hover {
+    background: #1d3557;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .faq-page h1 {
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+
+    .category-section {
+      padding: 1.5rem;
+    }
+
+    .category-section h2 {
+      font-size: 1.4rem;
+    }
+
+    .contact-buttons {
+      flex-direction: column;
+    }
+
+    .btn-contact,
+    .btn-email {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+{% endblock %}

@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.http import JsonResponse
 from .forms import UserRegistrationForm, CustomerProfileForm, ProfileUpdateForm, NewsletterSignupForm
 from .models import CustomerProfile, NewsletterSubscriber
 from accounts.utils import send_newsletter_discount_email
@@ -105,3 +106,16 @@ def subscribe_newsletter(request):
     # send them back to where they submitted from; fall back to home
     referer = request.META.get("HTTP_REFERER") or reverse('products:home')
     return redirect(referer)
+
+def validate_discount_code(request):
+    """AJAX endpoint to validate discount codes in real-time"""
+    code = request.GET.get('code', '').strip().upper()
+    
+    if not code:
+        return JsonResponse({'valid': False})
+    
+    try:
+        subscriber = NewsletterSubscriber.objects.get(discount_code=code)
+        return JsonResponse({'valid': True, 'discount': 10})
+    except NewsletterSubscriber.DoesNotExist:
+        return JsonResponse({'valid': False})

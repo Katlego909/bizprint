@@ -16,6 +16,24 @@ from .pdf_utils import generate_order_invoice_pdf
 
 from accounts.models import CustomerProfile, NewsletterSubscriber
 
+def privacy_policy(request):
+    return render(request, 'products/privacy_policy.html')
+
+def terms_of_service(request):
+    return render(request, 'products/terms_of_service.html')
+
+def how_to_order(request):
+    return render(request, 'products/how_to_order.html')
+
+def shipping_delivery(request):
+    return render(request, 'products/shipping_delivery.html')
+
+def returns_refunds(request):
+    return render(request, 'products/returns_refunds.html')
+
+def faq(request):
+    return render(request, 'products/faq.html')
+
 def home(request):
     products = Product.objects.all()[:3]
     categories = Category.objects.all()

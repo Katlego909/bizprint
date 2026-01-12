@@ -1,0 +1,513 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Returns & Refunds - BizPrint{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="resource-page">
+    <h1>Returns & Refunds</h1>
+    <p class="subtitle">Your satisfaction is our priority. Here's our returns and refunds policy.</p>
+
+    <section class="policy-section">
+      <h2>Our Guarantee</h2>
+      <p>We stand behind the quality of our work. If there's an issue with your order that's our fault, we'll make it right - either through a reprint or refund.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2>Eligibility for Returns & Refunds</h2>
+      <div class="eligibility-grid">
+        <div class="eligible-card yes">
+          <div class="card-header">✅ We Accept Returns For</div>
+          <ul>
+            <li><strong>Printing Errors:</strong> Defects in printing quality (smudges, misalignment, incorrect colors significantly off)</li>
+            <li><strong>Production Mistakes:</strong> Wrong quantity, size, or specifications</li>
+            <li><strong>Damaged Goods:</strong> Items damaged during production or shipping (not due to carrier handling)</li>
+            <li><strong>Our Design Errors:</strong> Mistakes we made in the design process (if using our design service)</li>
+          </ul>
+        </div>
+
+        <div class="eligible-card no">
+          <div class="card-header">❌ We Cannot Accept Returns For</div>
+          <ul>
+            <li><strong>Customer-Approved Proofs:</strong> If you approved the proof, we cannot accept returns for that design</li>
+            <li><strong>File Errors:</strong> Issues in your submitted artwork (low resolution, incorrect sizing, spelling errors)</li>
+            <li><strong>Color Variations:</strong> Minor color differences between screen and print (industry standard)</li>
+            <li><strong>Change of Mind:</strong> After production has started</li>
+            <li><strong>Late Orders:</strong> Delays beyond our control (courier issues, public holidays)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>How to Request a Return or Refund</h2>
+      <div class="steps-container">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <h3>Contact Us Within 7 Days</h3>
+          <p>Report the issue within 7 days of receiving your order. Email us at <strong>support@bizprint.co.za</strong> with:</p>
+          <ul>
+            <li>Your order number</li>
+            <li>Photos of the issue</li>
+            <li>Description of the problem</li>
+          </ul>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <h3>We Review Your Case</h3>
+          <p>Our team will review your claim within 1-2 business days and determine if it qualifies for a return or refund.</p>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <h3>Resolution</h3>
+          <p>If approved, we'll offer one of the following:</p>
+          <ul>
+            <li>Full reprint at no charge</li>
+            <li>Partial reprint for damaged items</li>
+            <li>Full refund to your original payment method</li>
+            <li>Store credit for future orders</li>
+          </ul>
+        </div>
+
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <h3>Return Shipping (If Applicable)</h3>
+          <p>If we require the items returned, we'll provide a prepaid shipping label. Do not send items back without our authorization.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>Refund Processing Time</h2>
+      <div class="timeline-info">
+        <div class="time-item">
+          <strong>Approval:</strong> 1-2 business days after claim submission
+        </div>
+        <div class="time-item">
+          <strong>EFT Refunds:</strong> 3-5 business days to reflect in your account
+        </div>
+        <div class="time-item">
+          <strong>Card Refunds:</strong> 5-10 business days (depends on your bank)
+        </div>
+        <div class="time-item">
+          <strong>Reprints:</strong> Standard production time applies
+        </div>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>Damaged in Shipping</h2>
+      <div class="shipping-damage">
+        <p>If your order arrives damaged due to shipping:</p>
+        <ol>
+          <li>Take photos of the packaging and damaged items</li>
+          <li>Do not discard the packaging</li>
+          <li>Report the damage within 24 hours of delivery</li>
+          <li>We'll file a claim with the courier and arrange a replacement</li>
+        </ol>
+        <div class="note-box">
+          <strong>📝 Important:</strong> All shipments are insured. You will not be charged for courier-damaged items.
+        </div>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>Order Cancellations</h2>
+      <div class="cancellation-info">
+        <h3>Before Production Starts</h3>
+        <p>You can cancel your order for a full refund before production begins. Contact us as soon as possible.</p>
+
+        <h3>After Production Starts</h3>
+        <p>Once your order is in production, it cannot be cancelled. Custom printed items are made specifically for you and cannot be resold.</p>
+
+        <h3>Design Services</h3>
+        <p>Design service fees are non-refundable once work has begun, but you're entitled to the number of revisions included in your package.</p>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>Quality Assurance</h2>
+      <div class="qa-info">
+        <p>To minimize issues, we:</p>
+        <div class="qa-grid">
+          <div class="qa-item">
+            <div class="qa-icon">🔍</div>
+            <h4>Inspect All Orders</h4>
+            <p>Every order goes through quality control before shipping</p>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon">📋</div>
+            <h4>Provide Proofs</h4>
+            <p>Design service orders receive proofs for approval</p>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon">✉️</div>
+            <h4>File Review</h4>
+            <p>We notify you of any issues with your files before printing</p>
+          </div>
+          <div class="qa-item">
+            <div class="qa-icon">📦</div>
+            <h4>Secure Packaging</h4>
+            <p>Items are carefully packaged to prevent damage</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>Special Circumstances</h2>
+      <div class="special-cases">
+        <h3>Large Orders (1000+ units)</h3>
+        <p>For bulk orders, we recommend ordering a small proof run first. This allows you to verify quality before committing to the full quantity.</p>
+
+        <h3>Custom/Rush Orders</h3>
+        <p>Rush orders are given the same quality guarantee. However, please note that extremely tight deadlines may limit revision opportunities.</p>
+
+        <h3>Promotional/Sale Items</h3>
+        <p>Items ordered during promotional sales are subject to the same return policy as regular orders.</p>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <h2>Common Questions</h2>
+      
+      <div class="faq-item">
+        <h3>What if I don't like how the colors turned out?</h3>
+        <p>Minor color variations between screen and print are normal due to different color profiles (RGB vs CMYK). However, if colors are significantly off from what was approved in the proof, we'll investigate and reprint if it's our error.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I return part of my order?</h3>
+        <p>Yes, if only some items in your order have issues, we can arrange a partial return and reprint just those items.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What if I made a mistake in my artwork?</h3>
+        <p>Unfortunately, we cannot accept returns for errors in customer-supplied files. We recommend carefully reviewing your files before submission and requesting a proof for important orders.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I avoid issues with my order?</h3>
+        <ul>
+          <li>Use high-resolution images (300 DPI)</li>
+          <li>Proofread all text carefully</li>
+          <li>Order a proof for color-critical projects</li>
+          <li>Use our design service if unsure about file preparation</li>
+          <li>Contact support if you have questions before ordering</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <h2>Need Help?</h2>
+      <p>If you have questions about returns, refunds, or the quality of your order, our support team is here to help.</p>
+      <div class="contact-box">
+        <div>
+          <strong>📧 Email:</strong> support@bizprint.co.za
+        </div>
+        <div>
+          <strong>📞 Phone:</strong> +27 11 123 4567
+        </div>
+        <div>
+          <strong>🕐 Hours:</strong> Monday - Friday, 8 AM - 5 PM SAST
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .resource-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .resource-page h1 {
+    font-size: 2.5rem;
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 3rem;
+  }
+
+  .policy-section {
+    margin-bottom: 3rem;
+  }
+
+  .policy-section h2 {
+    font-size: 1.8rem;
+    color: #1d3557;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .policy-section p {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .eligibility-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .eligible-card {
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 2px solid;
+  }
+
+  .eligible-card.yes {
+    background: #d4edda;
+    border-color: #28a745;
+  }
+
+  .eligible-card.no {
+    background: #f8d7da;
+    border-color: #dc3545;
+  }
+
+  .card-header {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #1d3557;
+  }
+
+  .eligible-card ul {
+    margin-left: 1.5rem;
+  }
+
+  .eligible-card li {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 0.75rem;
+  }
+
+  .steps-container {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .step-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    position: relative;
+    padding-left: 5rem;
+  }
+
+  .step-num {
+    position: absolute;
+    left: 1.5rem;
+    top: 1.5rem;
+    width: 40px;
+    height: 40px;
+    background: #1d3557;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .step-item h3 {
+    color: #1d3557;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-item p {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-item ul {
+    margin-left: 1.5rem;
+  }
+
+  .step-item li {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-info {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .time-item {
+    background: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #1d3557;
+    border-radius: 5px;
+  }
+
+  .time-item strong {
+    color: #1d3557;
+  }
+
+  .shipping-damage ol {
+    margin-left: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .shipping-damage li {
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 0.75rem;
+  }
+
+  .note-box {
+    background: #fff3cd;
+    border-left: 4px solid #856404;
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+  }
+
+  .note-box strong {
+    color: #856404;
+  }
+
+  .cancellation-info h3 {
+    color: #1d3557;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .qa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .qa-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .qa-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .qa-item h4 {
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+  }
+
+  .qa-item p {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .special-cases h3 {
+    color: #1d3557;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-section {
+    margin-top: 3rem;
+  }
+
+  .faq-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .faq-item h3 {
+    color: #1d3557;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-item p,
+  .faq-item li {
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .faq-item ul {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .contact-section {
+    background: #e8f4f8;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .contact-section h2 {
+    color: #1d3557;
+    margin-bottom: 1rem;
+  }
+
+  .contact-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    text-align: left;
+  }
+
+  .contact-box div {
+    background: white;
+    padding: 1rem;
+    border-radius: 5px;
+  }
+
+  .contact-box strong {
+    color: #1d3557;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .resource-page h1 {
+      font-size: 2rem;
+    }
+
+    .eligibility-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .step-item {
+      padding-left: 1.5rem;
+      padding-top: 4rem;
+    }
+
+    .step-num {
+      left: 50%;
+      transform: translateX(-50%);
+      top: 1rem;
+    }
+  }
+</style>
+{% endblock %}
