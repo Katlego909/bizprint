@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, QuantityTier, ProductOption, OptionalService, Order, Category
+from .models import Product, QuantityTier, ProductOption, OptionalService, Order, Category, ShippingMethod
 from django.utils.html import format_html
 from import_export.admin import ImportExportModelAdmin
 
@@ -153,3 +153,14 @@ class OrderAdmin(ImportExportModelAdmin):
     payment_preview.short_description = "Payment Preview"
 
 admin.site.register(Category, ImportExportModelAdmin)
+
+# ==========================
+# Shipping Method Admin
+# ==========================
+
+@admin.register(ShippingMethod)
+class ShippingMethodAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'price', 'description']
+    prepopulated_fields = {"slug": ("name",)}
+    list_editable = ['price']
+    search_fields = ['name', 'description']
