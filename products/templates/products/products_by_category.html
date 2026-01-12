@@ -69,7 +69,7 @@
         {% endif %}
         <h4>{{ product.name }}</h4>
         <p>{{ product.description|truncatewords:12 }}</p>
-        <a href="{% url 'products:product_detail' product.slug %}" class="btn" style="margin-top:10px;">View Product</a>
+        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-primary" style="margin-top:10px;">View Product</a>
       </div>
     {% empty %}
       <p>No products found in this category yet.</p>

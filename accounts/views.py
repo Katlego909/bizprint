@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import JsonResponse
+from decimal import Decimal
 from .forms import UserRegistrationForm, CustomerProfileForm, ProfileUpdateForm, NewsletterSignupForm
 from .models import CustomerProfile, NewsletterSubscriber
 from accounts.utils import send_newsletter_discount_email
+from .analytics import get_user_analytics
 
 def logout_view(request):
     logout(request)
@@ -67,10 +69,14 @@ def dashboard_view(request):
     # Note: We need to make sure the related_name 'design_requests' is set on the DesignRequest model
     # Based on previous context, it is: related_name='design_requests'
     recent_designs = request.user.design_requests.all().order_by('-created_at')[:5]
+    
+    # Get analytics data
+    analytics = get_user_analytics(request.user)
 
     context = {
         'recent_orders': recent_orders,
         'recent_designs': recent_designs,
+        'analytics': analytics,
     }
     return render(request, 'accounts/dashboard.html', context)
 
@@ -119,3 +125,52 @@ def validate_discount_code(request):
         return JsonResponse({'valid': True, 'discount': 10})
     except NewsletterSubscriber.DoesNotExist:
         return JsonResponse({'valid': False})
+
+@login_required
+def analytics_view(request):
+    """Dedicated analytics dashboard with detailed charts and insights"""
+    analytics = get_user_analytics(request.user)
+    
+    context = {
+        'analytics': analytics,
+    }
+    return render(request, 'accounts/analytics.html', context)
+
+@login_required
+def loyalty_program_view(request):
+    """View loyalty points and tier information"""
+    profile = request.user.profile
+    transactions = request.user.loyalty_transactions.all()[:20]
+    
+    # Calculate potential rewards
+    points_value = profile.loyalty_points * Decimal('0.10')  # R0.10 per point
+    
+    context = {
+        'profile': profile,
+        'transactions': transactions,
+        'points_value': points_value,
+    }
+    return render(request, 'accounts/loyalty.html', context)
+
+@login_required
+def referral_program_view(request):
+    """View referral program information and track referrals"""
+    profile = request.user.profile
+    
+    # Get user's referrals
+    from .models import Referral
+    referrals = Referral.objects.filter(referrer=request.user)
+    completed_referrals = referrals.filter(is_completed=True).count()
+    pending_referrals = referrals.filter(is_completed=False).count()
+    
+    # Calculate potential earnings
+    potential_earnings = pending_referrals * 50  # R50 per referral
+    
+    context = {
+        'profile': profile,
+        'referrals': referrals,
+        'completed_referrals': completed_referrals,
+        'pending_referrals': pending_referrals,
+        'potential_earnings': potential_earnings,
+    }
+    return render(request, 'accounts/referral.html', context)

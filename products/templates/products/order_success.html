@@ -29,9 +29,9 @@
   {% endif %}
 
   <div class="mt-2">
-    <a href="{% url 'products:track_order_result' %}?ref={{ order.uuid }}" class="btn">Track Order</a>
+    <a href="{% url 'products:track_order_result' %}?ref={{ order.uuid }}" class="btn btn-primary">Track Order</a>
     <a href="{% url 'products:my_orders' %}" class="btn btn-secondary">My Orders</a>
-    <a href="{% url 'products:order_invoice' order.uuid %}" target="_blank" class="btn btn-link mt-1">
+    <a href="{% url 'products:order_invoice' order.uuid %}" target="_blank" class="btn btn-link mt-1 border">
       📄 Download Invoice (PDF)
     </a>
   </div>

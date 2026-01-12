@@ -46,12 +46,19 @@ class Product(UniqueSlugMixin, models.Model):
         Category, on_delete=models.CASCADE, related_name='products',
         null=True, blank=True, help_text="Optional: leave blank for uncategorized"
     )
+    
+    # Inventory Management
+    stock_quantity = models.PositiveIntegerField(default=0, help_text="Current stock quantity")
+    low_stock_threshold = models.PositiveIntegerField(default=10, help_text="Alert when stock falls below this")
+    track_inventory = models.BooleanField(default=True, help_text="Enable inventory tracking for this product")
+    allow_backorder = models.BooleanField(default=False, help_text="Allow orders when out of stock")
 
     class Meta:
         ordering = ['name']  # NEW: consistent listing without changing features
         indexes = [
             models.Index(fields=['slug']),                 # NEW
             models.Index(fields=['category']),             # NEW
+            models.Index(fields=['stock_quantity']),       # NEW: for inventory queries
         ]
 
     def __str__(self):
@@ -65,6 +72,52 @@ class Product(UniqueSlugMixin, models.Model):
         """
         agg = self.quantity_tiers.aggregate(p=Min('base_price'))
         return agg['p']
+    
+    # Inventory Management Properties
+    @property
+    def is_in_stock(self) -> bool:
+        """Check if product is in stock"""
+        if not self.track_inventory:
+            return True
+        return self.stock_quantity > 0
+    
+    @property
+    def is_low_stock(self) -> bool:
+        """Check if stock is below threshold"""
+        if not self.track_inventory:
+            return False
+        return 0 < self.stock_quantity <= self.low_stock_threshold
+    
+    @property
+    def stock_status(self) -> str:
+        """Get human-readable stock status"""
+        if not self.track_inventory:
+            return "Available"
+        if self.stock_quantity == 0:
+            return "Out of Stock" if not self.allow_backorder else "Backorder Available"
+        if self.is_low_stock:
+            return f"Low Stock ({self.stock_quantity} remaining)"
+        return "In Stock"
+    
+    def can_order(self, quantity: int = 1) -> bool:
+        """Check if quantity can be ordered"""
+        if not self.track_inventory:
+            return True
+        if self.allow_backorder:
+            return True
+        return self.stock_quantity >= quantity
+    
+    def reduce_stock(self, quantity: int):
+        """Reduce stock quantity (called when order is placed)"""
+        if self.track_inventory:
+            self.stock_quantity = max(0, self.stock_quantity - quantity)
+            self.save(update_fields=['stock_quantity'])
+    
+    def increase_stock(self, quantity: int):
+        """Increase stock quantity (called when order is cancelled/refunded)"""
+        if self.track_inventory:
+            self.stock_quantity += quantity
+            self.save(update_fields=['stock_quantity'])
 
     # NEW: optional convenience
     def get_absolute_url(self):

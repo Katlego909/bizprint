@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.db import models
 from decimal import Decimal
 from collections import defaultdict
 from django.core.mail import send_mail
@@ -45,7 +46,78 @@ def home(request):
 
 def product_list(request):
     products = Product.objects.all()
-    return render(request, 'products/product_list.html', {'products': products})
+    categories = Category.objects.all()
+    
+    # Advanced Search and Filtering
+    search_query = request.GET.get('search', '')
+    category_filter = request.GET.get('category', '')
+    price_min = request.GET.get('price_min', '')
+    price_max = request.GET.get('price_max', '')
+    sort_by = request.GET.get('sort', '')
+    in_stock_only = request.GET.get('in_stock', '')
+    
+    # Search by name or description
+    if search_query:
+        products = products.filter(
+            models.Q(name__icontains=search_query) | 
+            models.Q(description__icontains=search_query)
+        )
+    
+    # Filter by category
+    if category_filter:
+        products = products.filter(category__slug=category_filter)
+    
+    # Filter by stock status
+    if in_stock_only:
+        products = [p for p in products if p.is_in_stock or not p.track_inventory]
+    
+    # Get products with their starting prices for price filtering
+    products_with_prices = []
+    for product in products:
+        starting_price = product.starting_price
+        if starting_price:
+            # Price range filtering
+            if price_min and starting_price < Decimal(price_min):
+                continue
+            if price_max and starting_price > Decimal(price_max):
+                continue
+            products_with_prices.append((product, starting_price))
+        else:
+            products_with_prices.append((product, None))
+    
+    # Sorting
+    if sort_by == 'price_low':
+        products_with_prices.sort(key=lambda x: x[1] if x[1] else Decimal('999999'))
+    elif sort_by == 'price_high':
+        products_with_prices.sort(key=lambda x: x[1] if x[1] else Decimal('0'), reverse=True)
+    elif sort_by == 'name':
+        products_with_prices.sort(key=lambda x: x[0].name)
+    elif sort_by == 'newest':
+        products_with_prices.sort(key=lambda x: x[0].id, reverse=True)
+    
+    products = [p[0] for p in products_with_prices]
+    
+    # Get price range for the filter
+    all_prices = [p.starting_price for p in Product.objects.all() if p.starting_price]
+    price_range = {
+        'min': min(all_prices) if all_prices else 0,
+        'max': max(all_prices) if all_prices else 1000
+    }
+    
+    context = {
+        'products': products,
+        'categories': categories,
+        'search_query': search_query,
+        'selected_category': category_filter,
+        'price_min': price_min,
+        'price_max': price_max,
+        'sort_by': sort_by,
+        'in_stock_only': in_stock_only,
+        'price_range': price_range,
+        'result_count': len(products)
+    }
+    
+    return render(request, 'products/product_list.html', context)
 
 def products_by_category(request, slug):
     category = get_object_or_404(Category, slug=slug)

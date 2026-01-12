@@ -1,0 +1,320 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}Referral Program - BizPrint{% endblock %}
+
+{% block content %}
+<style>
+  .referral-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  .referral-hero {
+    background: linear-gradient(135deg, #e63946 0%, #ff6b6b 100%);
+    color: white;
+    padding: 3rem;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .referral-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .share-section {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+  }
+
+  .referral-code-box {
+    background: #f8f9fa;
+    border: 3px dashed #1d3557;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .referral-code {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e63946;
+    letter-spacing: 3px;
+    margin: 1rem 0;
+  }
+
+  .copy-btn {
+    background: #1d3557;
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .copy-btn:hover {
+    background: #457b9d;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e63946;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .how-it-works {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+  }
+
+  .step-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .step-card {
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .step-number {
+    width: 60px;
+    height: 60px;
+    background: #e63946;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 1rem;
+  }
+
+  .referrals-list {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .referral-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .referral-item:last-child {
+    border-bottom: none;
+  }
+
+  .status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .status-completed {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  .status-pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  @media (max-width: 768px) {
+    .referral-code {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+
+<div class="referral-container">
+  <div class="referral-hero">
+    <h1>👥 Refer & Earn</h1>
+    <p style="font-size: 1.2rem;">Give R50, Get R50! Share BizPrint with friends and both benefit</p>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-value">{{ referrals.count }}</div>
+      <div class="stat-label">Total Referrals</div>
+    </div>
+    
+    <div class="stat-box">
+      <div class="stat-value">{{ completed_referrals }}</div>
+      <div class="stat-label">Completed</div>
+    </div>
+    
+    <div class="stat-box">
+      <div class="stat-value">{{ pending_referrals }}</div>
+      <div class="stat-label">Pending</div>
+    </div>
+    
+    <div class="stat-box">
+      <div class="stat-value">R{{ profile.referral_earnings|floatformat:2 }}</div>
+      <div class="stat-label">Total Earned</div>
+    </div>
+  </div>
+
+  <!-- Share Your Code -->
+  <div class="share-section">
+    <h2 style="text-align: center; color: #1d3557; margin-bottom: 1rem;">Share Your Referral Code</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 2rem;">Your friends get R50 off their first order, and you earn R50 when they make their first purchase!</p>
+    
+    <div class="referral-code-box">
+      <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">YOUR CODE</div>
+      <div class="referral-code" id="referralCode">{{ profile.referral_code }}</div>
+      <button class="copy-btn" onclick="copyReferralCode()">📋 Copy Code</button>
+    </div>
+
+    <!-- Share Links -->
+    <div style="text-align: center; margin-top: 2rem;">
+      <p style="color: #666; margin-bottom: 1rem;">Or share directly:</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="mailto:?subject=Get R50 off at BizPrint!&body=Use my referral code {{ profile.referral_code }} to get R50 off your first order at BizPrint!" 
+           style="padding: 0.75rem 1.5rem; background: #1d3557; color: white; text-decoration: none; border-radius: 8px;">
+          📧 Email
+        </a>
+        <a href="https://wa.me/?text=Get%20R50%20off%20at%20BizPrint!%20Use%20code%20{{ profile.referral_code }}%20-%20https://bizprint.co.za" 
+           target="_blank"
+           style="padding: 0.75rem 1.5rem; background: #25D366; color: white; text-decoration: none; border-radius: 8px;">
+          💬 WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="how-it-works">
+    <h2 style="text-align: center; color: #1d3557; margin-bottom: 0.5rem;">How It Works</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 2rem;">Simple steps to earn rewards</p>
+    
+    <div class="step-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h4>Share Your Code</h4>
+        <p style="color: #666; font-size: 0.9rem;">Send your unique referral code to friends and family</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h4>They Sign Up</h4>
+        <p style="color: #666; font-size: 0.9rem;">Your friend registers using your code and gets R50 off</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h4>First Purchase</h4>
+        <p style="color: #666; font-size: 0.9rem;">When they complete their first order, you both win!</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h4>Get Rewarded</h4>
+        <p style="color: #666; font-size: 0.9rem;">Receive R50 credit to use on your next order</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Referrals List -->
+  <div class="referrals-list">
+    <h2 style="margin-bottom: 1.5rem; color: #1d3557;">Your Referrals</h2>
+    
+    {% if referrals %}
+      {% for referral in referrals %}
+        <div class="referral-item">
+          <div>
+            <div style="font-weight: 600;">{{ referral.referred_user.first_name }} {{ referral.referred_user.last_name }}</div>
+            <div style="font-size: 0.85rem; color: #888;">Joined {{ referral.created_at|date:"M d, Y" }}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="text-align: right; margin-right: 1rem;">
+              <div style="font-weight: 600; color: #e63946;">R{{ referral.reward_amount }}</div>
+            </div>
+            <span class="status-badge {% if referral.is_completed %}status-completed{% else %}status-pending{% endif %}">
+              {% if referral.is_completed %}✓ Completed{% else %}⏳ Pending{% endif %}
+            </span>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div style="text-align: center; padding: 3rem; color: #888;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+        <p>No referrals yet. Start sharing your code to earn rewards!</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Terms -->
+  <div style="background: #f8f9fa; padding: 2rem; border-radius: 12px; margin-top: 2rem;">
+    <h3 style="color: #1d3557; margin-bottom: 1rem;">Program Terms</h3>
+    <ul style="color: #666; line-height: 1.8;">
+      <li>Referral rewards are credited after the referred user completes their first order</li>
+      <li>Both parties must be registered users to qualify</li>
+      <li>Referral credits are valid for 12 months from date of issue</li>
+      <li>Credits can be used on print orders and design services</li>
+      <li>Minimum order value of R100 required to use referral credit</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+function copyReferralCode() {
+  const code = document.getElementById('referralCode').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.style.background = '#2a9d8f';
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '#1d3557';
+    }, 2000);
+  });
+}
+</script>
+{% endblock %}
