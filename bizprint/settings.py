@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'products:product_list'
+LOGIN_REDIRECT_URL = 'accounts:dashboard'
 LOGOUT_REDIRECT_URL = 'products:home'
 
 # Application definition
