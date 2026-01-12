@@ -117,55 +117,68 @@
 </section>
 
   <!-- Design Services Section -->
-   <section class="section">
-  <div class="why-section text-center">
-    <h2>Need Custom Designs?</h2>
-    <p class="intro">Stand out with stunning designs crafted by our professional team. Whether you need a logo, business cards, company profile, or marketing material — we create it with excellence.</p>
-    
-    <div class="why-grid">
-      <div class="why-point">
-        <div class="why-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-            <path d="M2 2l7.586 7.586"></path>
-            <circle cx="11" cy="11" r="2"></circle>
-          </svg>
-        </div>
-        <h3>Logo & Branding</h3>
-        <p>Create a brand identity that leaves a lasting impression with a professionally crafted logo and visual system.</p>
-      </div>
-      <div class="why-point">
-        <div class="why-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-            <polyline points="10 9 9 9 8 9"></polyline>
-          </svg>
-        </div>
-        <h3>Business Essentials</h3>
-        <p>Business cards, letterheads, company profiles, and more — all customized to match your brand's voice.</p>
-      </div>
-      <div class="why-point">
-        <div class="why-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10"></line>
-            <line x1="12" y1="20" x2="12" y2="4"></line>
-            <line x1="6" y1="20" x2="6" y2="14"></line>
-          </svg>
-        </div>
-        <h3>Marketing Materials</h3>
-        <p>Flyers, brochures, posters, and social media graphics designed to grab attention and grow your brand.</p>
-      </div>
-    </div>
+  <section class="section design-services-section">
+    <div class="container">
+      <h2>Need Custom Designs?</h2>
+      <p class="intro">Stand out with stunning designs crafted by our professional team. Whether you need a logo, business cards, company profile, or marketing material — we create it with excellence.</p>
+      
+      <div class="design-services-grid">
+        <div class="design-service-card">
+          <div class="service-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
+          </div>
+          <h3>Logo & Branding</h3>
+          <p>Create a brand identity that leaves a lasting impression with a professionally crafted logo and visual system.</p>
+          <div class="service-mockup">
+            <img src="{% static 'images/mockups/branding-mockup.png' %}" alt="Logo & Branding" onerror="this.style.display='none'">
+          </div>
 
-    <div style="margin-top: 2rem;">
-      <a href="{% url 'designs:design_list' %}" class="cta-btn">Explore Design Packages</a>
+        </div>
+
+        <div class="design-service-card">
+          <div class="service-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3>Business Essentials</h3>
+          <p>Business cards, letterheads, company profiles, and more — all customized to match your brand's voice.</p>
+          <div class="service-mockup">
+            <img src="{% static 'images/mockups/business-mockup.png' %}" alt="Business Essentials" onerror="this.style.display='none'">
+          </div>
+
+        </div>
+
+        <div class="design-service-card">
+          <div class="service-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <h3>Marketing Materials</h3>
+          <p>Flyers, brochures, posters, and social media graphics designed to grab attention and grow your brand.</p>
+          <div class="service-mockup">
+            <img src="{% static 'images/mockups/marketing-mockup.png' %}" alt="Marketing Materials" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </div>
+
+      <div class="design-cta">
+        <a href="{% url 'designs:design_list' %}" class="explore-packages-btn">Explore Design Packages</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- FAQ Section -->
    <section class="section">
