@@ -702,6 +702,15 @@
      For a perfect CSS-only progress bar, we'd need a separate bar element, 
      but this visual is usually sufficient for simple trackers. */
   
+  /* File upload selected state */
+  .upload-label .file-selected {
+    display: none;
+    margin-top: 0.5rem;
+    color: #25D366;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
   @media (max-width: 600px) {
     .timeline-step .label {
         font-size: 0.7rem;
@@ -713,4 +722,39 @@
     }
   }
 </style>
+
+<script>
+// Show selected filename when file is chosen
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInputs = document.querySelectorAll('.file-input');
+  
+  fileInputs.forEach(input => {
+    input.addEventListener('change', function() {
+      const label = this.closest('.upload-label');
+      const span = label.querySelector('span');
+      let selectedDiv = label.querySelector('.file-selected');
+      
+      if (this.files && this.files[0]) {
+        const fileName = this.files[0].name;
+        const fileSize = (this.files[0].size / 1024 / 1024).toFixed(2); // Convert to MB
+        
+        if (!selectedDiv) {
+          selectedDiv = document.createElement('div');
+          selectedDiv.className = 'file-selected';
+          label.appendChild(selectedDiv);
+        }
+        
+        selectedDiv.textContent = `✓ ${fileName} (${fileSize} MB)`;
+        selectedDiv.style.display = 'block';
+        span.style.opacity = '0.6';
+      } else {
+        if (selectedDiv) {
+          selectedDiv.style.display = 'none';
+        }
+        span.style.opacity = '1';
+      }
+    });
+  });
+});
+</script>
 {% endblock %}

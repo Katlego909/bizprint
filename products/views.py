@@ -272,8 +272,8 @@ def reupload_artwork(request, order_id):
             order.file = uploaded_file
             order.save()
             messages.success(request, "Artwork updated successfully.")
-
-    redirect(reverse('products:track_order_result') + f'?ref={order.uuid}')
+    
+    return redirect(reverse('products:track_order_result') + f'?ref={order.uuid}')
 
 @login_required
 def order_invoice(request, order_id):
