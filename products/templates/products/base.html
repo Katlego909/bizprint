@@ -39,18 +39,22 @@
     </div>
 
     <div id="navbar-links" class="navbar-links">
-      <a href="/products/">All Products</a>
-      <a href="/designs/">Design Services</a>
-      <a href="/contact/">Contact</a>
+      <div class="navbar-menu">
+        <a href="/products/">All Products</a>
+        <a href="/designs/">Design Services</a>
+        <a href="/contact/">Contact</a>
+      </div>
 
-      {% if user.is_authenticated %}
-        <a href="{% url 'accounts:dashboard' %}">My Dashboard</a>
-        <a href="/track/">Track Order</a>
-        <a href="{% url 'accounts:logout' %}" class="btn btn-secondary">Logout</a>
-      {% else %}
-        <a href="{% url 'accounts:login' %}" class="btn-outline">Login</a>
-        <a href="{% url 'accounts:register' %}" class="btn btn-primary">Register</a>
-      {% endif %}
+      <div class="navbar-auth">
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:dashboard' %}">My Dashboard</a>
+          <a href="/track/">Track Order</a>
+          <a href="{% url 'accounts:logout' %}" class="btn btn-secondary">Logout</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn-outline">Login</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-primary">Register</a>
+        {% endif %}
+      </div>
     </div>
   </div>
 </header>

@@ -1,0 +1,83 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}Access Forbidden - BizPrint{% endblock %}
+
+{% block content %}
+<div class="error-page">
+  <div class="error-container">
+    <div class="error-code">403</div>
+    <h1>Access Forbidden</h1>
+    <p class="error-message">You don't have permission to access this page. Please log in with the appropriate credentials or contact support.</p>
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">Go to Homepage</a>
+      <a href="{% url 'accounts:login' %}" class="btn btn-outline">Login</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.error-page {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.error-container {
+  text-align: center;
+  max-width: 600px;
+}
+
+.error-code {
+  font-size: 8rem;
+  font-weight: 900;
+  color: #f77f00;
+  line-height: 1;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.error-page h1 {
+  font-size: 2.5rem;
+  color: #1d3557;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .error-code {
+    font-size: 6rem;
+  }
+  
+  .error-page h1 {
+    font-size: 2rem;
+  }
+  
+  .error-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .error-actions .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+</style>
+{% endblock %}

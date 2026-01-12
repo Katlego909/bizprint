@@ -12,3 +12,9 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Custom error handlers
+handler404 = 'bizprint.views.handler404'
+handler500 = 'bizprint.views.handler500'
+handler403 = 'bizprint.views.handler403'
+handler400 = 'bizprint.views.handler400'

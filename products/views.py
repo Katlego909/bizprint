@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from decimal import Decimal
 from collections import defaultdict
 from django.core.mail import send_mail
@@ -219,12 +220,27 @@ def track_order_result(request):
     vat = None
 
     if ref:
-        try:
-            order = Order.objects.get(uuid=ref, user=request.user)
-            vat = order.total_price * Decimal("0.15") / Decimal("1.15")
-            subtotal = order.total_price - vat
-        except Order.DoesNotExist:
-            order = None
+        # First check if it looks like a full UUID (contains hyphens and is ~36 chars)
+        if len(ref) >= 32 and '-' in ref:
+            try:
+                # Try to find order by full UUID
+                order = Order.objects.get(uuid=ref, user=request.user)
+                vat = order.total_price * Decimal("0.15") / Decimal("1.15")
+                subtotal = order.total_price - vat
+            except (Order.DoesNotExist, ValidationError, ValueError):
+                order = None
+        
+        # If no order found yet, try partial match with first 8 characters
+        if not order and len(ref) >= 8:
+            partial_ref = ref[:8].lower()
+            # Get all user orders and filter in Python to avoid UUID validation
+            user_orders = Order.objects.filter(user=request.user)
+            for user_order in user_orders:
+                if str(user_order.uuid).lower().startswith(partial_ref):
+                    order = user_order
+                    vat = order.total_price * Decimal("0.15") / Decimal("1.15")
+                    subtotal = order.total_price - vat
+                    break
 
     return render(request, 'products/track_result.html', {
         'order': order,
