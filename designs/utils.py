@@ -68,10 +68,10 @@ def generate_design_quote_pdf(design_request, subtotal, vat, total):
 
     # Banking Details
     story.append(Paragraph("<b>Banking Details:</b>", styles['h2']))
-    story.append(Paragraph("Account Name: BizPrint (Pty) Ltd", styles['Normal']))
-    story.append(Paragraph("Bank: ABSA Bank", styles['Normal']))
-    story.append(Paragraph("Account Number: 1234567890", styles['Normal']))
-    story.append(Paragraph("Branch Code: 632005", styles['Normal']))
+    story.append(Paragraph("Account Name: BizPrint", styles['Normal']))
+    story.append(Paragraph("Bank: Capitec Bank", styles['Normal']))
+    story.append(Paragraph("Account Number: 2482418611", styles['Normal']))
+    story.append(Paragraph("Branch Code: 470010", styles['Normal']))
     story.append(Paragraph(f"Reference: Quote {design_request.id}", styles['Normal']))
 
     doc.build(story)

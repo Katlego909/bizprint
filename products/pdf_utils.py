@@ -220,10 +220,10 @@ def generate_order_invoice_pdf(order):
         elements.append(Paragraph("Banking Details", heading_style))
         
         banking_data = [
-            ['Account Name:', 'BizPrint (Pty) Ltd'],
-            ['Bank:', 'ABSA Bank'],
-            ['Account Number:', '1234567890'],
-            ['Branch Code:', '632005'],
+            ['Account Name:', 'BizPrint'],
+            ['Bank:', 'Capitec Bank'],
+            ['Account Number:', '2482418611'],
+            ['Branch Code:', '470010'],
             ['Reference:', f'INV{str(order.uuid)[:8].upper()}'],
         ]
         
