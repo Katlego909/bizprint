@@ -35,207 +35,414 @@ class Command(BaseCommand):
                 self.stdout.write(f"Created Category: {cat_name}")
 
         # 2. Define Products Data
+        # Full professional product data, matching seed_products.py, with robust category assignment
         products_data = [
             # --- Business Cards ---
             {
-                "name": "Standard Business Cards",
+                "name": "Premium Business Cards",
                 "category": "Business Cards",
-                "description": "Premium 350gsm board with a choice of finishes. The standard for professional networking.",
+                "description": "Premium 350gsm business cards with a choice of gloss or matte finish. Perfect for first impressions.",
+                "image": "product_images/business_cards.jpg",
                 "tiers": [
-                    {"qty": 100, "price": 250},
-                    {"qty": 250, "price": 350},
-                    {"qty": 500, "price": 495},
-                    {"qty": 1000, "price": 795},
+                    {"qty": 100, "price": 299},
+                    {"qty": 250, "price": 499},
+                    {"qty": 500, "price": 899},
+                    {"qty": 1000, "price": 1499},
                 ],
                 "options": [
-                    {"type": "Finish", "value": "Matt Lamination", "price": 0},
-                    {"type": "Finish", "value": "Gloss Lamination", "price": 0},
-                    {"type": "Finish", "value": "Soft Touch", "price": 100},
-                    {"type": "Sides", "value": "Single Sided", "price": 0},
-                    {"type": "Sides", "value": "Double Sided", "price": 50},
-                    {"type": "Corners", "value": "Square", "price": 0},
-                    {"type": "Corners", "value": "Rounded", "price": 80},
+                    {"type": "Format", "value": "Single-Sided", "price": 0},
+                    {"type": "Format", "value": "Double-Sided", "price": 50},
+                    {"type": "Finish", "value": "Gloss", "price": 20},
+                    {"type": "Finish", "value": "Matte", "price": 20},
+                    {"type": "Paper", "value": "350gsm Premium", "price": 0},
                 ],
                 "services": [
-                    {"label": "Design Service", "price": 250, "required": False},
+                    {"label": "3-Day Design Service", "price": 200, "required": False},
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
                 ]
             },
             {
-                "name": "Spot UV Business Cards",
+                "name": "Eco Kraft Business Cards",
                 "category": "Business Cards",
-                "description": "Stand out with glossy raised areas on a matt background. Ultimate luxury.",
+                "description": "Eco-friendly kraft business cards printed on 300gsm recycled board. A natural look for sustainable brands.",
+                "image": "product_images/business_cards_kraft.jpg",
                 "tiers": [
-                    {"qty": 250, "price": 850},
-                    {"qty": 500, "price": 1200},
-                    {"qty": 1000, "price": 1800},
+                    {"qty": 100, "price": 329},
+                    {"qty": 250, "price": 529},
+                    {"qty": 500, "price": 949},
+                    {"qty": 1000, "price": 1599},
                 ],
                 "options": [
-                    {"type": "Sides", "value": "Single Sided", "price": 0},
-                    {"type": "Sides", "value": "Double Sided", "price": 150},
+                    {"type": "Format", "value": "Single-Sided", "price": 0},
+                    {"type": "Format", "value": "Double-Sided", "price": 40},
+                    {"type": "Paper", "value": "300gsm Kraft", "price": 0},
                 ],
                 "services": [
-                    {"label": "Design Service", "price": 350, "required": False},
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
                 ]
             },
-
             # --- Flyers ---
             {
-                "name": "A5 Flyers (Gloss)",
+                "name": "A5 Full Colour Flyers",
                 "category": "Flyers & Leaflets",
-                "description": "128gsm Gloss paper. Perfect for handing out at events or street marketing.",
+                "description": "Vibrant A5 flyers printed on 130gsm gloss paper. Ideal for promotions and events.",
+                "image": "product_images/flyers.jpg",
                 "tiers": [
-                    {"qty": 1000, "price": 999},
-                    {"qty": 2500, "price": 1850},
-                    {"qty": 5000, "price": 2999},
+                    {"qty": 500, "price": 399},
+                    {"qty": 1000, "price": 699},
+                    {"qty": 2500, "price": 1499},
+                    {"qty": 5000, "price": 2499},
                 ],
                 "options": [
-                    {"type": "Sides", "value": "Single Sided", "price": 0},
-                    {"type": "Sides", "value": "Double Sided", "price": 200},
+                    {"type": "Size", "value": "A5", "price": 0},
+                    {"type": "Size", "value": "A4", "price": 150},
+                    {"type": "Paper", "value": "130gsm Gloss", "price": 0},
+                    {"type": "Paper", "value": "170gsm Matte", "price": 50},
                 ],
                 "services": [
-                    {"label": "Basic Layout", "price": 150, "required": False},
+                    {"label": "Express Delivery (1-2 days)", "price": 149, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
                 ]
             },
             {
-                "name": "A4 Folded Leaflets",
+                "name": "DL Promotional Flyers",
                 "category": "Flyers & Leaflets",
-                "description": "A4 folded to DL or A5. Great for menus and price lists. 170gsm Gloss.",
+                "description": "DL size flyers (99x210mm) printed on 150gsm silk paper. Great for inserts and handouts.",
+                "image": "product_images/flyers_dl.jpg",
                 "tiers": [
-                    {"qty": 500, "price": 1450},
-                    {"qty": 1000, "price": 2200},
+                    {"qty": 500, "price": 349},
+                    {"qty": 1000, "price": 599},
+                    {"qty": 2500, "price": 1299},
+                    {"qty": 5000, "price": 2199},
                 ],
                 "options": [
-                    {"type": "Fold", "value": "Z-Fold (Concertina)", "price": 0},
-                    {"type": "Fold", "value": "Roll Fold", "price": 0},
-                    {"type": "Fold", "value": "Half Fold", "price": 0},
+                    {"type": "Size", "value": "DL", "price": 0},
+                    {"type": "Paper", "value": "150gsm Silk", "price": 0},
                 ],
-                "services": []
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 149, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
             },
-
+            # --- Brochures ---
+            {
+                "name": "A4 Tri-Fold Brochures",
+                "category": "Stationery",
+                "description": "A4 brochures folded to DL, printed on 170gsm gloss. Perfect for menus and company profiles.",
+                "image": "product_images/brochures_trifold.jpg",
+                "tiers": [
+                    {"qty": 250, "price": 799},
+                    {"qty": 500, "price": 1399},
+                    {"qty": 1000, "price": 2499},
+                ],
+                "options": [
+                    {"type": "Fold", "value": "Tri-Fold", "price": 0},
+                    {"type": "Paper", "value": "170gsm Gloss", "price": 0},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 199, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            {
+                "name": "A5 Half-Fold Brochures",
+                "category": "Stationery",
+                "description": "A5 brochures folded to A6, printed on 150gsm matte. Ideal for event programs and mini-menus.",
+                "image": "product_images/brochures_halffold.jpg",
+                "tiers": [
+                    {"qty": 250, "price": 599},
+                    {"qty": 500, "price": 1099},
+                    {"qty": 1000, "price": 1999},
+                ],
+                "options": [
+                    {"type": "Fold", "value": "Half-Fold", "price": 0},
+                    {"type": "Paper", "value": "150gsm Matte", "price": 0},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 199, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
             # --- Posters ---
             {
-                "name": "A1 Posters",
+                "name": "A2 Full Colour Posters",
                 "category": "Posters",
-                "description": "Large format A1 posters printed on high quality satin paper.",
+                "description": "A2 posters printed on 200gsm satin paper. Eye-catching for events and promotions.",
+                "image": "product_images/posters_a2.jpg",
                 "tiers": [
-                    {"qty": 1, "price": 180},
-                    {"qty": 5, "price": 800},
-                    {"qty": 10, "price": 1500},
+                    {"qty": 10, "price": 299},
+                    {"qty": 25, "price": 599},
+                    {"qty": 50, "price": 999},
                 ],
                 "options": [
-                    {"type": "Paper", "value": "Standard Satin", "price": 0},
-                    {"type": "Paper", "value": "Premium Photo Gloss", "price": 50},
-                ],
-                "services": []
-            },
-            {
-                "name": "A2 Posters",
-                "category": "Posters",
-                "description": "Medium format A2 posters. Great for indoor signage.",
-                "tiers": [
-                    {"qty": 5, "price": 450},
-                    {"qty": 10, "price": 800},
-                    {"qty": 50, "price": 3500},
-                ],
-                "options": [],
-                "services": []
-            },
-
-            # --- Banners ---
-            {
-                "name": "Pull Up Banner (Standard)",
-                "category": "Banners & Signage",
-                "description": "850mm x 2000mm retractable banner stand. Includes carry bag.",
-                "tiers": [
-                    {"qty": 1, "price": 850},
-                    {"qty": 2, "price": 1600},
-                    {"qty": 5, "price": 3750},
-                ],
-                "options": [
-                    {"type": "Base", "value": "Standard Silver", "price": 0},
-                    {"type": "Base", "value": "Luxury Wide Base", "price": 300},
+                    {"type": "Size", "value": "A2", "price": 0},
+                    {"type": "Paper", "value": "200gsm Satin", "price": 0},
                 ],
                 "services": [
-                    {"label": "Banner Design", "price": 450, "required": False},
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
                 ]
             },
             {
-                "name": "PVC Banners with Eyelets",
-                "category": "Banners & Signage",
-                "description": "Durable outdoor PVC banners. Price per square meter equivalent.",
+                "name": "A1 Promotional Posters",
+                "category": "Posters",
+                "description": "Large A1 posters printed on 170gsm gloss. Great for retail and advertising.",
+                "image": "product_images/posters_a1.jpg",
                 "tiers": [
-                    {"qty": 1, "price": 350}, # representing a standard size like 2x1m roughly
-                    {"qty": 5, "price": 1600},
+                    {"qty": 5, "price": 249},
+                    {"qty": 10, "price": 449},
+                    {"qty": 25, "price": 849},
                 ],
                 "options": [
-                    {"type": "Size", "value": "2m x 1m", "price": 0},
-                    {"type": "Size", "value": "3m x 1m", "price": 150},
-                    {"type": "Size", "value": "3m x 2m", "price": 500},
+                    {"type": "Size", "value": "A1", "price": 0},
+                    {"type": "Paper", "value": "170gsm Gloss", "price": 0},
                 ],
-                "services": []
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
             },
-
             # --- Stickers ---
             {
-                "name": "Vinyl Stickers (Round)",
+                "name": "Round Vinyl Stickers",
                 "category": "Stickers & Labels",
-                "description": "Waterproof vinyl stickers, kiss cut on sheets.",
+                "description": "Durable round vinyl stickers, 50mm diameter, waterproof and perfect for branding.",
+                "image": "product_images/stickers_round.jpg",
                 "tiers": [
-                    {"qty": 100, "price": 350},
-                    {"qty": 500, "price": 1200},
-                    {"qty": 1000, "price": 1900},
+                    {"qty": 100, "price": 199},
+                    {"qty": 250, "price": 399},
+                    {"qty": 500, "price": 699},
                 ],
                 "options": [
-                    {"type": "Size", "value": "30mm", "price": 0},
-                    {"type": "Size", "value": "50mm", "price": 50},
-                    {"type": "Size", "value": "80mm", "price": 150},
+                    {"type": "Shape", "value": "Round", "price": 0},
+                    {"type": "Material", "value": "Vinyl", "price": 0},
                 ],
-                "services": []
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 49, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
             },
-
-            # --- Booklets ---
             {
-                "name": "A4 Booklets (Saddle Stitched)",
-                "category": "Booklets & Magazines",
-                "description": "8 to 24 page booklets, stapled on the spine. Great for company profiles.",
+                "name": "Square Paper Stickers",
+                "category": "Stickers & Labels",
+                "description": "Square stickers, 50x50mm, printed on gloss paper. Affordable for packaging and gifts.",
+                "image": "product_images/stickers_square.jpg",
                 "tiers": [
-                    {"qty": 50, "price": 2500},
-                    {"qty": 100, "price": 4500},
+                    {"qty": 100, "price": 149},
+                    {"qty": 250, "price": 299},
+                    {"qty": 500, "price": 549},
                 ],
                 "options": [
-                    {"type": "Pages", "value": "8 Pages", "price": 0},
-                    {"type": "Pages", "value": "12 Pages", "price": 500},
-                    {"type": "Pages", "value": "16 Pages", "price": 1000},
+                    {"type": "Shape", "value": "Square", "price": 0},
+                    {"type": "Material", "value": "Gloss Paper", "price": 0},
                 ],
-                "services": []
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 49, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
             },
-
+            # --- T-shirts ---
+            {
+                "name": "Classic White T-shirt",
+                "category": "Apparel",
+                "description": "100% cotton white t-shirt with custom full-colour print. Unisex fit.",
+                "image": "product_images/tshirt_white.jpg",
+                "tiers": [
+                    {"qty": 10, "price": 799},
+                    {"qty": 25, "price": 1799},
+                    {"qty": 50, "price": 3299},
+                ],
+                "options": [
+                    {"type": "Size", "value": "S", "price": 0},
+                    {"type": "Size", "value": "M", "price": 0},
+                    {"type": "Size", "value": "L", "price": 0},
+                    {"type": "Size", "value": "XL", "price": 0},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            {
+                "name": "Premium Black T-shirt",
+                "category": "Apparel",
+                "description": "Premium black t-shirt, 180gsm, with custom logo print. Soft and durable.",
+                "image": "product_images/tshirt_black.jpg",
+                "tiers": [
+                    {"qty": 10, "price": 899},
+                    {"qty": 25, "price": 1999},
+                    {"qty": 50, "price": 3599},
+                ],
+                "options": [
+                    {"type": "Size", "value": "S", "price": 0},
+                    {"type": "Size", "value": "M", "price": 0},
+                    {"type": "Size", "value": "L", "price": 0},
+                    {"type": "Size", "value": "XL", "price": 0},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            # --- Uniforms ---
+            {
+                "name": "Classic Work Shirt",
+                "category": "Apparel",
+                "description": "Poly-cotton work shirt, available in navy or khaki. Embroidery option available.",
+                "image": "product_images/uniforms_shirt.jpg",
+                "tiers": [
+                    {"qty": 5, "price": 499},
+                    {"qty": 10, "price": 899},
+                    {"qty": 25, "price": 1999},
+                ],
+                "options": [
+                    {"type": "Colour", "value": "Navy", "price": 0},
+                    {"type": "Colour", "value": "Khaki", "price": 0},
+                ],
+                "services": [
+                    {"label": "Embroidery (per shirt)", "price": 50, "required": False},
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            {
+                "name": "Chef Jacket",
+                "category": "Apparel",
+                "description": "Professional chef jacket, double-breasted, available in white or black.",
+                "image": "product_images/uniforms_chef.jpg",
+                "tiers": [
+                    {"qty": 2, "price": 399},
+                    {"qty": 5, "price": 899},
+                    {"qty": 10, "price": 1699},
+                ],
+                "options": [
+                    {"type": "Colour", "value": "White", "price": 0},
+                    {"type": "Colour", "value": "Black", "price": 0},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 99, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            # --- Packaging ---
+            {
+                "name": "Custom Printed Boxes",
+                "category": "Stationery",
+                "description": "Corrugated boxes with full-colour print. Perfect for e-commerce and retail packaging.",
+                "image": "product_images/packaging_boxes.jpg",
+                "tiers": [
+                    {"qty": 50, "price": 1499},
+                    {"qty": 100, "price": 2599},
+                    {"qty": 250, "price": 5999},
+                ],
+                "options": [
+                    {"type": "Size", "value": "Small", "price": 0},
+                    {"type": "Size", "value": "Medium", "price": 200},
+                    {"type": "Size", "value": "Large", "price": 400},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 299, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            {
+                "name": "Printed Paper Bags",
+                "category": "Stationery",
+                "description": "Recyclable paper bags with your logo. Great for retail and events.",
+                "image": "product_images/packaging_bags.jpg",
+                "tiers": [
+                    {"qty": 100, "price": 799},
+                    {"qty": 250, "price": 1799},
+                    {"qty": 500, "price": 2999},
+                ],
+                "options": [
+                    {"type": "Size", "value": "Small", "price": 0},
+                    {"type": "Size", "value": "Large", "price": 150},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 149, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
             # --- Corporate Gifts ---
             {
-                "name": "Branded Coffee Mugs",
+                "name": "Branded Metal Pens",
                 "category": "Corporate Gifts",
-                "description": "Standard 330ml white ceramic mug with full colour sublimation print.",
+                "description": "Metal ballpoint pens with laser engraving. Supplied in a gift box.",
+                "image": "product_images/gifts_pens.jpg",
                 "tiers": [
-                    {"qty": 10, "price": 850},
-                    {"qty": 50, "price": 3750},
-                    {"qty": 100, "price": 6500},
-                ],
-                "options": [],
-                "services": []
-            },
-            {
-                "name": "Branded Pens",
-                "category": "Corporate Gifts",
-                "description": "Plastic barrel pens with single colour pad print.",
-                "tiers": [
-                    {"qty": 100, "price": 800},
-                    {"qty": 500, "price": 3500},
+                    {"qty": 50, "price": 499},
+                    {"qty": 100, "price": 899},
+                    {"qty": 250, "price": 1999},
                 ],
                 "options": [
-                    {"type": "Ink Colour", "value": "Black", "price": 0},
-                    {"type": "Ink Colour", "value": "Blue", "price": 0},
+                    {"type": "Colour", "value": "Silver", "price": 0},
+                    {"type": "Colour", "value": "Blue", "price": 0},
                 ],
-                "services": []
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 49, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            {
+                "name": "Custom Coffee Mugs",
+                "category": "Corporate Gifts",
+                "description": "Ceramic mugs with full-colour wrap print. Dishwasher safe.",
+                "image": "product_images/gifts_mugs.jpg",
+                "tiers": [
+                    {"qty": 24, "price": 399},
+                    {"qty": 48, "price": 749},
+                    {"qty": 96, "price": 1399},
+                ],
+                "options": [
+                    {"type": "Colour", "value": "White", "price": 0},
+                    {"type": "Colour", "value": "Black", "price": 0},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 49, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            # --- Personalized Gifts ---
+            {
+                "name": "Photo Keyrings",
+                "category": "Corporate Gifts",
+                "description": "Acrylic keyrings with your custom photo. Great for events and giveaways.",
+                "image": "product_images/personalized_keyrings.jpg",
+                "tiers": [
+                    {"qty": 20, "price": 199},
+                    {"qty": 50, "price": 399},
+                    {"qty": 100, "price": 749},
+                ],
+                "options": [
+                    {"type": "Shape", "value": "Rectangle", "price": 0},
+                    {"type": "Shape", "value": "Heart", "price": 10},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 49, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
+            },
+            {
+                "name": "Custom Mouse Pads",
+                "category": "Corporate Gifts",
+                "description": "Personalized mouse pads with your image or logo. Non-slip rubber base.",
+                "image": "product_images/personalized_mousepads.jpg",
+                "tiers": [
+                    {"qty": 10, "price": 249},
+                    {"qty": 25, "price": 499},
+                    {"qty": 50, "price": 899},
+                ],
+                "options": [
+                    {"type": "Shape", "value": "Rectangle", "price": 0},
+                    {"type": "Shape", "value": "Round", "price": 0},
+                ],
+                "services": [
+                    {"label": "Express Delivery (1-2 days)", "price": 49, "required": False},
+                    {"label": "Standard Delivery (3-5 days)", "price": 0, "required": False},
+                ]
             },
         ]
 
