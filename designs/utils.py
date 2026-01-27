@@ -27,10 +27,17 @@ def generate_design_quote_pdf(design_request, subtotal, vat, total):
     story.append(Paragraph(f"<b>Date:</b> {design_request.created_at.strftime('%d %b %Y')}", styles['Normal']))
     story.append(Paragraph("<br/>", styles['Normal']))
 
-    # Prepared For
-    prepared_for = design_request.user.get_full_name() if design_request.user else design_request.full_name or "Guest"
-    email = design_request.user.email if design_request.user else design_request.email
-    phone = design_request.user.profile.phone if design_request.user and design_request.user.profile.phone else design_request.phone
+    # Prepared For - prefer the saved design_request.full_name when provided
+    if design_request.full_name:
+        prepared_for = design_request.full_name
+    elif design_request.user:
+        prepared_for = design_request.user.get_full_name()
+    else:
+        prepared_for = "Guest"
+
+    # Prefer guest-supplied email when present, otherwise use user's email
+    email = design_request.email or (design_request.user.email if design_request.user else '')
+    phone = design_request.phone or (design_request.user.profile.phone if design_request.user and hasattr(design_request.user, 'profile') and design_request.user.profile.phone else '')
 
     story.append(Paragraph("<b>Prepared For:</b>", styles['h2']))
     story.append(Paragraph(prepared_for, styles['Normal']))
@@ -98,10 +105,17 @@ def generate_design_invoice_pdf(design_request, subtotal, vat, total):
     story.append(Paragraph(f"<b>Date:</b> {design_request.created_at.strftime('%d %b %Y')}", styles['Normal']))
     story.append(Paragraph("<br/>", styles['Normal']))
 
-    # Prepared For
-    prepared_for = design_request.user.get_full_name() if design_request.user else design_request.full_name or "Guest"
-    email = design_request.user.email if design_request.user else design_request.email
-    phone = design_request.user.profile.phone if design_request.user and design_request.user.profile.phone else design_request.phone
+    # Prepared For - prefer the saved design_request.full_name when provided
+    if design_request.full_name:
+        prepared_for = design_request.full_name
+    elif design_request.user:
+        prepared_for = design_request.user.get_full_name()
+    else:
+        prepared_for = "Guest"
+
+    # Prefer guest-supplied email when present, otherwise use user's email
+    email = design_request.email or (design_request.user.email if design_request.user else '')
+    phone = design_request.phone or (design_request.user.profile.phone if design_request.user and hasattr(design_request.user, 'profile') and design_request.user.profile.phone else '')
 
     story.append(Paragraph("<b>Prepared For:</b>", styles['h2']))
     story.append(Paragraph(prepared_for, styles['Normal']))

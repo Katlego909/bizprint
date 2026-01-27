@@ -19,19 +19,23 @@
   <p><strong>Quote #:</strong> {{ design_request.id }}</p>
   <p><strong>Date:</strong> {{ design_request.created_at|date:"d M Y" }}</p>
   
-  <div style="margin-top: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 6px;">
-    <p><strong>Prepared For:</strong> 
-      {% if design_request.user %}
+    <div style="margin-top: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 6px;">
+    <p><strong>Prepared For:</strong>
+      {% if design_request.full_name %}
+        {{ design_request.full_name }}
+      {% elif design_request.user %}
         {{ design_request.user.get_full_name }}
       {% else %}
-        {{ design_request.full_name|default:"Guest" }}
+        Guest
       {% endif %}
     </p>
-    <p><strong>Email:</strong> 
-      {% if design_request.user %}
+    <p><strong>Email:</strong>
+      {% if design_request.email %}
+        {{ design_request.email }}
+      {% elif design_request.user %}
         {{ design_request.user.email }}
       {% else %}
-        {{ design_request.email }}
+        
       {% endif %}
     </p>
     {% if design_request.phone %}

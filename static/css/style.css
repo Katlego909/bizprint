@@ -211,6 +211,7 @@ form textarea {
   min-height: 100px;
 }
 
+
 /* =============================
    NAVBAR
 ============================= */
@@ -1643,7 +1644,7 @@ a {
 /* Design Packages List */
 .design-packages-container {
   max-width: 1100px;
-  margin: 4rem auto;
+  margin: 2rem auto; /* reduced top whitespace */
   padding: 0 1rem;
   text-align: center;
 }
@@ -1651,19 +1652,20 @@ a {
 .design-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: 1.5rem;
+  margin-top: 1rem; /* tighter spacing under title */
 }
 
 .design-card {
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  padding: 2rem;
+  padding: 1.25rem 1.25rem 1.5rem; /* reduce top padding */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: auto; /* allow cards to grow to fit full content */
 }
 
 .design-card:hover {
@@ -1674,7 +1676,7 @@ a {
 .design-card h4 {
   font-size: 1.4rem;
   color: #1d3557;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .design-card p {
@@ -1691,26 +1693,150 @@ a {
   font-size: 1.1rem;
 }
 
-.select-package-checkbox {
+/* Make the main content grow so price/checkbox sit closer to bottom when content is short */
+.design-card .design-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  justify-content: flex-start;
+}
+
+.design-card .design-card-content p {
+  margin-bottom: 0.5rem;
+}
+
+/* Remove internal scrolling so cards do not show scrollbars */
+.design-card .design-card-content {
+  padding-right: 0;
+}
+
+/* Constrain images to a consistent header area (increased size) */
+.design-card img {
+  display: block;
+  max-height: 240px; /* increased from 64px */
+  width: 100%;
+  margin: 0 auto 0.6rem;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Header area: fixed space for image, title and summary so bullets align */
+.design-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 160px; /* reserve larger header space for bigger image */
+  padding-bottom: 0.25rem;
+}
+.design-card-header h4 {
+  margin: 0.25rem 0 0.25rem;
+}
+.design-card-header .package-summary {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+  max-height: 3.6rem; /* roughly 2 lines */
+  overflow: hidden;
+}
+
+/* Responsive: slightly smaller header/image on narrow screens */
+@media (max-width: 600px) {
+  .design-card img {
+    max-height: 80px;
+    object-fit: contain;
+  }
+  .design-card-header {
+    min-height: 120px;
+  }
+}
+
+/* Keep bullets close to header */
+.design-card .package-bullets {
+  margin-top: 0.35rem !important;
+}
+
+/* Footer pinned to bottom of card */
+.design-card .design-card-footer {
+  margin-top: 0.9rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+.design-card .design-card-footer .price {
+  margin: 0;
+  margin-right: auto;
+  font-weight: 700;
 }
 
+/* Ensure package feature lists are left-aligned and use outside markers */
+.design-card .package-bullets {
+  text-align: left !important;
+  margin: 0.5rem 0 0 0 !important;
+  padding-left: 1.2rem !important;
+  width: 100% !important;
+  display: block !important;
+  list-style-type: disc !important;
+  list-style-position: outside !important;
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+.design-card .package-bullets li {
+  margin-bottom: 0.2rem;
+  padding-left: 0;
+}
+
+.more-features {
+  font-size: 0.88rem;
+  color: #666;
+  margin-top: 0.35rem;
+}
+
+.select-package-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  position: relative;
+}
+
+/* Visually hide the native checkbox but keep it accessible */
 .select-package-checkbox input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  accent-color: #1d3557; /* Custom checkbox color */
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
-.select-package-checkbox label {
-  font-weight: 600;
-  color: #1d3557;
+/* Label styled as a selectable button */
+.select-package-checkbox input[type="checkbox"] + label.select-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
   cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+}
+
+/* Checked state */
+.select-package-checkbox input[type="checkbox"]:checked + label.select-btn {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary-dark);
+}
+
+/* Support the old .checkbox-label class too */
+.select-package-checkbox label.checkbox-label {
+  line-height: 1;
 }
 
 #proceed-to-request-btn {

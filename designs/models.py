@@ -4,11 +4,22 @@ from django.core.exceptions import ValidationError
 from decimal import Decimal
 import uuid
 
+
 class DesignPackage(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(upload_to='design_images/', blank=True, null=True)
+
+    def description_as_list(self):
+        """
+        Returns the description as a list of bullet points, splitting on newlines or semicolons.
+        Strips any leading dash and whitespace for clean template rendering.
+        This allows for professional formatting in templates, even for admin-added items.
+        """
+        import re
+        # Split on newlines or semicolons, strip whitespace, ignore empty, remove leading dash
+        return [re.sub(r'^-\s*', '', item.strip()) for item in re.split(r'[\n;]+', self.description) if item.strip()]
 
     def __str__(self):
         return self.title

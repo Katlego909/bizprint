@@ -39,7 +39,10 @@ def design_request_create(request):
         additional_instructions = request.POST.get('additional_instructions', '')
         uploaded_file = request.FILES.get('uploaded_files')
         email = request.POST.get('email', '').strip()
-        full_name = request.POST.get('full_name', '').strip()
+        # Read full_name defensively: support several possible keys and GET fallback
+        full_name = (request.POST.get('full_name') or request.POST.get('fullname') or
+                 request.POST.get('id_fullname') or request.GET.get('full_name') or '')
+        full_name = full_name.strip()
         phone = request.POST.get('phone', '').strip()
         
         # Design brief fields
@@ -95,6 +98,9 @@ def design_request_create(request):
             inspiration_links=inspiration_links,
             timeline_preference=timeline_preference,
         )
+        # If full_name is still missing, add a warning to help debug missing guest names
+        if not design_request.full_name:
+            messages.warning(request, "No full name was provided — if you typed a name, please check the form and try again.")
         design_request.packages.add(*package_ids)
         design_request.save()
 

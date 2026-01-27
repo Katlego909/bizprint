@@ -13,18 +13,31 @@
     <div class="design-grid">
       {% for package in packages %}
         <div class="design-card">
-          {% if package.image %}
-            <img src="{{ package.image.url }}" alt="{{ package.title }}" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
-          {% else %}
-            <img src="{% static 'images/default-package.jpg' %}" alt="Default Package" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
-          {% endif %}
+          <div class="design-card-header">
+            {% if package.image %}
+              <img src="{{ package.image.url }}" alt="{{ package.title }}">
+            {% else %}
+              <img src="{% static 'images/default-package.jpg' %}" alt="Default Package">
+            {% endif %}
+            <h4>{{ package.title }}</h4>
+            <p class="package-summary">{{ package.description_as_list|first }}</p>
+          </div>
 
-          <h4>{{ package.title }}</h4>
-          <p>{{ package.description }}</p>
-          <div class="price">R{{ package.price }}</div>
-          <div class="select-package-checkbox">
-            <input type="checkbox" name="packages" id="package_{{ package.id }}" value="{{ package.id }}">
-            <label for="package_{{ package.id }}">Add to Request</label>
+          <div class="design-card-content">
+            {% if package.description_as_list|length > 1 %}
+              <ul class="package-bullets">
+                {% for bullet in package.description_as_list|slice:'1:' %}
+                  <li>{{ bullet }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          <div class="design-card-footer">
+            <div class="price">R{{ package.price }}</div>
+            <div class="select-package-checkbox">
+              <input type="checkbox" name="packages" id="package_{{ package.id }}" value="{{ package.id }}">
+              <label for="package_{{ package.id }}" class="select-btn checkbox-label">Add to Request</label>
+            </div>
           </div>
         </div>
       {% empty %}
